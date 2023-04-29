@@ -16,7 +16,7 @@ public class PropertiesControllerTest {
     MockMvc mockMvc;
 
     @Test
-    void testGetProperties() throws Exception {
+    void should_ReturnPropertiesOK_when_GetPropperties() throws Exception {
         mockMvc.perform(get("/properties"))
             .andExpect(status().isOk());
     }
