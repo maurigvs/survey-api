@@ -16,6 +16,12 @@ public class PropertiesControllerTest {
     MockMvc mockMvc;
 
     @Test
+    void should_ReturnNotFound_when_GetWithoutEndpoint() throws Exception {
+        mockMvc.perform(get("/"))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
     void should_ReturnPropertiesOK_when_GetPropperties() throws Exception {
         mockMvc.perform(get("/properties"))
             .andExpect(status().isOk());
