@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(PropertiesController.class)
 @AutoConfigureMockMvc
-public class PropertiesControllerTest {
+class PropertiesControllerTest {
 
     @Autowired
     MockMvc mockMvc;

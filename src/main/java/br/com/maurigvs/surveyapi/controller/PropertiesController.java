@@ -21,7 +21,7 @@ public class PropertiesController {
         Properties result = System.getProperties();
 
         if(log.isDebugEnabled()){
-            log.info("Get Properties response: {}", result.toString());    
+            log.info("Get Properties response: {}", result);    
         } else {
             log.info("Get Properties response");
         }
