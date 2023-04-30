@@ -31,8 +31,7 @@ class SurveyControllerTest {
     @Test
     void should_ReturnStatusCreated_when_PostSurvey() throws Exception {
 
-        SurveyRequest survey = new SurveyRequest();
-        survey.setTitle("My Survey");
+        SurveyRequest survey = new SurveyRequest("My Survey");
         String request = parseToJson(survey);
 
         mockMvc.perform(post("/")

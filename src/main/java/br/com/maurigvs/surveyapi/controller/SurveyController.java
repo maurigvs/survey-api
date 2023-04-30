@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import lombok.Data;
+import lombok.NonNull;
 
 @RestController
 @RequestMapping("/")
@@ -21,7 +22,7 @@ public class SurveyController {
     SurveyService service;
 
     @PostMapping
-    public ResponseEntity<Void> postSurvey(@RequestBody SurveyRequest request){
+    public ResponseEntity<Void> postSurvey(@RequestBody @NonNull SurveyRequest request){
         service.createSurvey(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -30,6 +31,7 @@ public class SurveyController {
     @Data
     public static class SurveyRequest {
 
+        @NonNull
         @JsonProperty("survey-title")
         private String title;
     }
