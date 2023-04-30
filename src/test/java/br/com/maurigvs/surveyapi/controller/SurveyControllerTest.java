@@ -34,7 +34,7 @@ class SurveyControllerTest {
         SurveyRequest survey = new SurveyRequest("My Survey");
         String request = parseToJson(survey);
 
-        mockMvc.perform(post("/")
+        mockMvc.perform(post("/survey")
             .contentType(MediaType.APPLICATION_JSON)
             .content(request))
                 .andExpect(status().isCreated());

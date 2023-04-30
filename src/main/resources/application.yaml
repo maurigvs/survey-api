@@ -3,7 +3,7 @@ server:
         context-path: /${spring.application.name}
 spring:
     application:
-        name: survey
+        name: surveyapi
     datasource:
         url: jdbc:h2:mem:survey-db
         username: app

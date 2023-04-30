@@ -15,7 +15,7 @@ import lombok.Data;
 import lombok.NonNull;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/survey")
 public class SurveyController {
 
     @Autowired
