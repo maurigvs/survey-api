@@ -1,26 +1,36 @@
 package br.com.maurigvs.surveyapi.controller.exception;
 
-import java.time.ZonedDateTime;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.Setter;
+import java.time.ZonedDateTime;
 
-@Data
 public class ApiResponse {
     
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T' HH:mm:ss'Z'")
-    @Setter(AccessLevel.NONE)
     private ZonedDateTime timestamp = ZonedDateTime.now();
-
-    @NonNull
     private String error;
-
-    @NonNull
     private String message;
-
     private String path;
+
+    public ApiResponse(String error, String message, String path) {
+        this.error = error;
+        this.message = message;
+        this.path = path;
+    }
+
+    public ZonedDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getPath() {
+        return path;
+    }
 }

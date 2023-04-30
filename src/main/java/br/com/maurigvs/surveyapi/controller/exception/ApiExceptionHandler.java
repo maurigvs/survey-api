@@ -1,12 +1,12 @@
 package br.com.maurigvs.surveyapi.controller.exception;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
@@ -22,8 +22,7 @@ public class ApiExceptionHandler {
     }
 
     private ResponseEntity<ApiResponse> getApiException(HttpStatus status, String message, String path){
-        ApiResponse error = new ApiResponse(status.getReasonPhrase(), message);
-        error.setPath(path);
+        ApiResponse error = new ApiResponse(status.getReasonPhrase(), message, path);
         return ResponseEntity.status(status).body(error);
     }
 }

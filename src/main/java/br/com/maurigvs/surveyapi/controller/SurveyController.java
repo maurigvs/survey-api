@@ -1,5 +1,7 @@
 package br.com.maurigvs.surveyapi.controller;
 
+import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,30 +10,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import br.com.maurigvs.surveyapi.service.SurveyService;
-import lombok.Data;
-
 @RestController
 @RequestMapping("/api/survey")
 public class SurveyController {
 
     @Autowired
-    SurveyService service;
+    SurveyService surveyService;
 
     @PostMapping
     public ResponseEntity<Void> postSurvey(@RequestBody SurveyRequest request){
-        service.validatePostSurveyRequest(request);
-        service.createSurvey(request);
+        surveyService.createSurvey(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    
-    @Data
-    public static class SurveyRequest {
-        
-        @JsonProperty("survey-title")
-        private String title;
     }
 }

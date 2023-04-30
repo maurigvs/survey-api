@@ -1,8 +1,8 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import br.com.maurigvs.surveyapi.mock.Mocks;
+import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -11,12 +11,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-
-import br.com.maurigvs.surveyapi.controller.SurveyController.SurveyRequest;
-import br.com.maurigvs.surveyapi.service.SurveyService;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(SurveyController.class)
 @AutoConfigureMockMvc
@@ -26,33 +22,24 @@ class SurveyControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    SurveyService service;
+    SurveyService surveyService;
 
     @Test
     void should_ReturnStatusCreated_when_PostSurvey() throws Exception {
-
-        SurveyRequest survey = new SurveyRequest();
-        survey.setTitle("My Survey");
-        String request = parseToJson(survey);
-
+        SurveyRequest request = Mocks.getSurveyRequestValid();
+        String jsonContent = Mocks.parseToJson(request);
         mockMvc.perform(post("/api/survey")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(request))
+            .content(jsonContent))
                 .andExpect(status().isCreated());
     }
 
     @Test
     void should_ReturnBadRequest_when_PostSurveyWithMissingFields() throws Exception {
-        String request = "{'survey-title:''}";
+        String jsonContent = Mocks.getSurveyWithoutTitle();
         mockMvc.perform(post("/api/survey")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(request))
+            .content(jsonContent))
                 .andExpect(status().isBadRequest());
-    }
-
-
-    private String parseToJson(Object object) throws JsonProcessingException {
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        return ow.writeValueAsString(object);
     }
 }

@@ -1,14 +1,14 @@
 package br.com.maurigvs.surveyapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "survey")
-public class Survey implements Serializable {
+@Table(name = "choice")
+public class Choice implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,13 +16,15 @@ public class Survey implements Serializable {
 
     private String title;
 
-    @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Question> questions = new ArrayList<>();
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private Question question;
 
-    public Survey() {
+    public Choice() {
     }
 
-    public Survey(String title) {
+    public Choice(String title) {
         this.title = title;
     }
 
@@ -42,20 +44,24 @@ public class Survey implements Serializable {
         this.title = title;
     }
 
-    public List<Question> getQuestions() {
-        return questions;
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Survey survey = (Survey) o;
-        return Objects.equals(title, survey.title) && Objects.equals(questions, survey.questions);
+        Choice choice = (Choice) o;
+        return Objects.equals(title, choice.title);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, questions);
+        return Objects.hash(title);
     }
 }

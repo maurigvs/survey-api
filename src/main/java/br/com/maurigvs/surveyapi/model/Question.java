@@ -1,5 +1,7 @@
 package br.com.maurigvs.surveyapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,8 +9,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "survey")
-public class Survey implements Serializable {
+@Table(name = "question")
+public class Question implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,13 +18,18 @@ public class Survey implements Serializable {
 
     private String title;
 
-    @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Question> questions = new ArrayList<>();
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Choice> choices = new ArrayList<>();
 
-    public Survey() {
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "survey_id")
+    private Survey survey;
+
+    public Question() {
     }
 
-    public Survey(String title) {
+    public Question(String title) {
         this.title = title;
     }
 
@@ -42,20 +49,28 @@ public class Survey implements Serializable {
         this.title = title;
     }
 
-    public List<Question> getQuestions() {
-        return questions;
+    public List<Choice> getChoices() {
+        return choices;
+    }
+
+    public Survey getSurvey() {
+        return survey;
+    }
+
+    public void setSurvey(Survey survey) {
+        this.survey = survey;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Survey survey = (Survey) o;
-        return Objects.equals(title, survey.title) && Objects.equals(questions, survey.questions);
+        Question question = (Question) o;
+        return Objects.equals(title, question.title) && Objects.equals(choices, question.choices);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, questions);
+        return Objects.hash(title, choices);
     }
 }
