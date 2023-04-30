@@ -25,7 +25,8 @@ class SurveyServiceTest {
 
     @Test
     void should_CreateSurvey_when_RequestOk() {
-        SurveyRequest request = new SurveyRequest("My Survey");
+        SurveyRequest request = new SurveyRequest();
+        request.setTitle("My Survey");
 
         Survey requestedSurvey = new Survey();
         requestedSurvey.setTitle("My Survey");

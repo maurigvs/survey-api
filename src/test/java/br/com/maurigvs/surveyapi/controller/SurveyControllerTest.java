@@ -31,16 +31,17 @@ class SurveyControllerTest {
     @Test
     void should_ReturnStatusCreated_when_PostSurvey() throws Exception {
 
-        SurveyRequest survey = new SurveyRequest("My Survey");
+        SurveyRequest survey = new SurveyRequest();
+        survey.setTitle("My Survey");
         String request = parseToJson(survey);
 
-        mockMvc.perform(post("/survey")
+        mockMvc.perform(post("/api/survey")
             .contentType(MediaType.APPLICATION_JSON)
             .content(request))
                 .andExpect(status().isCreated());
     }
 
-    private String parseToJson(Object object) throws JsonProcessingException{
+    private String parseToJson(Object object) throws JsonProcessingException {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         return ow.writeValueAsString(object);
     }

@@ -15,7 +15,7 @@ import lombok.Data;
 import lombok.NonNull;
 
 @RestController
-@RequestMapping("/survey")
+@RequestMapping("/api/survey")
 public class SurveyController {
 
     @Autowired
@@ -30,8 +30,7 @@ public class SurveyController {
 
     @Data
     public static class SurveyRequest {
-
-        @NonNull
+        
         @JsonProperty("survey-title")
         private String title;
     }
