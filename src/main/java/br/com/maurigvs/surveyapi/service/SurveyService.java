@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import br.com.maurigvs.surveyapi.controller.SurveyController.SurveyRequest;
 import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.repository.SurveyRepository;
+import lombok.NonNull;
 
 @Service
 public class SurveyService {
@@ -22,5 +23,10 @@ public class SurveyService {
         Survey survey = new Survey();
         survey.setTitle(request.getTitle());
         return survey;
+    }
+
+    public void validatePostSurveyRequest(@NonNull SurveyRequest request) {
+        if(request.getTitle() == null || request.getTitle().isEmpty() || request.getTitle().isBlank())
+            throw new IllegalArgumentException("survey-title is required");
     }
 }

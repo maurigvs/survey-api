@@ -10,7 +10,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
-    
+ 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse> handleIllegalArgumentException(IllegalArgumentException exception, HttpServletRequest request){
+        return getApiException(HttpStatus.BAD_REQUEST, exception.getMessage(), request.getRequestURI());
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiResponse> messageNoReadable(HttpMessageNotReadableException exception, HttpServletRequest request){
         return getApiException(HttpStatus.BAD_REQUEST, exception.getMessage(), request.getRequestURI());

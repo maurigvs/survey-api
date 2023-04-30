@@ -41,6 +41,16 @@ class SurveyControllerTest {
                 .andExpect(status().isCreated());
     }
 
+    @Test
+    void should_ReturnBadRequest_when_PostSurveyWithMissingFields() throws Exception {
+        String request = "{'survey-title:''}";
+        mockMvc.perform(post("/api/survey")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(request))
+                .andExpect(status().isBadRequest());
+    }
+
+
     private String parseToJson(Object object) throws JsonProcessingException {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         return ow.writeValueAsString(object);
