@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "choice")
 public class Choice implements Serializable {
     
     @Id
