@@ -63,4 +63,12 @@ public class Choice implements Serializable {
     public int hashCode() {
         return Objects.hash(title);
     }
+
+    @Override
+    public String toString() {
+        return "\n   Choice{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }

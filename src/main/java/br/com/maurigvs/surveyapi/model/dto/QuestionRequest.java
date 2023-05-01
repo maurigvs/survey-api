@@ -24,4 +24,12 @@ public class QuestionRequest {
     public List<String> getChoices() {
         return choices;
     }
+
+    @Override
+    public String toString() {
+        return "\n  QuestionRequest{" +
+                "title='" + title + '\'' +
+                ",\n   choices=" + choices +
+                '}';
+    }
 }

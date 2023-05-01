@@ -24,4 +24,12 @@ public class SurveyRequest {
     public List<QuestionRequest> getQuestions() {
         return questions;
     }
+
+    @Override
+    public String toString() {
+        return "\n SurveyRequest{" +
+                "title='" + title + '\'' +
+                ", questions=" + questions +
+                '}';
+    }
 }

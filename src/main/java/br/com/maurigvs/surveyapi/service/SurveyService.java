@@ -5,6 +5,8 @@ import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
 import br.com.maurigvs.surveyapi.repository.SurveyRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,20 +16,24 @@ import java.util.stream.Collectors;
 @Service
 public class SurveyService {
 
+    Logger log = LoggerFactory.getLogger(SurveyService.class);
+
     @Autowired
     SurveyRepository repository;
 
     public void createSurvey(SurveyRequest request) {
         Survey survey = parseFromDto(request);
+        log.info("Saving survey");
         repository.save(survey);
     }
 
     public List<Survey> listSurveys() {
+        log.info("Listing all surveys");
         return repository.findAll();
     }
 
     private Survey parseFromDto(SurveyRequest request) {
-
+        log.info("Parsing DTO to Entity");
         if(isNullString(request.getTitle()))
             throw new IllegalArgumentException("Survey title is required");
 

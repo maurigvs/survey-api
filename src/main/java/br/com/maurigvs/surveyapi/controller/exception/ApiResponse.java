@@ -33,4 +33,14 @@ public class ApiResponse {
     public String getPath() {
         return path;
     }
+
+    @Override
+    public String toString() {
+        return " \n ApiResponse{" +
+                " \n  timestamp=" + timestamp +
+                ",\n  error='" + error + '\'' +
+                ",\n  message='" + message + '\'' +
+                ",\n  path='" + path + '\'' +
+                '}';
+    }
 }

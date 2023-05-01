@@ -72,4 +72,13 @@ public class Question implements Serializable {
     public int hashCode() {
         return Objects.hash(title, choices);
     }
+
+    @Override
+    public String toString() {
+        return "\n  Question{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", choices=" + choices +
+                '}';
+    }
 }
