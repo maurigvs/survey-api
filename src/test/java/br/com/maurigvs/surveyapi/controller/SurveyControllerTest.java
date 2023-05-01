@@ -35,7 +35,7 @@ class SurveyControllerTest {
     }
 
     @Test
-    void should_ReturnBadRequest_when_PostSurveyWithMissingFields() throws Exception {
+    void should_ReturnBadRequest_when_PostSurvey_if_EmptyTitle() throws Exception {
         String jsonContent = Mocks.getSurveyWithoutTitle();
         mockMvc.perform(post("/api/survey")
             .contentType(MediaType.APPLICATION_JSON)

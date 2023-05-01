@@ -32,7 +32,8 @@ public class Mocks {
                 "Very satisfied",
                 "Somewhat satisfied",
                 "Neither satisfied or dissatisfied",
-                "Dissatisfied", "Very dissatisfied"));
+                "Dissatisfied",
+                "Very dissatisfied"));
         request.getQuestions().add(q2);
         return request;
     }
@@ -59,11 +60,43 @@ public class Mocks {
     }
 
     public static String getSurveyWithoutTitle() {
-        return "{'title':''}";
+        return "{'survey':''}";
     }
 
     public static String parseToJson(Object object) throws JsonProcessingException {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         return ow.writeValueAsString(object);
+    }
+
+    public static SurveyRequest getSurveyRequestWithEmptyQuestions() {
+        SurveyRequest request = new SurveyRequest();
+        request.setTitle("Sample Survey");
+        return request;
+    }
+
+    public static SurveyRequest getSurveyRequestWithEmptyQuestionTitle() {
+        SurveyRequest request = new SurveyRequest();
+        request.setTitle("Sample Survey");
+        request.getQuestions().add(new QuestionRequest());
+        return request;
+    }
+
+    public static SurveyRequest getSurveyRequestWithEmptyChoices() {
+        SurveyRequest request = new SurveyRequest();
+        request.setTitle("Sample Survey");
+        QuestionRequest question = new QuestionRequest();
+        question.setTitle("Where does Santa Claus live?");
+        request.getQuestions().add(question);
+        return request;
+    }
+
+    public static SurveyRequest getSurveyRequestWithEmptyChoiceTitle() {
+        SurveyRequest request = new SurveyRequest();
+        request.setTitle("Sample Survey");
+        QuestionRequest question = new QuestionRequest();
+        question.setTitle("Where does Santa Claus live?");
+        question.getChoices().add("  ");
+        request.getQuestions().add(question);
+        return request;
     }
 }
