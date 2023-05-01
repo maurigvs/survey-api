@@ -22,7 +22,7 @@ class SurveyControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    SurveyService surveyService;
+    SurveyService service;
 
     @Test
     void should_ReturnStatusCreated_when_PostSurvey() throws Exception {
