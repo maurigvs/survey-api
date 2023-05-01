@@ -23,23 +23,25 @@ public class SurveyService {
 
     private Survey parseFromDto(SurveyRequest request) {
 
-        if(request.getTitle() == null || request.getTitle().isBlank() || request.getTitle().isEmpty())
+        if(isNullString(request.getTitle()))
             throw new IllegalArgumentException("Survey title is required");
+
         if(request.getQuestions().isEmpty())
             throw new IllegalArgumentException("Surveys must have at least 1 question");
 
         Survey survey = new Survey(request.getTitle());
         survey.getQuestions().addAll(request.getQuestions().stream().map(q -> {
 
-            if(q.getTitle() == null || q.getTitle().isEmpty() || q.getTitle().isBlank())
+            if(isNullString(q.getTitle()))
                 throw new IllegalArgumentException("Question title is required");
+
             if(q.getChoices().isEmpty())
                 throw new IllegalArgumentException("Questions must have at least 1 choice");
 
             Question question = new Question(q.getTitle());
             question.getChoices().addAll(q.getChoices().stream().map(c -> {
 
-                if(c.isEmpty() || c.isBlank())
+                if(isNullString(c))
                     throw new IllegalArgumentException("Choices can not be null or blank");
 
                 Choice choice = new Choice(c);
@@ -51,5 +53,9 @@ public class SurveyService {
             return question;
         }).collect(Collectors.toList()));
         return survey;
+    }
+
+    private boolean isNullString(String value){
+        return (value == null || value.isEmpty() || value.isBlank());
     }
 }
