@@ -8,17 +8,22 @@ import br.com.maurigvs.surveyapi.repository.SurveyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class SurveyService {
 
     @Autowired
-    SurveyRepository surveyRepository;
+    SurveyRepository repository;
 
     public void createSurvey(SurveyRequest request) {
         Survey survey = parseFromDto(request);
-        surveyRepository.save(survey);
+        repository.save(survey);
+    }
+
+    public List<Survey> listSurveys() {
+        return repository.findAll();
     }
 
     private Survey parseFromDto(SurveyRequest request) {

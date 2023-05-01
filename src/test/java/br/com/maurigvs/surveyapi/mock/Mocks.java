@@ -99,4 +99,10 @@ public class Mocks {
         request.getQuestions().add(question);
         return request;
     }
+
+    public static List<Survey> getSurveyList() {
+        Survey survey1 = getSurveyValid();
+        Survey survey2 = getSurveyValid();
+        return List.of(survey1, survey2);
+    }
 }
