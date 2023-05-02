@@ -10,10 +10,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
+import java.util.Collections;
+import java.util.List;
 
 @SpringBootTest(classes = {SurveyService.class})
 class SurveyServiceTest {
@@ -35,6 +43,36 @@ class SurveyServiceTest {
         service.createSurvey(request);
         // then
         verify(repository, times(1)).save(requestedSurvey);
+    }
+
+    @Test
+    void should_ListSurveys_when_RequestOk(){
+        // given
+        List<Survey> surveys = List.of(Mocks.getSurveyValid());
+        given(repository.findAll()).willReturn(surveys);
+        // when
+        List<Survey> result = service.listSurveys();
+        // then
+        assertAll(
+            () -> assertNotNull(result),
+            () -> assertFalse(result.isEmpty()),
+            () -> assertEquals(1, result.size())
+        );
+    }
+
+
+    @Test
+    void should_ListNothing_when_ListSurvey(){
+        // given
+        given(repository.findAll()).willReturn(Collections.emptyList());
+        // when
+        List<Survey> result = service.listSurveys();
+        // then
+        assertAll(
+            () -> assertNotNull(result),
+            () -> assertTrue(result.isEmpty()),
+            () -> assertEquals(0, result.size())
+        );
     }
 
     @Test
