@@ -2,6 +2,7 @@ package br.com.maurigvs.surveyapi.controller;
 
 import br.com.maurigvs.surveyapi.mock.Mocks;
 import br.com.maurigvs.surveyapi.model.Survey;
+import br.com.maurigvs.surveyapi.model.dto.AnswerRequest;
 import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,16 @@ class SurveyControllerTest {
         SurveyRequest request = Mocks.getSurveyRequestValid();
         String jsonContent = Mocks.parseToJson(request);
         mockMvc.perform(post("/api/survey")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonContent))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void should_ReturnCreated_when_PostAnswers() throws Exception{
+        AnswerRequest request = Mocks.getAnswerRequestValid();
+        String jsonContent = Mocks.parseToJson(request);
+        mockMvc.perform(post("/api/answer")
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonContent))
                 .andExpect(status().isCreated());

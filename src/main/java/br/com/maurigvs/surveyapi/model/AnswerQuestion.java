@@ -1,7 +1,5 @@
 package br.com.maurigvs.surveyapi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,29 +7,23 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Choice implements Serializable {
-    
+@Table(name = "answer_question")
+public class AnswerQuestion implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
-
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "choice")
-    private final List<AnswerChoice> answerChoices = new ArrayList<>();
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<AnswerChoice> choices = new ArrayList<>();
 
-    public Choice() {
-    }
-
-    public Choice(String title) {
-        this.title = title;
-    }
+    @ManyToOne
+    @JoinColumn(name = "answer_id")
+    private Answer answer;
 
     public Long getId() {
         return id;
@@ -39,14 +31,6 @@ public class Choice implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public Question getQuestion() {
@@ -57,24 +41,28 @@ public class Choice implements Serializable {
         this.question = question;
     }
 
+    public List<AnswerChoice> getChoices() {
+        return choices;
+    }
+
+    public Answer getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(Answer answer) {
+        this.answer = answer;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Choice choice = (Choice) o;
-        return Objects.equals(title, choice.title);
+        AnswerQuestion that = (AnswerQuestion) o;
+        return Objects.equals(id, that.id) && Objects.equals(choices, that.choices);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title);
-    }
-
-    @Override
-    public String toString() {
-        return "\n   Choice{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                '}';
+        return Objects.hash(id, choices);
     }
 }

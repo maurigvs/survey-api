@@ -18,12 +18,16 @@ public class Question implements Serializable {
     private String title;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Choice> choices = new ArrayList<>();
+    private final List<Choice> choices = new ArrayList<>();
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "survey_id")
     private Survey survey;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "question")
+    private final List<AnswerQuestion> answerQuestions = new ArrayList<>();
 
     public Question() {
     }
@@ -58,6 +62,10 @@ public class Question implements Serializable {
 
     public void setSurvey(Survey survey) {
         this.survey = survey;
+    }
+
+    public List<AnswerQuestion> getAnswerQuestions() {
+        return answerQuestions;
     }
 
     @Override

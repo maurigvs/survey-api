@@ -1,5 +1,7 @@
 package br.com.maurigvs.surveyapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,7 +18,11 @@ public class Survey implements Serializable {
     private String title;
 
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Question> questions = new ArrayList<>();
+    private final List<Question> questions = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "survey")
+    private final List<Answer> answers = new ArrayList<>();
 
     public Survey() {
     }

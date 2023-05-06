@@ -1,14 +1,15 @@
 package br.com.maurigvs.surveyapi.mock;
 
-import br.com.maurigvs.surveyapi.model.Choice;
-import br.com.maurigvs.surveyapi.model.Question;
-import br.com.maurigvs.surveyapi.model.Survey;
+import br.com.maurigvs.surveyapi.model.*;
+import br.com.maurigvs.surveyapi.model.dto.AnswerItemRequest;
+import br.com.maurigvs.surveyapi.model.dto.AnswerRequest;
 import br.com.maurigvs.surveyapi.model.dto.QuestionRequest;
 import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Mocks {
@@ -59,6 +60,19 @@ public class Mocks {
         return survey;
     }
 
+    public static Survey getSurveySaved(){
+        Survey survey = getSurveyValid();
+        long id = 1L;
+        survey.setId(id);
+        for (Question q : survey.getQuestions()) {
+            q.setId(id++);
+            for (Choice c : q.getChoices()) {
+                c.setId(id++);
+            }
+        }
+        return survey;
+    }
+
     public static String getSurveyWithoutTitle() {
         return "{'survey':''}";
     }
@@ -104,5 +118,40 @@ public class Mocks {
         Survey survey1 = getSurveyValid();
         Survey survey2 = getSurveyValid();
         return List.of(survey1, survey2);
+    }
+
+    public static AnswerRequest getAnswerRequestValid() {
+        AnswerRequest answer = new AnswerRequest();
+        answer.setEmail("maurigvs@icloud.com");
+        answer.setSurveyId(1L);
+
+        AnswerItemRequest item1 = new AnswerItemRequest();
+        item1.setQuestionId(2L);
+        item1.getChoicesIds().addAll(List.of(3L, 4L, 5L));
+
+        AnswerItemRequest item2 = new AnswerItemRequest();
+        item2.setQuestionId(6L);
+        item2.getChoicesIds().addAll(List.of(7L, 8L));
+
+        answer.getItems().addAll(Arrays.asList(item1, item2));
+        return answer;
+    }
+
+    public static Answer getAnswerValid() {
+        Survey survey = getSurveyValid();
+        Answer answer = new Answer();
+        answer.setEmail("maurigvs@icloud.com");
+        answer.setSurvey(survey);
+        for (Question question : survey.getQuestions()) {
+            AnswerQuestion aq = new AnswerQuestion();
+            aq.setAnswer(answer);
+            aq.setQuestion(question);
+            for (Choice choice : question.getChoices()) {
+                AnswerChoice ac = new AnswerChoice();
+                ac.setQuestion(aq);
+                ac.setChoice(choice);
+            }
+        }
+        return answer;
     }
 }

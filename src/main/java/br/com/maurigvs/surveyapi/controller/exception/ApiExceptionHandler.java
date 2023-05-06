@@ -14,16 +14,23 @@ import javax.servlet.http.HttpServletRequest;
 public class ApiExceptionHandler {
 
     Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
+    String logPrefix = "Handling {}";
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ApiResponse> handleBusinessException(BusinessException exception, HttpServletRequest request){
+        log.info(logPrefix, exception.getClass().getCanonicalName());
+        return getApiException(HttpStatus.BAD_REQUEST, exception.getMessage(), request.getRequestURI());
+    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse> handleIllegalArgumentException(IllegalArgumentException exception, HttpServletRequest request){
-        log.info("Handling {}", exception.getClass().getCanonicalName());
+        log.info(logPrefix, exception.getClass().getCanonicalName());
         return getApiException(HttpStatus.BAD_REQUEST, exception.getMessage(), request.getRequestURI());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiResponse> messageNoReadable(HttpMessageNotReadableException exception, HttpServletRequest request){
-        log.info("Handling {}", exception.getClass().getCanonicalName());
+        log.info(logPrefix, exception.getClass().getCanonicalName());
         return getApiException(HttpStatus.BAD_REQUEST, exception.getMessage(), request.getRequestURI());
     }
 
