@@ -17,7 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import br.com.maurigvs.surveyapi.entity.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.entity.dto.SurveyDto;
 import br.com.maurigvs.surveyapi.entity.model.Survey;
 import br.com.maurigvs.surveyapi.mock.Mocks;
 import br.com.maurigvs.surveyapi.service.SurveyService;
@@ -34,7 +34,7 @@ class SurveyControllerTest {
 
     @Test
     void should_ReturnCreated_when_PostSurvey() throws Exception {
-        SurveyRequest request = Mocks.getSurveyRequestValid();
+        SurveyDto request = Mocks.getSurveyRequestValid();
         String jsonContent = Mocks.parseToJson(request);
         mockMvc.perform(post("/api/survey")
             .contentType(MediaType.APPLICATION_JSON)

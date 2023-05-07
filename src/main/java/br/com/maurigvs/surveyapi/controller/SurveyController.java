@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.maurigvs.surveyapi.entity.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.entity.dto.SurveyDto;
 import br.com.maurigvs.surveyapi.entity.model.Survey;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class SurveyController {
     SurveyService service;
 
     @PostMapping
-    public ResponseEntity<Void> postSurvey(@RequestBody SurveyRequest request){
+    public ResponseEntity<Void> postSurvey(@RequestBody SurveyDto request){
         log.info("POST /api/survey request: {}", request);
         service.createSurvey(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();

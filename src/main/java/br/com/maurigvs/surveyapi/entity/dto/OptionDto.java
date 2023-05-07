@@ -8,22 +8,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
-public class AnswerRequest {
+public class OptionDto {
 
     @JsonIgnore
     private Long id;
 
-    @JsonProperty("email")
-    private String email;
+    @JsonProperty("question_id")
+    private Long questionId;
 
-    @JsonProperty("survey_id")
-    private Long surveyId;
-
-    @JsonProperty("answers")
-    private final List<AnswerItemRequest> items = new ArrayList<>();
+    @JsonProperty("choices_ids")
+    private final List<Long> choicesIds = new ArrayList<>();
 }

@@ -12,11 +12,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class QuestionRequest {
+public class SurveyDto {
 
-    @JsonProperty("question")
+    @JsonProperty("survey")
     private String title;
 
-    @JsonProperty("choices")
-    private final List<String> choices = new ArrayList<>();
+    @JsonProperty("questions")
+    private final List<QuestionDto> questions = new ArrayList<>();
 }

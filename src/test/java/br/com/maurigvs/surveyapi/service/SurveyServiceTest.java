@@ -21,8 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import br.com.maurigvs.surveyapi.entity.dto.AnswerRequest;
-import br.com.maurigvs.surveyapi.entity.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.entity.dto.AnswerDto;
+import br.com.maurigvs.surveyapi.entity.dto.SurveyDto;
 import br.com.maurigvs.surveyapi.entity.model.Answer;
 import br.com.maurigvs.surveyapi.entity.model.Survey;
 import br.com.maurigvs.surveyapi.mock.Mocks;
@@ -44,7 +44,7 @@ class SurveyServiceTest {
     @Test
     void should_CreateSurvey_when_RequestOk() {
         // given
-        SurveyRequest request = Mocks.getSurveyRequestValid();
+        SurveyDto request = Mocks.getSurveyRequestValid();
         Survey requestedSurvey = Mocks.getSurveyValid();
         Survey createdSurvey = Mocks.getSurveyValid();
         given(surveyRepository.save(any(Survey.class))).willReturn(createdSurvey);
@@ -57,7 +57,7 @@ class SurveyServiceTest {
     @Test
     void should_CreateAnswer_when_RequestOk(){
         // given
-        AnswerRequest request = Mocks.getAnswerRequestValid();
+        AnswerDto request = Mocks.getAnswerRequestValid();
         Answer createdAnswer = Mocks.getAnswerValid();
         given(surveyRepository.findById(anyLong())).willReturn(Optional.of(Mocks.getSurveyValid()));
         given(answerRepository.save(any(Answer.class))).willReturn(createdAnswer);
@@ -70,7 +70,7 @@ class SurveyServiceTest {
     @Test
     void should_ThrowException_when_CreateSurvey_if_EmptyTitle(){
         // given
-        SurveyRequest request = new SurveyRequest();
+        SurveyDto request = new SurveyDto();
         // when... then
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> service.createSurvey(request))
@@ -80,7 +80,7 @@ class SurveyServiceTest {
     @Test
     void should_ThrowException_when_CreateSurvey_if_EmptyQuestions(){
         // given
-        SurveyRequest request = Mocks.getSurveyRequestWithEmptyQuestions();
+        SurveyDto request = Mocks.getSurveyRequestWithEmptyQuestions();
         // when... then
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> service.createSurvey(request))
@@ -90,7 +90,7 @@ class SurveyServiceTest {
     @Test
     void should_ThrowException_when_CreateQuestion_if_EmptyTitle(){
         // given
-        SurveyRequest request = Mocks.getSurveyRequestWithEmptyQuestionTitle();
+        SurveyDto request = Mocks.getSurveyRequestWithEmptyQuestionTitle();
         // when... then
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> service.createSurvey(request))
@@ -100,7 +100,7 @@ class SurveyServiceTest {
     @Test
     void should_ThrowException_when_CreateQuestion_if_EmptyChoices(){
         // given
-        SurveyRequest request = Mocks.getSurveyRequestWithEmptyChoices();
+        SurveyDto request = Mocks.getSurveyRequestWithEmptyChoices();
         // when... then
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> service.createSurvey(request))
@@ -110,7 +110,7 @@ class SurveyServiceTest {
     @Test
     void should_ThrowException_when_CreateChoices_if_EmptyTitle(){
         // given
-        SurveyRequest request = Mocks.getSurveyRequestWithEmptyChoiceTitle();
+        SurveyDto request = Mocks.getSurveyRequestWithEmptyChoiceTitle();
         // when... then
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> service.createSurvey(request))

@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.maurigvs.surveyapi.controller.exception.BusinessException;
-import br.com.maurigvs.surveyapi.entity.dto.AnswerRequest;
-import br.com.maurigvs.surveyapi.entity.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.entity.dto.AnswerDto;
+import br.com.maurigvs.surveyapi.entity.dto.SurveyDto;
 import br.com.maurigvs.surveyapi.entity.model.Answer;
 import br.com.maurigvs.surveyapi.entity.model.AnswerChoice;
 import br.com.maurigvs.surveyapi.entity.model.AnswerQuestion;
@@ -32,13 +32,13 @@ public class SurveyService {
     @Autowired
     AnswerRepository answerRepository;
 
-    public void createSurvey(SurveyRequest request) {
+    public void createSurvey(SurveyDto request) {
         Survey survey = parseFromDto(request);
         log.info("Saving survey");
         surveyRepository.save(survey);
     }
 
-    public void createAnswer(AnswerRequest request){
+    public void createAnswer(AnswerDto request){
         Answer answer = parseFromDto(request);
         log.info("Saving Survey Answer");
         answerRepository.save(answer);
@@ -49,7 +49,7 @@ public class SurveyService {
         return surveyRepository.findAll();
     }
 
-    private Survey parseFromDto(SurveyRequest request) {
+    private Survey parseFromDto(SurveyDto request) {
         log.info("Parsing DTO to Entity");
         if(isNullString(request.getTitle()))
             throw new IllegalArgumentException("Survey title is required");
@@ -83,7 +83,7 @@ public class SurveyService {
         return survey;
     }
 
-    private Answer parseFromDto(AnswerRequest request){
+    private Answer parseFromDto(AnswerDto request){
 
         log.info("Parsing DTO to Entity");
 

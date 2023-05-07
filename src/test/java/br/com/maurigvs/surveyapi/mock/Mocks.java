@@ -7,10 +7,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
-import br.com.maurigvs.surveyapi.entity.dto.AnswerItemRequest;
-import br.com.maurigvs.surveyapi.entity.dto.AnswerRequest;
-import br.com.maurigvs.surveyapi.entity.dto.QuestionRequest;
-import br.com.maurigvs.surveyapi.entity.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.entity.dto.OptionDto;
+import br.com.maurigvs.surveyapi.entity.dto.AnswerDto;
+import br.com.maurigvs.surveyapi.entity.dto.QuestionDto;
+import br.com.maurigvs.surveyapi.entity.dto.SurveyDto;
 import br.com.maurigvs.surveyapi.entity.model.Answer;
 import br.com.maurigvs.surveyapi.entity.model.AnswerChoice;
 import br.com.maurigvs.surveyapi.entity.model.AnswerQuestion;
@@ -20,11 +20,11 @@ import br.com.maurigvs.surveyapi.entity.model.SurveyQuestion;
 
 public class Mocks {
 
-    public static SurveyRequest getSurveyRequestValid() {
-        SurveyRequest request = new SurveyRequest();
+    public static SurveyDto getSurveyRequestValid() {
+        SurveyDto request = new SurveyDto();
         request.setTitle("Sample Survey");
 
-        QuestionRequest q1 = new QuestionRequest();
+        QuestionDto q1 = new QuestionDto();
         q1.setTitle("Where does Santa Claus live?");
         q1.getChoices().addAll(List.of(
                 "Hawaii",
@@ -33,7 +33,7 @@ public class Mocks {
                 "China"));
         request.getQuestions().add(q1);
 
-        QuestionRequest q2 = new QuestionRequest();
+        QuestionDto q2 = new QuestionDto();
         q2.setTitle("Where you satisfied with your Christmas presents?");
         q2.getChoices().addAll(List.of(
                 "Very satisfied",
@@ -88,32 +88,32 @@ public class Mocks {
         return ow.writeValueAsString(object);
     }
 
-    public static SurveyRequest getSurveyRequestWithEmptyQuestions() {
-        SurveyRequest request = new SurveyRequest();
+    public static SurveyDto getSurveyRequestWithEmptyQuestions() {
+        SurveyDto request = new SurveyDto();
         request.setTitle("Sample Survey");
         return request;
     }
 
-    public static SurveyRequest getSurveyRequestWithEmptyQuestionTitle() {
-        SurveyRequest request = new SurveyRequest();
+    public static SurveyDto getSurveyRequestWithEmptyQuestionTitle() {
+        SurveyDto request = new SurveyDto();
         request.setTitle("Sample Survey");
-        request.getQuestions().add(new QuestionRequest());
+        request.getQuestions().add(new QuestionDto());
         return request;
     }
 
-    public static SurveyRequest getSurveyRequestWithEmptyChoices() {
-        SurveyRequest request = new SurveyRequest();
+    public static SurveyDto getSurveyRequestWithEmptyChoices() {
+        SurveyDto request = new SurveyDto();
         request.setTitle("Sample Survey");
-        QuestionRequest question = new QuestionRequest();
+        QuestionDto question = new QuestionDto();
         question.setTitle("Where does Santa Claus live?");
         request.getQuestions().add(question);
         return request;
     }
 
-    public static SurveyRequest getSurveyRequestWithEmptyChoiceTitle() {
-        SurveyRequest request = new SurveyRequest();
+    public static SurveyDto getSurveyRequestWithEmptyChoiceTitle() {
+        SurveyDto request = new SurveyDto();
         request.setTitle("Sample Survey");
-        QuestionRequest question = new QuestionRequest();
+        QuestionDto question = new QuestionDto();
         question.setTitle("Where does Santa Claus live?");
         question.getChoices().add("  ");
         request.getQuestions().add(question);
@@ -126,16 +126,16 @@ public class Mocks {
         return List.of(survey1, survey2);
     }
 
-    public static AnswerRequest getAnswerRequestValid() {
-        AnswerRequest answer = new AnswerRequest();
+    public static AnswerDto getAnswerRequestValid() {
+        AnswerDto answer = new AnswerDto();
         answer.setEmail("maurigvs@icloud.com");
         answer.setSurveyId(1L);
 
-        AnswerItemRequest item1 = new AnswerItemRequest();
+        OptionDto item1 = new OptionDto();
         item1.setQuestionId(2L);
         item1.getChoicesIds().addAll(List.of(3L, 4L, 5L));
 
-        AnswerItemRequest item2 = new AnswerItemRequest();
+        OptionDto item2 = new OptionDto();
         item2.setQuestionId(6L);
         item2.getChoicesIds().addAll(List.of(7L, 8L));
 

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.maurigvs.surveyapi.entity.dto.AnswerRequest;
+import br.com.maurigvs.surveyapi.entity.dto.AnswerDto;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +21,7 @@ public class AnswerController {
     SurveyService service;
 
     @PostMapping
-    public ResponseEntity<Void> postAnswer(@RequestBody AnswerRequest request) {
+    public ResponseEntity<Void> postAnswer(@RequestBody AnswerDto request) {
         log.info("POST /api/survey/answer request: {}", request);
         service.createAnswer(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
