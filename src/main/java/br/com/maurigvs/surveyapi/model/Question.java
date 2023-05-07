@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "survey_question")
 public class Question implements Serializable {
     
     @Id
