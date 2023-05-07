@@ -1,16 +1,22 @@
 package br.com.maurigvs.surveyapi.mock;
 
-import br.com.maurigvs.surveyapi.model.*;
-import br.com.maurigvs.surveyapi.model.dto.AnswerItemRequest;
-import br.com.maurigvs.surveyapi.model.dto.AnswerRequest;
-import br.com.maurigvs.surveyapi.model.dto.QuestionRequest;
-import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
+import java.util.Arrays;
+import java.util.List;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
-import java.util.Arrays;
-import java.util.List;
+import br.com.maurigvs.surveyapi.entity.dto.AnswerItemRequest;
+import br.com.maurigvs.surveyapi.entity.dto.AnswerRequest;
+import br.com.maurigvs.surveyapi.entity.dto.QuestionRequest;
+import br.com.maurigvs.surveyapi.entity.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.entity.model.Answer;
+import br.com.maurigvs.surveyapi.entity.model.AnswerChoice;
+import br.com.maurigvs.surveyapi.entity.model.AnswerQuestion;
+import br.com.maurigvs.surveyapi.entity.model.Survey;
+import br.com.maurigvs.surveyapi.entity.model.SurveyChoice;
+import br.com.maurigvs.surveyapi.entity.model.SurveyQuestion;
 
 public class Mocks {
 

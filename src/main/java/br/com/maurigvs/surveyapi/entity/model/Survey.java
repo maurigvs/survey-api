@@ -1,4 +1,4 @@
-package br.com.maurigvs.surveyapi.model;
+package br.com.maurigvs.surveyapi.entity.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,8 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -22,12 +20,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "survey_question")
+@Table(name = "survey")
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class SurveyQuestion implements Serializable {
+public class Survey implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,20 +33,15 @@ public class SurveyQuestion implements Serializable {
 
     private String title;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<SurveyChoice> choices = new ArrayList<>();
+    @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<SurveyQuestion> questions = new ArrayList<>();
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "survey_id")
-    private Survey survey;
+    @OneToMany(mappedBy = "survey")
+    private final List<Answer> answers = new ArrayList<>();
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "question")
-    private final List<AnswerQuestion> answerQuestions = new ArrayList<>();
-
-
-    public SurveyQuestion(String title) {
+   
+    public Survey(String title) {
         this.title = title;
     }
 }

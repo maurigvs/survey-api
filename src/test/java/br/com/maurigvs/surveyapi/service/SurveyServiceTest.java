@@ -1,28 +1,33 @@
 package br.com.maurigvs.surveyapi.service;
 
-import br.com.maurigvs.surveyapi.mock.Mocks;
-import br.com.maurigvs.surveyapi.model.Answer;
-import br.com.maurigvs.surveyapi.model.Survey;
-import br.com.maurigvs.surveyapi.model.dto.AnswerRequest;
-import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
-import br.com.maurigvs.surveyapi.repository.AnswerRepository;
-import br.com.maurigvs.surveyapi.repository.SurveyRepository;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import br.com.maurigvs.surveyapi.entity.dto.AnswerRequest;
+import br.com.maurigvs.surveyapi.entity.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.entity.model.Answer;
+import br.com.maurigvs.surveyapi.entity.model.Survey;
+import br.com.maurigvs.surveyapi.mock.Mocks;
+import br.com.maurigvs.surveyapi.repository.AnswerRepository;
+import br.com.maurigvs.surveyapi.repository.SurveyRepository;
 
 @SpringBootTest(classes = {SurveyService.class})
 class SurveyServiceTest {

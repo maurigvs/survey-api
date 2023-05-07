@@ -1,4 +1,4 @@
-package br.com.maurigvs.surveyapi.model;
+package br.com.maurigvs.surveyapi.entity.model;
 
 import javax.persistence.*;
 

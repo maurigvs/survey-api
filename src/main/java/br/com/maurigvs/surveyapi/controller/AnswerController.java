@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.maurigvs.surveyapi.model.dto.AnswerRequest;
+import br.com.maurigvs.surveyapi.entity.dto.AnswerRequest;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import lombok.extern.slf4j.Slf4j;
 

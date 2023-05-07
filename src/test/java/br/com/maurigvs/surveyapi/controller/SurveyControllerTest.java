@@ -1,9 +1,14 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.mock.Mocks;
-import br.com.maurigvs.surveyapi.model.Survey;
-import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
-import br.com.maurigvs.surveyapi.service.SurveyService;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -12,14 +17,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
-import java.util.List;
-
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import br.com.maurigvs.surveyapi.entity.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.entity.model.Survey;
+import br.com.maurigvs.surveyapi.mock.Mocks;
+import br.com.maurigvs.surveyapi.service.SurveyService;
 
 @WebMvcTest(SurveyController.class)
 @AutoConfigureMockMvc

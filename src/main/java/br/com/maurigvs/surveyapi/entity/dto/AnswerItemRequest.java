@@ -1,4 +1,4 @@
-package br.com.maurigvs.surveyapi.model.dto;
+package br.com.maurigvs.surveyapi.entity.dto;
 
 import java.util.ArrayList;
 import java.util.List;

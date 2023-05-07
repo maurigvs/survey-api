@@ -1,19 +1,25 @@
 package br.com.maurigvs.surveyapi.service;
 
-import br.com.maurigvs.surveyapi.controller.exception.BusinessException;
-import br.com.maurigvs.surveyapi.model.*;
-import br.com.maurigvs.surveyapi.model.dto.AnswerRequest;
-import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
-import br.com.maurigvs.surveyapi.repository.AnswerRepository;
-import br.com.maurigvs.surveyapi.repository.SurveyRepository;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import br.com.maurigvs.surveyapi.controller.exception.BusinessException;
+import br.com.maurigvs.surveyapi.entity.dto.AnswerRequest;
+import br.com.maurigvs.surveyapi.entity.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.entity.model.Answer;
+import br.com.maurigvs.surveyapi.entity.model.AnswerChoice;
+import br.com.maurigvs.surveyapi.entity.model.AnswerQuestion;
+import br.com.maurigvs.surveyapi.entity.model.Survey;
+import br.com.maurigvs.surveyapi.entity.model.SurveyChoice;
+import br.com.maurigvs.surveyapi.entity.model.SurveyQuestion;
+import br.com.maurigvs.surveyapi.repository.AnswerRepository;
+import br.com.maurigvs.surveyapi.repository.SurveyRepository;
 
 @Service
 public class SurveyService {

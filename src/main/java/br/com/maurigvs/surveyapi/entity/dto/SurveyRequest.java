@@ -1,4 +1,4 @@
-package br.com.maurigvs.surveyapi.model.dto;
+package br.com.maurigvs.surveyapi.entity.dto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +12,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class QuestionRequest {
+public class SurveyRequest {
 
-    @JsonProperty("question")
+    @JsonProperty("survey")
     private String title;
 
-    @JsonProperty("choices")
-    private final List<String> choices = new ArrayList<>();
+    @JsonProperty("questions")
+    private final List<QuestionRequest> questions = new ArrayList<>();
 }
