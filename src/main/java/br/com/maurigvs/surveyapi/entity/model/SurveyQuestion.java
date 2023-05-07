@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,8 +34,10 @@ public class SurveyQuestion implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonProperty("question")
     private String title;
 
+    @JsonProperty("choices")
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<SurveyChoice> choices = new ArrayList<>();
 
@@ -42,11 +45,6 @@ public class SurveyQuestion implements Serializable {
     @ManyToOne
     @JoinColumn(name = "survey_id")
     private Survey survey;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "question")
-    private final List<AnswerQuestion> answerQuestions = new ArrayList<>();
-
 
     public SurveyQuestion(String title) {
         this.title = title;

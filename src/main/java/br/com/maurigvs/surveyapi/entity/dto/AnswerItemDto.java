@@ -11,7 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OptionDto {
+public class AnswerItemDto {
 
     @JsonIgnore
     private Long id;
@@ -19,6 +19,12 @@ public class OptionDto {
     @JsonProperty("question_id")
     private Long questionId;
 
+    @JsonProperty("question")
+    private String questionTitle;
+
     @JsonProperty("choices_ids")
     private final List<Long> choicesIds = new ArrayList<>();
+
+    @JsonProperty("choices")
+    private final List<String> choicesTitles = new ArrayList<>();
 }

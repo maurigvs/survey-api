@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class QuestionDto {
+public class SurveyItemDto {
 
     @JsonProperty("question")
     private String title;

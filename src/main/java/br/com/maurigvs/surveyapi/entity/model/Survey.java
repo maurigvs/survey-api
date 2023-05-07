@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,15 +32,12 @@ public class Survey implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonProperty("survey")
     private String title;
 
+    @JsonProperty("questions")
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<SurveyQuestion> questions = new ArrayList<>();
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "survey")
-    private final List<Answer> answers = new ArrayList<>();
-
    
     public Survey(String title) {
         this.title = title;

@@ -1,8 +1,6 @@
 package br.com.maurigvs.surveyapi.entity.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,10 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,17 +30,13 @@ public class SurveyChoice implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonProperty("choice")
     private String title;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "question_id")
     private SurveyQuestion question;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "choice")
-    private final List<AnswerChoice> answerChoices = new ArrayList<>();
-
     
     public SurveyChoice(String title) {
         this.title = title;

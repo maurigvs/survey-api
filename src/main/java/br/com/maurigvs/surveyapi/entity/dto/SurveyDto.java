@@ -18,5 +18,5 @@ public class SurveyDto {
     private String title;
 
     @JsonProperty("questions")
-    private final List<QuestionDto> questions = new ArrayList<>();
+    private final List<SurveyItemDto> items = new ArrayList<>();
 }

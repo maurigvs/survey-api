@@ -24,6 +24,9 @@ public class AnswerDto {
     @JsonProperty("survey_id")
     private Long surveyId;
 
+    @JsonProperty("survey")
+    private Long surveyTitle;
+
     @JsonProperty("answers")
-    private final List<OptionDto> items = new ArrayList<>();
+    private final List<AnswerItemDto> items = new ArrayList<>();
 }
