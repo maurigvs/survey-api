@@ -1,36 +1,36 @@
 package br.com.maurigvs.surveyapi.controller.exception;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
+@Slf4j
 public class ApiExceptionHandler {
 
-    Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
-    String logPrefix = "Handling {}";
+    private static final String LOG_PREFIX = "Handling {}";
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiResponse> handleBusinessException(BusinessException exception, HttpServletRequest request){
-        log.info(logPrefix, exception.getClass().getCanonicalName());
+        log.info(LOG_PREFIX, exception.getClass().getCanonicalName());
         return getApiException(HttpStatus.BAD_REQUEST, exception.getMessage(), request.getRequestURI());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse> handleIllegalArgumentException(IllegalArgumentException exception, HttpServletRequest request){
-        log.info(logPrefix, exception.getClass().getCanonicalName());
+        log.info(LOG_PREFIX, exception.getClass().getCanonicalName());
         return getApiException(HttpStatus.BAD_REQUEST, exception.getMessage(), request.getRequestURI());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiResponse> messageNoReadable(HttpMessageNotReadableException exception, HttpServletRequest request){
-        log.info(logPrefix, exception.getClass().getCanonicalName());
+        log.info(LOG_PREFIX, exception.getClass().getCanonicalName());
         return getApiException(HttpStatus.BAD_REQUEST, exception.getMessage(), request.getRequestURI());
     }
 

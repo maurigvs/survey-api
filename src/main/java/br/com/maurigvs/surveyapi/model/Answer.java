@@ -1,12 +1,21 @@
 package br.com.maurigvs.surveyapi.model;
 
 import javax.persistence.*;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "answer")
+@Getter
+@Setter
+@ToString
 public class Answer implements Serializable {
 
     @Id
