@@ -34,7 +34,7 @@ public class Survey implements Serializable {
     private String title;
 
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Question> questions = new ArrayList<>();
+    private final List<SurveyQuestion> questions = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "survey")

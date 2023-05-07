@@ -27,7 +27,7 @@ public class AnswerChoice implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "choice_id")
-    private Choice choice;
+    private SurveyChoice choice;
 
     @ManyToOne
     @JoinColumn(name = "question_id")

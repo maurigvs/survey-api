@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,12 +22,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "survey_choice")
+@Table(name = "survey_question")
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Choice implements Serializable {
+public class SurveyQuestion implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,17 +35,20 @@ public class Choice implements Serializable {
 
     private String title;
 
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<SurveyChoice> choices = new ArrayList<>();
+
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "question_id")
-    private Question question;
+    @JoinColumn(name = "survey_id")
+    private Survey survey;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "choice")
-    private final List<AnswerChoice> answerChoices = new ArrayList<>();
+    @OneToMany(mappedBy = "question")
+    private final List<AnswerQuestion> answerQuestions = new ArrayList<>();
 
-    
-    public Choice(String title) {
+
+    public SurveyQuestion(String title) {
         this.title = title;
     }
 }

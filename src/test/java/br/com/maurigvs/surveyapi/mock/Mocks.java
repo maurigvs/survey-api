@@ -41,21 +41,21 @@ public class Mocks {
 
     public static Survey getSurveyValid() {
         Survey survey = new Survey("Sample Survey");
-        Question q1 = new Question("Where does Santa Claus live?");
+        SurveyQuestion q1 = new SurveyQuestion("Where does Santa Claus live?");
         q1.getChoices().addAll(List.of(
-                new Choice("Hawaii"),
-                new Choice("Finland"),
-                new Choice("Sweden"),
-                new Choice("China")));
+                new SurveyChoice("Hawaii"),
+                new SurveyChoice("Finland"),
+                new SurveyChoice("Sweden"),
+                new SurveyChoice("China")));
         survey.getQuestions().add(q1);
 
-        Question q2 = new Question("Where you satisfied with your Christmas presents?");
+        SurveyQuestion q2 = new SurveyQuestion("Where you satisfied with your Christmas presents?");
         q2.getChoices().addAll(List.of(
-                new Choice("Very satisfied"),
-                new Choice("Somewhat satisfied"),
-                new Choice("Neither satisfied or dissatisfied"),
-                new Choice("Dissatisfied"),
-                new Choice("Very dissatisfied")));
+                new SurveyChoice("Very satisfied"),
+                new SurveyChoice("Somewhat satisfied"),
+                new SurveyChoice("Neither satisfied or dissatisfied"),
+                new SurveyChoice("Dissatisfied"),
+                new SurveyChoice("Very dissatisfied")));
         survey.getQuestions().add(q2);
         return survey;
     }
@@ -64,9 +64,9 @@ public class Mocks {
         Survey survey = getSurveyValid();
         long id = 1L;
         survey.setId(id);
-        for (Question q : survey.getQuestions()) {
+        for (SurveyQuestion q : survey.getQuestions()) {
             q.setId(id++);
-            for (Choice c : q.getChoices()) {
+            for (SurveyChoice c : q.getChoices()) {
                 c.setId(id++);
             }
         }
@@ -142,11 +142,11 @@ public class Mocks {
         Answer answer = new Answer();
         answer.setEmail("maurigvs@icloud.com");
         answer.setSurvey(survey);
-        for (Question question : survey.getQuestions()) {
+        for (SurveyQuestion question : survey.getQuestions()) {
             AnswerQuestion aq = new AnswerQuestion();
             aq.setAnswer(answer);
             aq.setQuestion(question);
-            for (Choice choice : question.getChoices()) {
+            for (SurveyChoice choice : question.getChoices()) {
                 AnswerChoice ac = new AnswerChoice();
                 ac.setQuestion(aq);
                 ac.setChoice(choice);

@@ -33,7 +33,7 @@ public class AnswerQuestion implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "question_id")
-    private Question question;
+    private SurveyQuestion question;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<AnswerChoice> choices = new ArrayList<>();

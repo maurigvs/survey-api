@@ -60,13 +60,13 @@ public class SurveyService {
             if(q.getChoices().isEmpty())
                 throw new IllegalArgumentException("Questions must have at least 1 choice");
 
-            Question question = new Question(q.getTitle());
+            SurveyQuestion question = new SurveyQuestion(q.getTitle());
             question.getChoices().addAll(q.getChoices().stream().map(c -> {
 
                 if(isNullString(c))
                     throw new IllegalArgumentException("Choices can not be null or blank");
 
-                Choice choice = new Choice(c);
+                SurveyChoice choice = new SurveyChoice(c);
                 choice.setQuestion(question);
                 return choice;
 
@@ -98,14 +98,14 @@ public class SurveyService {
         answer.setSurvey(survey);
         answer.getQuestions().addAll(
             request.getItems().stream().map(i -> {
-            for (Question question : survey.getQuestions()) {
+            for (SurveyQuestion question : survey.getQuestions()) {
                 if(Objects.equals(question.getId(), i.getQuestionId())){
                     AnswerQuestion aq = new AnswerQuestion();
                     aq.setAnswer(answer);
                     aq.setQuestion(question);
                     aq.getChoices().addAll(
                         i.getChoicesIds().stream().map(c -> {
-                        for (Choice choice : question.getChoices()) {
+                        for (SurveyChoice choice : question.getChoices()) {
                             if(Objects.equals(choice.getId(), c)){
                                 AnswerChoice ac = new AnswerChoice();
                                 ac.setQuestion(aq);
