@@ -1,4 +1,4 @@
-package br.com.maurigvs.surveyapi.controller.exception;
+package br.com.maurigvs.surveyapi.exception;
 
 public class BusinessException extends RuntimeException {
 

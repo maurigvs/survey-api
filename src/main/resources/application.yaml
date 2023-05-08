@@ -3,7 +3,7 @@ server:
         context-path: /${spring.application.name}
 spring:
     application:
-        name: surveys
+        name: api
     datasource:
         url: jdbc:h2:mem:survey-db
         username: app
@@ -15,5 +15,5 @@ spring:
     jpa:
         properties:
             hibernate:
-                format-sql: true
+                format-sql: false
         show-sql: true

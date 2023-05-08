@@ -5,13 +5,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
-@Getter
-@Setter
-@ToString
 public class SurveyItemDto {
 
     @JsonProperty("question")
@@ -19,4 +12,24 @@ public class SurveyItemDto {
 
     @JsonProperty("choices")
     private final List<String> choices = new ArrayList<>();
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public List<String> getChoices() {
+        return choices;
+    }
+
+    @Override
+    public String toString() {
+        return "SurveyItemDto{" +
+                "title='" + title + '\'' +
+                ", choices=" + choices +
+                '}';
+    }
 }
