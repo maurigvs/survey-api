@@ -8,9 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Collections;
 
-import br.com.maurigvs.surveyapi.Mocks;
-import br.com.maurigvs.surveyapi.entity.dto.SurveyDto;
-import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,6 +15,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import br.com.maurigvs.surveyapi.Mocks;
+import br.com.maurigvs.surveyapi.entity.dto.SurveyDto;
+import br.com.maurigvs.surveyapi.service.SurveyService;
 
 @WebMvcTest(SurveyController.class)
 @AutoConfigureMockMvc

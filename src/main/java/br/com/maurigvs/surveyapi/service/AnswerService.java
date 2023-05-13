@@ -3,23 +3,23 @@ package br.com.maurigvs.surveyapi.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import lombok.extern.slf4j.Slf4j;
+
 import br.com.maurigvs.surveyapi.entity.dto.AnswerDto;
 import br.com.maurigvs.surveyapi.entity.model.Answer;
 import br.com.maurigvs.surveyapi.entity.model.AnswerChoice;
 import br.com.maurigvs.surveyapi.entity.model.AnswerQuestion;
 import br.com.maurigvs.surveyapi.repository.AnswerRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class AnswerService {
 
-    private static final Logger log = LoggerFactory.getLogger(AnswerService.class);
-    
     @Autowired
-    AnswerRepository repository;
+    private AnswerRepository repository;
 
     public void createAnswer(AnswerDto dto){
         Answer answer = parseDto(dto);

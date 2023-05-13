@@ -2,18 +2,17 @@ package br.com.maurigvs.surveyapi.exception;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-@ControllerAdvice
-public class ApiExceptionHandler {
+import lombok.extern.slf4j.Slf4j;
 
-    private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
+@ControllerAdvice
+@Slf4j
+public class ApiExceptionHandler {
 
     private static final String LOG_PREFIX = "Handling {}";
 

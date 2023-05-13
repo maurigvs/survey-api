@@ -1,5 +1,9 @@
 package br.com.maurigvs.surveyapi.entity.model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,15 +13,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 @Entity
 @Table(name = "survey_question")
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 public class SurveyQuestion implements Serializable {
     
     @Id
@@ -34,49 +44,10 @@ public class SurveyQuestion implements Serializable {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "survey_id")
+    @ToString.Exclude
     private Survey survey;
-
-    public SurveyQuestion() {
-    }
 
     public SurveyQuestion(String title) {
         this.title = title;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public List<SurveyChoice> getChoices() {
-        return choices;
-    }
-
-    public Survey getSurvey() {
-        return survey;
-    }
-
-    public void setSurvey(Survey survey) {
-        this.survey = survey;
-    }
-
-    @Override
-    public String toString() {
-        return "SurveyQuestion{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", choices=" + choices +
-                '}';
     }
 }
