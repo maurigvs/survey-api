@@ -3,9 +3,9 @@ package br.com.maurigvs.surveyapi.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import br.com.maurigvs.surveyapi.entity.dto.AnswerDto;
@@ -16,9 +16,9 @@ import br.com.maurigvs.surveyapi.repository.AnswerRepository;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class AnswerService {
 
-    @Autowired
     private AnswerRepository repository;
 
     public void createAnswer(AnswerDto dto){
