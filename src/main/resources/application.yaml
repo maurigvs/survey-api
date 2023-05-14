@@ -15,5 +15,5 @@ spring:
     jpa:
         properties:
             hibernate:
-                format-sql: false
-        show-sql: true
+                format-sql: true
+        show-sql: false
