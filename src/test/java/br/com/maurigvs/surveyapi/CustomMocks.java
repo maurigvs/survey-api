@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import br.com.maurigvs.surveyapi.model.dto.QuestionDto;
 import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
@@ -62,6 +63,7 @@ public class CustomMocks {
     public static String parseToJson(Object object) {
         try {
             ObjectMapper om = new ObjectMapper();
+            om.registerModule(new JavaTimeModule());
             return om.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

@@ -1,5 +1,7 @@
 package br.com.maurigvs.surveyapi.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +23,7 @@ public class SurveyController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> postSurvey(@RequestBody SurveyDto dto){
+    public ResponseEntity<Void> postSurvey(@RequestBody @Valid SurveyDto dto){
         surveyService.createSurvey(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

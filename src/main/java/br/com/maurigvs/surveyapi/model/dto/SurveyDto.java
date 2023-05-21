@@ -3,8 +3,11 @@ package br.com.maurigvs.surveyapi.model.dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+
 public class SurveyDto {
 
+    @NotBlank(message = "Survey title can not be blank")
     private String survey;
 
     private final List<QuestionDto> questions = new ArrayList<>();
