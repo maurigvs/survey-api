@@ -27,18 +27,19 @@ public class Mocks {
             "Neither satisfied or dissatisfied", "Dissatisfied", "Very dissatisfied");
 
     public static Survey mockSurvey() {
+
         Survey survey = new Survey();
         survey.setTitle(title);
 
         Question qs1 = new Question();
         qs1.setTitle(question1);
-        choices1.forEach(c -> qs1.getChoiceList().add(new Choice(c, qs1)));
-        survey.getQuestionList().add(qs1);
+        choices1.forEach(c -> qs1.getChoices().add(new Choice(c, qs1)));
+        survey.getQuestions().add(qs1);
 
         Question qs2 = new Question();
         qs2.setTitle(question2);
-        choices2.forEach(c -> qs2.getChoiceList().add(new Choice(c, qs2)));
-        survey.getQuestionList().add(qs2);
+        choices2.forEach(c -> qs2.getChoices().add(new Choice(c, qs2)));
+        survey.getQuestions().add(qs2);
 
         return survey;
     }
@@ -62,10 +63,12 @@ public class Mocks {
     }
 
     public static Survey mockSurveyWithIds(){
+        int bound = 10000;
+        Random random = new Random();
         Survey survey = mockSurvey();
-        survey.setId(new Random().nextInt(10000));
-        survey.getQuestionList().forEach(q -> q.setId(new Random().nextInt(10000)));
-        survey.getQuestionList().forEach(q -> q.getChoiceList().forEach(c -> c.setId(new Random().nextInt(10000))));
+        survey.setId(random.nextInt(bound));
+        survey.getQuestions().forEach(q -> q.setId(random.nextInt(bound)));
+        survey.getQuestions().forEach(q -> q.getChoices().forEach(c -> c.setId(random.nextInt(bound))));
         return survey;
     }
 

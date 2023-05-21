@@ -7,6 +7,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(name = "SurveyRequest")
 public class SurveyDto {
 
     @NotBlank(message = "Survey title can not be blank")

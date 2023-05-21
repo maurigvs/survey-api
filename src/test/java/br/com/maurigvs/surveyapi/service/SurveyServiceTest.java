@@ -40,14 +40,14 @@ class SurveyServiceTest {
         assertAll(
             () -> verify(surveyRepository, times(1)).save(any(Survey.class)),
             () -> assertEquals(expected.getTitle(), result.getTitle()),
-            () -> assertEquals(expected.getQuestionList().get(0).getTitle(),
-                    result.getQuestionList().get(0).getTitle()),
-            () -> assertEquals(expected.getQuestionList().get(0).getChoiceList().get(0).getTitle(),
-                    result.getQuestionList().get(0).getChoiceList().get(0).getTitle()),
-            () -> assertEquals(expected.getQuestionList().get(1).getTitle(),
-                    result.getQuestionList().get(1).getTitle()),
-            () -> assertEquals(expected.getQuestionList().get(1).getChoiceList().get(0).getTitle(),
-                    result.getQuestionList().get(1).getChoiceList().get(0).getTitle())
+            () -> assertEquals(expected.getQuestions().get(0).getTitle(),
+                    result.getQuestions().get(0).getTitle()),
+            () -> assertEquals(expected.getQuestions().get(0).getChoices().get(0).getTitle(),
+                    result.getQuestions().get(0).getChoices().get(0).getTitle()),
+            () -> assertEquals(expected.getQuestions().get(1).getTitle(),
+                    result.getQuestions().get(1).getTitle()),
+            () -> assertEquals(expected.getQuestions().get(1).getChoices().get(0).getTitle(),
+                    result.getQuestions().get(1).getChoices().get(0).getTitle())
         );
     }
 
@@ -64,7 +64,7 @@ class SurveyServiceTest {
             () -> verify(surveyRepository, times(1)).findAll(),
             () -> assertEquals(1, result.size()),
             () -> assertEquals("Sample Survey", result.get(0).getTitle()),
-            () -> assertEquals(2, result.get(0).getQuestionList().size())
+            () -> assertEquals(2, result.get(0).getQuestions().size())
         );
     }
 }

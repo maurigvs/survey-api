@@ -15,6 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
 import br.com.maurigvs.surveyapi.model.entity.Survey;
 import br.com.maurigvs.surveyapi.service.SurveyService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/survey")
@@ -26,12 +32,25 @@ public class SurveyController {
         this.surveyService = surveyService;
     }
 
+    @Tag(name = "survey")
+    @Operation(summary = "Creates a new survey")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Survey created"),
+        @ApiResponse(responseCode = "400", description = "Bad Request. Required information is missing.")
+    })
     @PostMapping
     public ResponseEntity<Void> postSurvey(@RequestBody @Valid SurveyDto dto){
         surveyService.createSurvey(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @Tag(name = "survey")
+    @Operation(summary = "List all the surveys available")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Surveys listed", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = Survey.class))
+        })
+    })
     @GetMapping
     public ResponseEntity<List<Survey>> getSurveys(){
         List<Survey> surveyList = surveyService.findAll();

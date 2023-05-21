@@ -17,3 +17,7 @@ spring:
             hibernate:
                 format-sql: true
         show-sql: false
+
+springdoc:
+    api-docs:
+        path: /docs
