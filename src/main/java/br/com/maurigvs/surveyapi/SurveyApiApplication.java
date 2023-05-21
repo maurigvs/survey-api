@@ -19,10 +19,13 @@ public class SurveyApiApplication {
 	@Bean
 	public OpenAPI openApiInfo() {
 		return new OpenAPI()
-				.info(new Info().title("Survey API")
+				.info(new Info()
+						.title("Survey API")
 						.description("A simple Survey application")
 						.version("v0.0.1")
-						.license(new License().name("Apache 2.0").url("http://springdoc.org")))
+						.license(new License()
+								.name("Apache 2.0")
+								.url("http://springdoc.org")))
 				.externalDocs(new ExternalDocumentation()
 						.description("More projects from the Developer")
 						.url("https://github.com/maurigvs"));
