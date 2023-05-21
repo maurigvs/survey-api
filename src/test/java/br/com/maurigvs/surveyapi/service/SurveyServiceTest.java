@@ -7,12 +7,14 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import br.com.maurigvs.surveyapi.CustomMocks;
+import br.com.maurigvs.surveyapi.mocks.Mocks;
 import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
 import br.com.maurigvs.surveyapi.model.entity.Survey;
 import br.com.maurigvs.surveyapi.repository.SurveyRepository;
@@ -29,8 +31,8 @@ class SurveyServiceTest {
     @Test
     void should_ReturnSurvey_when_CreateSurveyWithData(){
         //given
-        SurveyDto surveyDto = CustomMocks.mockSurveyDto();
-        Survey expected = CustomMocks.mockSurvey();
+        SurveyDto surveyDto = Mocks.mockSurveyDto();
+        Survey expected = Mocks.mockSurvey();
         given(surveyRepository.save(any(Survey.class))).willReturn(expected);
         // when
         Survey result = surveyService.createSurvey(surveyDto);
@@ -49,5 +51,20 @@ class SurveyServiceTest {
         );
     }
 
-
+    @Test
+    void should_ReturnList_when_FindAllSurveys(){
+        // given
+        Survey survey = Mocks.mockSurveyWithIds();
+        List<Survey> surveyList = List.of(survey);
+        given(surveyRepository.findAll()).willReturn(surveyList);
+        // when
+        List<Survey> result = surveyService.findAll();
+        // then
+        assertAll(
+            () -> verify(surveyRepository, times(1)).findAll(),
+            () -> assertEquals(1, result.size()),
+            () -> assertEquals("Sample Survey", result.get(0).getTitle()),
+            () -> assertEquals(2, result.get(0).getQuestionList().size())
+        );
+    }
 }

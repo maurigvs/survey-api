@@ -1,5 +1,7 @@
 package br.com.maurigvs.surveyapi.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
@@ -18,5 +20,9 @@ public class SurveyService {
     public Survey createSurvey(SurveyDto dto) {
         Survey survey = new Survey(dto);
         return surveyRepository.save(survey);
+    }
+
+    public List<Survey> findAll() {
+        return surveyRepository.findAll();
     }
 }

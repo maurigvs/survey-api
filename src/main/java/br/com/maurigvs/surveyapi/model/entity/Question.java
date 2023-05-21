@@ -3,6 +3,7 @@ package br.com.maurigvs.surveyapi.model.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -13,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.maurigvs.surveyapi.model.dto.QuestionDto;
 
 @Entity
@@ -20,13 +23,14 @@ public class Question implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String title;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Choice> choiceList = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "survey_id")
     private Survey survey;
@@ -40,11 +44,11 @@ public class Question implements Serializable {
         dto.getChoices().forEach(c -> this.choiceList.add(new Choice(c, this)));
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -66,5 +70,18 @@ public class Question implements Serializable {
 
     public void setSurvey(Survey survey) {
         this.survey = survey;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Question question = (Question) o;
+        return Objects.equals(id, question.id) && Objects.equals(title, question.title) && Objects.equals(choiceList, question.choiceList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, choiceList);
     }
 }

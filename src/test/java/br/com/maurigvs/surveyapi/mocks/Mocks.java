@@ -1,6 +1,7 @@
-package br.com.maurigvs.surveyapi;
+package br.com.maurigvs.surveyapi.mocks;
 
 import java.util.List;
+import java.util.Random;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +13,7 @@ import br.com.maurigvs.surveyapi.model.entity.Choice;
 import br.com.maurigvs.surveyapi.model.entity.Question;
 import br.com.maurigvs.surveyapi.model.entity.Survey;
 
-public class CustomMocks {
+public class Mocks {
 
     private static final String title = "Sample Survey";
 
@@ -58,6 +59,14 @@ public class CustomMocks {
         surveyDto.getQuestions().add(qd2);
 
         return surveyDto;
+    }
+
+    public static Survey mockSurveyWithIds(){
+        Survey survey = mockSurvey();
+        survey.setId(new Random().nextInt(10000));
+        survey.getQuestionList().forEach(q -> q.setId(new Random().nextInt(10000)));
+        survey.getQuestionList().forEach(q -> q.getChoiceList().forEach(c -> c.setId(new Random().nextInt(10000))));
+        return survey;
     }
 
     public static String parseToJson(Object object) {
