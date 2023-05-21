@@ -84,13 +84,12 @@ class SurveyControllerTest {
     @Nested
     @DisplayName("Failure Tests")
     class FailureTests {
+
         @Test
         @DisplayName("Post Survey without body")
         void should_ReturnBadRequest_when_PostSurveyWithoutBody() throws Exception {
             mockMvc.perform(post("/survey")).andExpect(status().isBadRequest());
         }
-
-
 
         @Test
         @DisplayName("Post Survey without title")
