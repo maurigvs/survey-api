@@ -43,29 +43,72 @@ class SurveyControllerTest {
         SurveyDto surveyDto = CustomMocks.mockSurveyDto();
         String surveyAsJson = CustomMocks.parseToJson(surveyDto);
 
-        mockMvc.perform(post("/survey")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(surveyAsJson))
-                .andExpect(status().isCreated());
+        mockMvc.perform(post("/survey").contentType(MediaType.APPLICATION_JSON)
+                .content(surveyAsJson)).andExpect(status().isCreated());
 
         verify(surveyService, times(1)).createSurvey(any(SurveyDto.class));
         verifyNoMoreInteractions(surveyService);
     }
 
     @Test
-    void should_ReturnBadRequest_when_PostSurveyWithMissingTitle() throws Exception {
+    void should_ReturnBadRequest_when_PostSurveyWithoutTitle() throws Exception {
         SurveyDto surveyDto = CustomMocks.mockSurveyDto();
         surveyDto.setSurvey("");
         String surveyAsJson = CustomMocks.parseToJson(surveyDto);
 
-        StandardError error = new StandardError(HttpStatus.BAD_REQUEST.getReasonPhrase(),"Survey title can not be blank");
+        StandardError error = new StandardError(HttpStatus.BAD_REQUEST.getReasonPhrase(), "Survey title can not be blank");
         String errorAsJson = CustomMocks.parseToJson(error);
 
-        mockMvc.perform(post("/survey")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(surveyAsJson))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/survey").contentType(MediaType.APPLICATION_JSON).content(surveyAsJson))
+                .andExpect(status().isBadRequest()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(errorAsJson));
+
+        verifyNoInteractions(surveyService);
+    }
+
+    @Test
+    void should_ReturnBadRequest_when_PostSurveyWithoutQuestions() throws Exception {
+        SurveyDto surveyDto = CustomMocks.mockSurveyDto();
+        surveyDto.getQuestions().clear();
+        String surveyAsJson = CustomMocks.parseToJson(surveyDto);
+
+        StandardError error = new StandardError(HttpStatus.BAD_REQUEST.getReasonPhrase(), "Survey must have questions");
+        String errorAsJson = CustomMocks.parseToJson(error);
+
+        mockMvc.perform(post("/survey").contentType(MediaType.APPLICATION_JSON).content(surveyAsJson))
+                .andExpect(status().isBadRequest()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(errorAsJson));
+
+        verifyNoInteractions(surveyService);
+    }
+
+    @Test
+    void should_ReturnBadRequest_when_PostSurveyWithQuestionWithoutTitle() throws Exception {
+        SurveyDto surveyDto = CustomMocks.mockSurveyDto();
+        surveyDto.getQuestions().get(0).setQuestion("");
+        String surveyAsJson = CustomMocks.parseToJson(surveyDto);
+
+        StandardError error = new StandardError(HttpStatus.BAD_REQUEST.getReasonPhrase(), "Question title can not be blank");
+        String errorAsJson = CustomMocks.parseToJson(error);
+
+        mockMvc.perform(post("/survey").contentType(MediaType.APPLICATION_JSON).content(surveyAsJson))
+                .andExpect(status().isBadRequest()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(errorAsJson));
+
+        verifyNoInteractions(surveyService);
+    }
+
+    @Test
+    void should_ReturnBadRequest_when_PostSurveyWithQuestionWithoutChoices() throws Exception {
+        SurveyDto surveyDto = CustomMocks.mockSurveyDto();
+        surveyDto.getQuestions().get(0).getChoices().clear();
+        String surveyAsJson = CustomMocks.parseToJson(surveyDto);
+
+        StandardError error = new StandardError(HttpStatus.BAD_REQUEST.getReasonPhrase(), "Question must have choices");
+        String errorAsJson = CustomMocks.parseToJson(error);
+
+        mockMvc.perform(post("/survey").contentType(MediaType.APPLICATION_JSON).content(surveyAsJson))
+                .andExpect(status().isBadRequest()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(errorAsJson));
 
         verifyNoInteractions(surveyService);

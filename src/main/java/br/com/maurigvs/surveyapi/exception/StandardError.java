@@ -9,7 +9,9 @@ public class StandardError implements Serializable {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T' HH:ss:ss'Z'")
     private final ZonedDateTime timestamp = ZonedDateTime.now();
+
     private final String error;
+
     private final String message;
 
     public StandardError(String error, String message) {
