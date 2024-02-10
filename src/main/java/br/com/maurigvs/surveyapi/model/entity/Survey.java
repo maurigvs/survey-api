@@ -31,8 +31,8 @@ public class Survey implements Serializable {
     }
 
     public Survey(SurveyDto dto) {
-        this.title = dto.getSurvey();
-        dto.getQuestions().forEach(q -> this.questions.add(new Question(q, this)));
+        this.title = dto.survey();
+        dto.questions().forEach(q -> this.questions.add(new Question(q, this)));
     }
 
     public Integer getId() {

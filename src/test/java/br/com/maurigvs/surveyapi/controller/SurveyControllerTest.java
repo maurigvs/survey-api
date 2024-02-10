@@ -11,8 +11,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Collections;
 import java.util.List;
 
+import br.com.maurigvs.surveyapi.model.dto.QuestionDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -94,8 +96,7 @@ class SurveyControllerTest {
         @Test
         @DisplayName("Post Survey without title")
         void should_ReturnBadRequest_when_PostSurveyWithoutTitle() throws Exception {
-            SurveyDto surveyDto = Mocks.mockSurveyDto();
-            surveyDto.setSurvey("");
+            var surveyDto = new SurveyDto("", Mocks.mockSurveyDto().questions());
             String surveyAsJson = Mocks.parseToJson(surveyDto);
 
             StandardError error = new StandardError(HttpStatus.BAD_REQUEST.getReasonPhrase(), "Survey title can not be blank");
@@ -111,8 +112,7 @@ class SurveyControllerTest {
         @Test
         @DisplayName("Post Survey without questions")
         void should_ReturnBadRequest_when_PostSurveyWithoutQuestions() throws Exception {
-            SurveyDto surveyDto = Mocks.mockSurveyDto();
-            surveyDto.getQuestions().clear();
+            var surveyDto = new SurveyDto(Mocks.TITLE, Collections.emptyList());
             String surveyAsJson = Mocks.parseToJson(surveyDto);
 
             StandardError error = new StandardError(HttpStatus.BAD_REQUEST.getReasonPhrase(), "Survey must have questions");
@@ -128,8 +128,9 @@ class SurveyControllerTest {
         @Test
         @DisplayName("Post Survey with questions without title")
         void should_ReturnBadRequest_when_PostSurveyWithQuestionWithoutTitle() throws Exception {
-            SurveyDto surveyDto = Mocks.mockSurveyDto();
-            surveyDto.getQuestions().get(0).setQuestion("");
+
+            var surveyDto = new SurveyDto(Mocks.TITLE,
+                    List.of(new QuestionDto("", Mocks.CHOICES_1)));
             String surveyAsJson = Mocks.parseToJson(surveyDto);
 
             StandardError error = new StandardError(HttpStatus.BAD_REQUEST.getReasonPhrase(), "Question title can not be blank");
@@ -145,8 +146,8 @@ class SurveyControllerTest {
         @Test
         @DisplayName("Post Survey with questions without choices")
         void should_ReturnBadRequest_when_PostSurveyWithQuestionWithoutChoices() throws Exception {
-            SurveyDto surveyDto = Mocks.mockSurveyDto();
-            surveyDto.getQuestions().get(0).getChoices().clear();
+            var surveyDto = new SurveyDto(Mocks.TITLE,
+                    List.of(new QuestionDto(Mocks.QUESTION_1, Collections.emptyList())));
             String surveyAsJson = Mocks.parseToJson(surveyDto);
 
             StandardError error = new StandardError(HttpStatus.BAD_REQUEST.getReasonPhrase(), "Question must have choices");

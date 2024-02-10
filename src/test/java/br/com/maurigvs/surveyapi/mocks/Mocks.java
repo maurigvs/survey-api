@@ -15,51 +15,41 @@ import br.com.maurigvs.surveyapi.model.entity.Survey;
 
 public class Mocks {
 
-    private static final String title = "Sample Survey";
+    public static final String TITLE = "Sample Survey";
 
-    private static final String question1 = "Where does Santa Claus live?";
+    public static final String QUESTION_1 = "Where does Santa Claus live?";
 
-    private static final List<String> choices1 = List.of("Hawaii", "Finland", "Sweden", "China");
+    public static final List<String> CHOICES_1 = List.of("Hawaii", "Finland", "Sweden", "China");
 
-    private static final String question2 = "Were you satisfied with your Christmas presents?";
+    public static final String QUESTION_2 = "Were you satisfied with your Christmas presents?";
 
-    private static final List<String> choices2 = List.of("Very satisfied", "Somewhat satisfied",
+    public static final List<String> CHOICES_2 = List.of("Very satisfied", "Somewhat satisfied",
             "Neither satisfied or dissatisfied", "Dissatisfied", "Very dissatisfied");
 
     public static Survey mockSurvey() {
 
         Survey survey = new Survey();
-        survey.setTitle(title);
+        survey.setTitle(TITLE);
 
         Question qs1 = new Question();
-        qs1.setTitle(question1);
-        choices1.forEach(c -> qs1.getChoices().add(new Choice(c, qs1)));
+        qs1.setTitle(QUESTION_1);
+        CHOICES_1.forEach(c -> qs1.getChoices().add(new Choice(c, qs1)));
         survey.getQuestions().add(qs1);
 
         Question qs2 = new Question();
-        qs2.setTitle(question2);
-        choices2.forEach(c -> qs2.getChoices().add(new Choice(c, qs2)));
+        qs2.setTitle(QUESTION_2);
+        CHOICES_2.forEach(c -> qs2.getChoices().add(new Choice(c, qs2)));
         survey.getQuestions().add(qs2);
 
         return survey;
     }
 
     public static SurveyDto mockSurveyDto() {
-
-        SurveyDto surveyDto = new SurveyDto();
-        surveyDto.setSurvey(title);
-
-        QuestionDto qd1 = new QuestionDto();
-        qd1.setQuestion(question1);
-        qd1.getChoices().addAll(choices1);
-        surveyDto.getQuestions().add(qd1);
-
-        QuestionDto qd2 = new QuestionDto();
-        qd2.setQuestion(question2);
-        qd2.getChoices().addAll(choices2);
-        surveyDto.getQuestions().add(qd2);
-
-        return surveyDto;
+        var questionsDto = List.of(
+            new QuestionDto(QUESTION_1, CHOICES_1),
+            new QuestionDto(QUESTION_2, CHOICES_2)
+        );
+        return new SurveyDto(TITLE, questionsDto);
     }
 
     public static Survey mockSurveyWithIds(){

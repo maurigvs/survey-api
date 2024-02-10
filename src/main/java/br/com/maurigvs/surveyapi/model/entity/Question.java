@@ -40,9 +40,9 @@ public class Question implements Serializable {
     }
 
     public Question(QuestionDto dto, Survey survey) {
-        this.title = dto.getQuestion();
+        this.title = dto.question();
         this.survey = survey;
-        dto.getChoices().forEach(c -> this.choices.add(new Choice(c, this)));
+        dto.choices().forEach(c -> this.choices.add(new Choice(c, this)));
     }
 
     public Integer getId() {

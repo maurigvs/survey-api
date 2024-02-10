@@ -9,23 +9,13 @@ import javax.validation.constraints.NotEmpty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(name = "QuestionRequest")
-public class QuestionDto {
+public record QuestionDto (
 
     @NotBlank(message = "Question title can not be blank")
-    private String question;
+    String question,
 
     @NotEmpty(message = "Question must have choices")
-    private final List<String> choices = new ArrayList<>();
+    List<String> choices
 
-    public String getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
-    public List<String> getChoices() {
-        return choices;
-    }
+){
 }
