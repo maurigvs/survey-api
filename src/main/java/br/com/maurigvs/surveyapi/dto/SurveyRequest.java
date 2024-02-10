@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 
-@Schema(name = "Survey")
+@Schema
 public record SurveyRequest(
 
         @NotBlank(message = "Survey title can not be blank")

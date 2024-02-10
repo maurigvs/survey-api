@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.dto.ErrorMessageDto;
+import br.com.maurigvs.surveyapi.dto.ErrorResponse;
 import br.com.maurigvs.surveyapi.dto.SurveyRequest;
 import br.com.maurigvs.surveyapi.exception.SurveyAlreadyExistsException;
 import br.com.maurigvs.surveyapi.mocks.Mock;
@@ -107,7 +107,7 @@ class SurveyControllerTest {
     @Test
     void should_return_Bad_Request_when_MethodArgumentNotValidException_is_thrown() throws Exception {
         var request = new SurveyRequest("", Mock.ofSurveyRequest().questions());
-        var response = new ErrorMessageDto(ZonedDateTime.now(),
+        var response = new ErrorResponse(ZonedDateTime.now(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 "Survey title can not be blank");
 
@@ -124,7 +124,7 @@ class SurveyControllerTest {
     @Test
     void should_return_Bad_Request_when_BadRequestException_is_thrown() throws Exception {
         var request = Mock.ofSurveyRequest();
-        var response = new ErrorMessageDto(ZonedDateTime.now(),
+        var response = new ErrorResponse(ZonedDateTime.now(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 "Survey 'Sample Survey' already exists");
         willThrow(new SurveyAlreadyExistsException(request.survey())).given(surveyService).createSurvey(any());
@@ -143,7 +143,7 @@ class SurveyControllerTest {
     @Test
     void should_return_Not_Found_when_NoResourceFoundException_is_thrown() throws Exception {
 
-        var response = new ErrorMessageDto(ZonedDateTime.now(),
+        var response = new ErrorResponse(ZonedDateTime.now(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
                 "Endpoint inexistent or missing required parameters: POST /survey/1");
 
