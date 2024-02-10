@@ -57,14 +57,14 @@ class SurveyControllerTest {
     void should_return_OK_when_get_survey_list() throws Exception {
 
         var surveys = Mock.ofSurveyList();
-        given(surveyService.findAll()).willReturn(surveys);
+        given(surveyService.listAllSurveys()).willReturn(surveys);
 
         mockMvc.perform(get("/survey"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(Mock.toJson(surveys)));
 
-        verify(surveyService, times(1)).findAll();
+        verify(surveyService, times(1)).listAllSurveys();
         verifyNoMoreInteractions(surveyService);
     }
 

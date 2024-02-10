@@ -15,9 +15,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-@SpringBootTest(classes = {SurveyService.class})
+@SpringBootTest(classes = {SurveyServiceImpl.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class SurveyServiceTest {
+class SurveyServiceImplTest {
 
     @Autowired
     private SurveyService surveyService;
@@ -39,7 +39,7 @@ class SurveyServiceTest {
         var surveys = Mock.ofSurveyList();
         given(surveyRepository.findAll()).willReturn(surveys);
 
-        var result = surveyService.findAll();
+        var result = surveyService.listAllSurveys();
 
         assertEquals(result, surveys);
         verify(surveyRepository, times(1)).findAll();

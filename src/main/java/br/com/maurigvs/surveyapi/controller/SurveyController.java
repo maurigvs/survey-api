@@ -56,6 +56,6 @@ public class SurveyController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<Survey> getSurveys(){
-        return surveyService.findAll();
+        return surveyService.listAllSurveys();
     }
 }
