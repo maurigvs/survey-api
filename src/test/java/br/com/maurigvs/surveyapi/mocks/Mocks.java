@@ -1,17 +1,15 @@
 package br.com.maurigvs.surveyapi.mocks;
 
-import java.util.List;
-import java.util.Random;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
 import br.com.maurigvs.surveyapi.model.dto.QuestionDto;
 import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
 import br.com.maurigvs.surveyapi.model.entity.Choice;
 import br.com.maurigvs.surveyapi.model.entity.Question;
 import br.com.maurigvs.surveyapi.model.entity.Survey;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import java.util.List;
 
 public class Mocks {
 
@@ -28,20 +26,32 @@ public class Mocks {
 
     public static Survey mockSurvey() {
 
-        Survey survey = new Survey();
-        survey.setTitle(TITLE);
+        var survey = new Survey(1, TITLE);
 
-        Question qs1 = new Question();
-        qs1.setTitle(QUESTION_1);
-        CHOICES_1.forEach(c -> qs1.getChoices().add(new Choice(c, qs1)));
-        survey.getQuestions().add(qs1);
+        var question1 = mockQuestion1(survey);
 
-        Question qs2 = new Question();
-        qs2.setTitle(QUESTION_2);
-        CHOICES_2.forEach(c -> qs2.getChoices().add(new Choice(c, qs2)));
-        survey.getQuestions().add(qs2);
+        var question2 = new Question(2, QUESTION_2, survey);
+        question1.getChoices().addAll(List.of(
+                new Choice(5, "Very satisfied", question2),
+                new Choice(6, "Somewhat satisfied", question2),
+                new Choice(7, "Neither satisfied or dissatisfied", question2),
+                new Choice(8, "Dissatisfied", question2),
+                new Choice(9, "Very dissatisfied", question2)
+        ));
+        survey.getQuestions().addAll(List.of(question1, question2));
 
         return survey;
+    }
+
+    public static Question mockQuestion1(Survey survey) {
+        var question1 = new Question(1, QUESTION_1, survey);
+        question1.getChoices().addAll(List.of(
+                new Choice(1, "Hawaii", question1),
+                new Choice(2, "Finland", question1),
+                new Choice(3, "Sweden", question1),
+                new Choice(4, "China", question1)
+        ));
+        return question1;
     }
 
     public static SurveyDto mockSurveyDto() {
@@ -52,14 +62,8 @@ public class Mocks {
         return new SurveyDto(TITLE, questionsDto);
     }
 
-    public static Survey mockSurveyWithIds(){
-        int bound = 10000;
-        Random random = new Random();
-        Survey survey = mockSurvey();
-        survey.setId(random.nextInt(bound));
-        survey.getQuestions().forEach(q -> q.setId(random.nextInt(bound)));
-        survey.getQuestions().forEach(q -> q.getChoices().forEach(c -> c.setId(random.nextInt(bound))));
-        return survey;
+    public static QuestionDto mockQuestionDto() {
+        return new QuestionDto(QUESTION_1, CHOICES_1);
     }
 
     public static String parseToJson(Object object) {

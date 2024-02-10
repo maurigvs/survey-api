@@ -1,8 +1,12 @@
 package br.com.maurigvs.surveyapi.model.entity;
 
-import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,28 +25,19 @@ public class Survey implements Serializable {
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Question> questions = new ArrayList<>();
 
-    public Survey() {
+    public Survey(Integer id, String title) {
+        this.id = id;
+        this.title = title;
     }
 
-    public Survey(SurveyDto dto) {
-        this.title = dto.survey();
-        dto.questions().forEach(q -> this.questions.add(new Question(q, this)));
-    }
+    protected Survey() {}
 
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public List<Question> getQuestions() {

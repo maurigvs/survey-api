@@ -1,20 +1,11 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Collections;
-import java.util.List;
-
+import br.com.maurigvs.surveyapi.exception.StandardError;
+import br.com.maurigvs.surveyapi.mocks.Mocks;
 import br.com.maurigvs.surveyapi.model.dto.QuestionDto;
+import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
+import br.com.maurigvs.surveyapi.model.entity.Survey;
+import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -26,11 +17,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import br.com.maurigvs.surveyapi.exception.StandardError;
-import br.com.maurigvs.surveyapi.mocks.Mocks;
-import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
-import br.com.maurigvs.surveyapi.model.entity.Survey;
-import br.com.maurigvs.surveyapi.service.SurveyService;
+import java.util.Collections;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(SurveyController.class)
 @AutoConfigureMockMvc
@@ -55,7 +54,7 @@ class SurveyControllerTest {
             mockMvc.perform(post("/survey").contentType(MediaType.APPLICATION_JSON)
                     .content(surveyAsJson)).andExpect(status().isCreated());
 
-            verify(surveyService, times(1)).createSurvey(any(SurveyDto.class));
+            verify(surveyService, times(1)).createSurvey(any(Survey.class));
             verifyNoMoreInteractions(surveyService);
         }
 
@@ -68,7 +67,7 @@ class SurveyControllerTest {
         @Test
         @DisplayName("Get Surveys correctly")
         void should_ReturnSurveyList_when_GetSurveys() throws Exception {
-            Survey survey = Mocks.mockSurveyWithIds();
+            Survey survey = Mocks.mockSurvey();
             List<Survey> surveyList = List.of(survey);
             String listAsJson = Mocks.parseToJson(surveyList);
             given(surveyService.findAll()).willReturn(surveyList);

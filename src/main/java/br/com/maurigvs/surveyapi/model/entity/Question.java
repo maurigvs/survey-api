@@ -1,6 +1,5 @@
 package br.com.maurigvs.surveyapi.model.entity;
 
-import br.com.maurigvs.surveyapi.model.dto.QuestionDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
@@ -34,29 +33,20 @@ public class Question implements Serializable {
     @JoinColumn(name = "survey_id")
     private Survey survey;
 
-    public Question() {
+    public Question(Integer id, String title, Survey survey) {
+        this.id = id;
+        this.title = title;
+        this.survey = survey;
     }
 
-    public Question(QuestionDto dto, Survey survey) {
-        this.title = dto.question();
-        this.survey = survey;
-        dto.choices().forEach(c -> this.choices.add(new Choice(c, this)));
-    }
+    protected Question() {}
 
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public List<Choice> getChoices() {
@@ -65,9 +55,5 @@ public class Question implements Serializable {
 
     public Survey getSurvey() {
         return survey;
-    }
-
-    public void setSurvey(Survey survey) {
-        this.survey = survey;
     }
 }

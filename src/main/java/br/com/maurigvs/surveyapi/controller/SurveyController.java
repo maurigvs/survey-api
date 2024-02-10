@@ -1,5 +1,6 @@
 package br.com.maurigvs.surveyapi.controller;
 
+import br.com.maurigvs.surveyapi.mapper.SurveyMapper;
 import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
 import br.com.maurigvs.surveyapi.model.entity.Survey;
 import br.com.maurigvs.surveyapi.service.SurveyService;
@@ -38,7 +39,8 @@ public class SurveyController {
     })
     @PostMapping
     public ResponseEntity<Void> postSurvey(@RequestBody @Valid SurveyDto dto){
-        surveyService.createSurvey(dto);
+        final var survey = new SurveyMapper().apply(dto);
+        surveyService.createSurvey(survey);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

@@ -26,35 +26,23 @@ public class Choice implements Serializable {
     @JoinColumn(name = "question_id")
     private Question question;
 
-    public Choice() {
-    }
-
-    public Choice(String dto, Question question) {
-        this.title = dto;
+    public Choice(Integer id, String title, Question question) {
+        this.id = id;
+        this.title = title;
         this.question = question;
     }
 
+    protected Choice() {}
+
     public Integer getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public Question getQuestion() {
         return question;
-    }
-
-    public void setQuestion(Question question) {
-        this.question = question;
     }
 }
