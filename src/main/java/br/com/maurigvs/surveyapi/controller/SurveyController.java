@@ -1,9 +1,9 @@
 package br.com.maurigvs.surveyapi.controller;
 
 import br.com.maurigvs.surveyapi.dto.QuestionDto;
+import br.com.maurigvs.surveyapi.dto.SurveyDto;
 import br.com.maurigvs.surveyapi.mapper.SurveyDtoMapper;
 import br.com.maurigvs.surveyapi.mapper.SurveyMapper;
-import br.com.maurigvs.surveyapi.dto.SurveyDto;
 import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.service.QuestionService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -71,5 +72,11 @@ public class SurveyController {
         var survey = surveyService.findById(surveyId);
         var question = new SurveyMapper.QuestionMapper(survey).apply(questionDto);
         questionService.createQuestion(question);
+    }
+
+    @DeleteMapping("/{surveyId}/question/{questionId}")
+    public void deleteQuestionById(@PathVariable Integer surveyId,
+                                   @PathVariable Integer questionId){
+        questionService.deleteById(questionId, surveyId);
     }
 }

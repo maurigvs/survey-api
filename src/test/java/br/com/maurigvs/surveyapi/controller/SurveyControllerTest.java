@@ -28,6 +28,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -89,6 +90,17 @@ class SurveyControllerTest {
         verify(surveyService, times(1)).findById(1);
         verify(questionService, times(1)).createQuestion(any(Question.class));
         verifyNoMoreInteractions(surveyService, questionService);
+    }
+
+    @Test
+    void should_return_OK_when_delete_question_from_existing_survey() throws Exception {
+
+        mockMvc.perform(delete("/survey/1/question/2"))
+                .andExpect(status().isOk());
+
+        verify(questionService, times(1)).deleteById(2,1);
+        verifyNoMoreInteractions(questionService);
+        verifyNoInteractions(surveyService);
     }
 
     @Test
