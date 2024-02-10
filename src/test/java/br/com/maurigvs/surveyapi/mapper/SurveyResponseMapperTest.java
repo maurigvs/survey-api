@@ -1,35 +1,35 @@
 package br.com.maurigvs.surveyapi.mapper;
 
 import br.com.maurigvs.surveyapi.mocks.Mock;
-import br.com.maurigvs.surveyapi.model.Choice;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertLinesMatch;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class SurveyDtoMapperTest {
+class SurveyResponseMapperTest {
 
     @Test
-    void should_return_SurveyDto_given_an_Survey() {
+    void should_return_SurveyResponse_given_an_Survey() {
         var survey = Mock.ofSurvey();
+        var questions = Mock.ofSurveyResponse().questions();
 
-        var result = new SurveyDtoMapper().apply(survey);
+        var result = new SurveyResponseMapper().apply(survey);
 
+        assertEquals(survey.getId(), result.id());
         assertEquals(survey.getTitle(), result.survey());
-        assertEquals(survey.getQuestions().size(), result.questions().size());
+        assertEquals(questions, result.questions());
     }
 
     @Test
-    void should_return_QuestionDto_given_and_Question() {
+    void should_return_QuestionResponse_given_an_Question() {
         var question = Mock.ofSurvey().getQuestions().get(0);
-        var choices = question.getChoices().stream().map(Choice::getTitle).toList();
+        var choices = Mock.ofSurveyResponse().questions().get(1).choices();
 
-        var result = new SurveyDtoMapper.QuestionDtoMapper().apply(question);
+        var result = new SurveyResponseMapper.QuestionResponseMapper().apply(question);
 
         assertEquals(question.getTitle(), result.question());
-        assertLinesMatch(choices, result.choices());
+        assertEquals(choices, result.choices());
     }
 }

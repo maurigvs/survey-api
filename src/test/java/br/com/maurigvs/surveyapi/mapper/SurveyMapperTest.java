@@ -14,7 +14,7 @@ class SurveyMapperTest {
 
     @Test
     void should_return_Survey_given_an_SurveyDto() {
-        var surveyDto = Mock.ofSurveyDto();
+        var surveyDto = Mock.ofSurveyRequest();
 
         var result = new SurveyMapper().apply(surveyDto);
 
@@ -26,7 +26,7 @@ class SurveyMapperTest {
     @Test
     void should_return_Question_given_and_QuestionDto() {
         var survey = Mock.ofSurvey();
-        var questionDto = Mock.ofQuestionDto1();
+        var questionDto = Mock.ofQuestionRequest1();
 
         var result = new SurveyMapper.QuestionMapper(survey).apply(questionDto);
 

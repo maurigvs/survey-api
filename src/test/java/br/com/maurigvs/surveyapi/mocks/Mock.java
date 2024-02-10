@@ -1,7 +1,9 @@
 package br.com.maurigvs.surveyapi.mocks;
 
-import br.com.maurigvs.surveyapi.dto.QuestionDto;
-import br.com.maurigvs.surveyapi.dto.SurveyDto;
+import br.com.maurigvs.surveyapi.dto.QuestionRequest;
+import br.com.maurigvs.surveyapi.dto.QuestionResponse;
+import br.com.maurigvs.surveyapi.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.dto.SurveyResponse;
 import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.model.Survey;
@@ -10,17 +12,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.util.List;
+import java.util.Map;
 
 public class Mock {
 
     public static Survey ofSurvey() {
         var survey = new Survey(1, "Sample Survey");
         survey.getQuestions().addAll(
-            List.of(
-                ofQuestion1(survey),
-                ofQuestion2(survey)
-            )
-        );
+                List.of(ofQuestion1(survey),
+                        ofQuestion2(survey)));
 
         return survey;
     }
@@ -33,8 +33,7 @@ public class Mock {
                 new Choice(2, "Finland", question),
                 new Choice(3, "Sweden", question),
                 new Choice(4, "China", question)
-            )
-        );
+            ));
 
         return question;
     }
@@ -48,8 +47,7 @@ public class Mock {
                 new Choice(7, "Neither satisfied or dissatisfied", question),
                 new Choice(8, "Dissatisfied", question),
                 new Choice(9, "Very dissatisfied", question)
-            )
-        );
+            ));
 
         return question;
     }
@@ -58,34 +56,62 @@ public class Mock {
         return List.of(ofSurvey());
     }
 
-    public static SurveyDto ofSurveyDto() {
-        return new SurveyDto("Sample Survey", List.of(
-            ofQuestionDto1(),
-            ofQuestionDto2())
-        );
+    public static SurveyRequest ofSurveyRequest() {
+        return new SurveyRequest("Sample Survey",
+                List.of(ofQuestionRequest1(),
+                        ofQuestionRequest2()));
     }
 
-    public static QuestionDto ofQuestionDto1() {
-        return new QuestionDto("Where does Santa Claus live?",
-                List.of("Hawaii", "Finland", "Sweden", "China"));
+    public static QuestionRequest ofQuestionRequest1() {
+        return new QuestionRequest("Where does Santa Claus live?",
+                List.of("Hawaii",
+                        "Finland",
+                        "Sweden",
+                        "China"));
     }
 
-    public static QuestionDto ofQuestionDto2() {
-        return new QuestionDto("Were you satisfied with your Christmas presents?",
-                List.of("Very satisfied", "Somewhat satisfied",
-                        "Neither satisfied or dissatisfied", "Dissatisfied",
+    private static QuestionRequest ofQuestionRequest2() {
+        return new QuestionRequest("Were you satisfied with your Christmas presents?",
+                List.of("Very satisfied",
+                        "Somewhat satisfied",
+                        "Neither satisfied or dissatisfied",
+                        "Dissatisfied",
                         "Very dissatisfied"));
     }
 
-    public static List<SurveyDto> ofSurveyDtoList(){
-        return List.of(ofSurveyDto());
+    public static SurveyResponse ofSurveyResponse() {
+        return new SurveyResponse(1, "Sample Survey",
+                Map.of(1, ofQuestionResponse1(),
+                        2, ofQuestionResponse2()));
     }
 
-    public static String toJson(Object object) {
+    private static QuestionResponse ofQuestionResponse1() {
+        return new QuestionResponse("Where does Santa Claus live?",
+                Map.of(1, "Hawaii",
+                        2, "Finland",
+                        3, "Sweden",
+                        4, "China"));
+    }
+
+    private static QuestionResponse ofQuestionResponse2() {
+        return new QuestionResponse("Were you satisfied with your Christmas presents?",
+                Map.of(5, "Very satisfied",
+                        6, "Somewhat satisfied",
+                        7, "Neither satisfied or dissatisfied",
+                        8, "Dissatisfied",
+                        9, "Very dissatisfied"));
+    }
+
+    public static List<SurveyResponse> ofSurveyResponseList() {
+        return List.of(ofSurveyResponse());
+    }
+
+    public static String ofJson(Object object) {
         try {
             ObjectMapper om = new ObjectMapper();
             om.registerModule(new JavaTimeModule());
             return om.writeValueAsString(object);
+
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Schema(name = "Question")
-public record QuestionDto (
+public record QuestionRequest(
 
         @NotBlank(message = "Question title can not be blank")
         String question,

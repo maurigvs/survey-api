@@ -1,8 +1,9 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.dto.QuestionDto;
-import br.com.maurigvs.surveyapi.dto.SurveyDto;
-import br.com.maurigvs.surveyapi.mapper.SurveyDtoMapper;
+import br.com.maurigvs.surveyapi.dto.QuestionRequest;
+import br.com.maurigvs.surveyapi.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.dto.SurveyResponse;
+import br.com.maurigvs.surveyapi.mapper.SurveyResponseMapper;
 import br.com.maurigvs.surveyapi.mapper.SurveyMapper;
 import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.service.QuestionService;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,8 +50,8 @@ public class SurveyController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void postSurvey(@RequestBody @Valid SurveyDto dto){
-        surveyService.createSurvey(new SurveyMapper().apply(dto));
+    public void postSurvey(@RequestBody @Valid SurveyRequest request){
+        surveyService.createSurvey(new SurveyMapper().apply(request));
     }
 
     @Tag(name = "survey")
@@ -62,15 +64,15 @@ public class SurveyController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<SurveyDto> getSurveys(){
-        return surveyService.listAllSurveys().stream().map(new SurveyDtoMapper()).toList();
+    public List<SurveyResponse> getSurveys(){
+        return surveyService.listAllSurveys().stream().map(new SurveyResponseMapper()).toList();
     }
 
     @PutMapping("/{surveyId}/question")
-    public void putQuestionToSurvey(@PathVariable Integer surveyId,
-                                    @RequestBody @Valid QuestionDto questionDto){
+    public void putQuestionToSurvey(@PathVariable @NotNull(message = "Survey Id is required") Integer surveyId,
+                                    @RequestBody @Valid QuestionRequest request){
         var survey = surveyService.findById(surveyId);
-        var question = new SurveyMapper.QuestionMapper(survey).apply(questionDto);
+        var question = new SurveyMapper.QuestionMapper(survey).apply(request);
         questionService.createQuestion(question);
     }
 

@@ -1,7 +1,7 @@
 package br.com.maurigvs.surveyapi.controller;
 
 import br.com.maurigvs.surveyapi.dto.ErrorMessageDto;
-import br.com.maurigvs.surveyapi.dto.SurveyDto;
+import br.com.maurigvs.surveyapi.dto.SurveyRequest;
 import br.com.maurigvs.surveyapi.exception.SurveyAlreadyExistsException;
 import br.com.maurigvs.surveyapi.mocks.Mock;
 import br.com.maurigvs.surveyapi.model.Question;
@@ -51,11 +51,11 @@ class SurveyControllerTest {
 
     @Test
     void should_return_Created_when_post_survey() throws Exception {
-        var request = Mock.ofSurveyDto();
+        var request = Mock.ofSurveyRequest();
 
         mockMvc.perform(post("/survey")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(Mock.toJson(request)))
+                        .content(Mock.ofJson(request)))
                 .andExpect(status().isCreated());
 
         verify(surveyService, times(1)).createSurvey(any());
@@ -65,12 +65,13 @@ class SurveyControllerTest {
     @Test
     void should_return_OK_when_get_survey_list() throws Exception {
         var surveys = Mock.ofSurveyList();
+        var response = Mock.ofSurveyResponseList();
         given(surveyService.listAllSurveys()).willReturn(surveys);
 
         mockMvc.perform(get("/survey"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(Mock.toJson(Mock.ofSurveyDtoList())));
+                .andExpect(content().json(Mock.ofJson(response)));
 
         verify(surveyService, times(1)).listAllSurveys();
         verifyNoMoreInteractions(surveyService);
@@ -79,12 +80,12 @@ class SurveyControllerTest {
     @Test
     void should_return_OK_when_add_question_to_existing_survey() throws Exception {
         var survey = Mock.ofSurvey();
-        var question = Mock.ofQuestionDto1();
+        var question = Mock.ofQuestionRequest1();
         given(surveyService.findById(anyInt())).willReturn(survey);
 
         mockMvc.perform(put("/survey/1/question")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(Mock.toJson(question)))
+                        .content(Mock.ofJson(question)))
                 .andExpect(status().isOk());
 
         verify(surveyService, times(1)).findById(1);
@@ -105,24 +106,24 @@ class SurveyControllerTest {
 
     @Test
     void should_return_Bad_Request_when_MethodArgumentNotValidException_is_thrown() throws Exception {
-        var request = new SurveyDto("", Mock.ofSurveyDto().questions());
+        var request = new SurveyRequest("", Mock.ofSurveyRequest().questions());
         var response = new ErrorMessageDto(ZonedDateTime.now(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 "Survey title can not be blank");
 
         mockMvc.perform(post("/survey")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(Mock.toJson(request)))
+                        .content(Mock.ofJson(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(Mock.toJson(response)));
+                .andExpect(content().json(Mock.ofJson(response)));
 
         verifyNoInteractions(surveyService);
     }
 
     @Test
     void should_return_Bad_Request_when_BadRequestException_is_thrown() throws Exception {
-        var request = Mock.ofSurveyDto();
+        var request = Mock.ofSurveyRequest();
         var response = new ErrorMessageDto(ZonedDateTime.now(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 "Survey 'Sample Survey' already exists");
@@ -130,12 +131,27 @@ class SurveyControllerTest {
 
         mockMvc.perform(post("/survey")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(Mock.toJson(request)))
+                        .content(Mock.ofJson(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(Mock.toJson(response)));
+                .andExpect(content().json(Mock.ofJson(response)));
 
         verify(surveyService, times(1)).createSurvey(any());
         verifyNoMoreInteractions(surveyService);
+    }
+
+    @Test
+    void should_return_Not_Found_when_NoResourceFoundException_is_thrown() throws Exception {
+
+        var response = new ErrorMessageDto(ZonedDateTime.now(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                "Endpoint inexistent or missing required parameters: POST /survey/1");
+
+        mockMvc.perform(post("/survey/1"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(Mock.ofJson(response)));
+
+        verifyNoInteractions(surveyService);
     }
 }

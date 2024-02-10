@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.ZonedDateTime;
 
@@ -25,6 +26,15 @@ public class ApiExceptionHandler {
     @ResponseBody
     public ErrorMessageDto handleMethodArgumentNotValid(MethodArgumentNotValidException ex){
         return getErrorMessageDto(HttpStatus.BAD_REQUEST, ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorMessageDto handleMethodArgumentNotValid(NoResourceFoundException ex){
+        return getErrorMessageDto(HttpStatus.NOT_FOUND,
+                "Endpoint inexistent or missing required parameters: " +
+                        ex.getHttpMethod() + " /" + ex.getResourcePath());
     }
 
     private ErrorMessageDto getErrorMessageDto(HttpStatus status, String message){
