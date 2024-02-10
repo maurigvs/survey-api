@@ -1,18 +1,12 @@
 package br.com.maurigvs.surveyapi.model.entity;
 
+import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
-import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
-import io.swagger.v3.oas.annotations.media.Schema;
 
 @Entity
 @Schema(name = "SurveyResponse")

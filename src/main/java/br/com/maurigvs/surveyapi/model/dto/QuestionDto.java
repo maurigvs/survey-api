@@ -1,12 +1,10 @@
 package br.com.maurigvs.surveyapi.model.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+
+import java.util.List;
 
 @Schema(name = "QuestionRequest")
 public record QuestionDto (
