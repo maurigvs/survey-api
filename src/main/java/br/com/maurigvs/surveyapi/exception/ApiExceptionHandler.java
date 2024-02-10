@@ -15,11 +15,11 @@ public class ApiExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorMessageDto handleMethodArgumentNotValid(MethodArgumentNotValidException exception){
+    public ErrorMessageDto handleMethodArgumentNotValid(MethodArgumentNotValidException ex){
         return new ErrorMessageDto(
                 ZonedDateTime.now(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                exception.getBindingResult().getAllErrors().get(0).getDefaultMessage()
+                ex.getBindingResult().getAllErrors().get(0).getDefaultMessage()
         );
     }
 }

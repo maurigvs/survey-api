@@ -11,10 +11,14 @@ import java.util.function.Function;
 public class SurveyMapper implements Function<SurveyDto, Survey> {
 
     @Override
-    public Survey apply(SurveyDto surveyDto) {
-        final var survey = new Survey(null, surveyDto.survey());
-        survey.getQuestions().addAll(surveyDto.questions().stream()
-                .map(q -> new QuestionMapper(survey).apply(q)).toList());
+    public Survey apply(SurveyDto dto) {
+
+        final var survey = new Survey(null, dto.survey());
+        survey.getQuestions().addAll(
+            dto.questions().stream()
+                    .map(q -> new QuestionMapper(survey).apply(q))
+                    .toList());
+
         return survey;
     }
 
@@ -27,10 +31,14 @@ public class SurveyMapper implements Function<SurveyDto, Survey> {
         }
 
         @Override
-        public Question apply(QuestionDto questionDto) {
-            final var question = new Question(null, questionDto.question(), survey);
-            question.getChoices().addAll(questionDto.choices().stream()
-                    .map(c -> new ChoiceMapper(question).apply(c)).toList());
+        public Question apply(QuestionDto dto) {
+
+            final var question = new Question(null, dto.question(), survey);
+            question.getChoices().addAll(
+                dto.choices().stream()
+                        .map(c -> new ChoiceMapper(question).apply(c))
+                        .toList());
+
             return question;
         }
     }
@@ -43,8 +51,8 @@ public class SurveyMapper implements Function<SurveyDto, Survey> {
         }
 
         @Override
-        public Choice apply(String choiceDto) {
-            return new Choice(null, choiceDto, question);
+        public Choice apply(String dto) {
+            return new Choice(null, dto, question);
         }
     }
 }

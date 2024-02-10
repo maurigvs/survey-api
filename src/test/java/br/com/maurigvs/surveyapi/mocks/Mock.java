@@ -54,6 +54,10 @@ public class Mock {
         return question;
     }
 
+    public static List<Survey> ofSurveyList() {
+        return List.of(ofSurvey());
+    }
+
     public static SurveyDto ofSurveyDto() {
         return new SurveyDto("Sample Survey", List.of(
             ofQuestionDto1(),
@@ -81,9 +85,5 @@ public class Mock {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static List<Survey> ofSurveyList() {
-        return List.of(ofSurvey());
     }
 }

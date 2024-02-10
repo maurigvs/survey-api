@@ -26,10 +26,10 @@ import java.util.List;
 @RequestMapping("/survey")
 public class SurveyController {
 
-    private final SurveyService service;
+    private final SurveyService surveyService;
 
-    public SurveyController(SurveyService service) {
-        this.service = service;
+    public SurveyController(SurveyService surveyService) {
+        this.surveyService = surveyService;
     }
 
     @Tag(name = "survey")
@@ -42,7 +42,7 @@ public class SurveyController {
     @ResponseStatus(HttpStatus.CREATED)
     public void postSurvey(@RequestBody @Valid SurveyDto dto){
         final var survey = new SurveyMapper().apply(dto);
-        service.createSurvey(survey);
+        surveyService.createSurvey(survey);
     }
 
     @Tag(name = "survey")
@@ -56,6 +56,6 @@ public class SurveyController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<Survey> getSurveys(){
-        return service.findAll();
+        return surveyService.findAll();
     }
 }
