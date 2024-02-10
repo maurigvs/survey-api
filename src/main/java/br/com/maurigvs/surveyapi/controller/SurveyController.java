@@ -1,8 +1,8 @@
 package br.com.maurigvs.surveyapi.controller;
 
 import br.com.maurigvs.surveyapi.mapper.SurveyMapper;
-import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
-import br.com.maurigvs.surveyapi.model.entity.Survey;
+import br.com.maurigvs.surveyapi.dto.SurveyDto;
+import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

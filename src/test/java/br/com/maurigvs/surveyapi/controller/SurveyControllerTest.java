@@ -1,8 +1,8 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.exception.ErrorMessageDto;
+import br.com.maurigvs.surveyapi.dto.ErrorMessageDto;
 import br.com.maurigvs.surveyapi.mocks.Mock;
-import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
+import br.com.maurigvs.surveyapi.dto.SurveyDto;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;

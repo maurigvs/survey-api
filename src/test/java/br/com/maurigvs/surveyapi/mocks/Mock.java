@@ -1,10 +1,10 @@
 package br.com.maurigvs.surveyapi.mocks;
 
-import br.com.maurigvs.surveyapi.model.dto.QuestionDto;
-import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
-import br.com.maurigvs.surveyapi.model.entity.Choice;
-import br.com.maurigvs.surveyapi.model.entity.Question;
-import br.com.maurigvs.surveyapi.model.entity.Survey;
+import br.com.maurigvs.surveyapi.dto.QuestionDto;
+import br.com.maurigvs.surveyapi.dto.SurveyDto;
+import br.com.maurigvs.surveyapi.model.Choice;
+import br.com.maurigvs.surveyapi.model.Question;
+import br.com.maurigvs.surveyapi.model.Survey;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

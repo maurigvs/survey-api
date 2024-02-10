@@ -1,4 +1,4 @@
-package br.com.maurigvs.surveyapi.model.entity;
+package br.com.maurigvs.surveyapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;

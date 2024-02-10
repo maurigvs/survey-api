@@ -1,5 +1,6 @@
 package br.com.maurigvs.surveyapi.exception;
 
+import br.com.maurigvs.surveyapi.dto.ErrorMessageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
