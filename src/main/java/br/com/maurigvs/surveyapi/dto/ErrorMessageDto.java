@@ -7,9 +7,12 @@ import java.time.ZonedDateTime;
 
 @Schema(name = "ErrorResponse")
 public record ErrorMessageDto(
+
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T' HH:ss:ss'Z'")
         ZonedDateTime timestamp,
+
         String error,
+
         String message
 ){
 }

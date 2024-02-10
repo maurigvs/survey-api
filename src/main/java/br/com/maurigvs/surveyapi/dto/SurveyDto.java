@@ -10,12 +10,10 @@ import java.util.List;
 @Schema(name = "SurveyRequest")
 public record SurveyDto (
 
-    @NotBlank(message = "Survey title can not be blank")
-    String survey,
+        @NotBlank(message = "Survey title can not be blank")
+        String survey,
 
-    @Valid
-    @NotEmpty(message = "Survey must have questions")
-    List<QuestionDto> questions
-
+        @Valid @NotEmpty(message = "Survey must have questions")
+        List<QuestionDto> questions
 ) {
 }
