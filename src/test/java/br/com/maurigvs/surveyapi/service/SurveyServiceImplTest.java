@@ -1,5 +1,6 @@
 package br.com.maurigvs.surveyapi.service;
 
+import br.com.maurigvs.surveyapi.exception.SurveyAlreadyExistsException;
 import br.com.maurigvs.surveyapi.mocks.Mock;
 import br.com.maurigvs.surveyapi.repository.SurveyRepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -10,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -28,10 +31,26 @@ class SurveyServiceImplTest {
     @Test
     void should_save_survey(){
         var survey = Mock.ofSurvey();
+        given(surveyRepository.existsByTitle(anyString())).willReturn(false);
 
         surveyService.createSurvey(survey);
 
+        verify(surveyRepository, times(1)).existsByTitle(survey.getTitle());
         verify(surveyRepository, times(1)).save(survey);
+        verifyNoMoreInteractions(surveyRepository);
+    }
+
+    @Test
+    void should_throw_exception_when_survey_already_exists() {
+        var survey = Mock.ofSurvey();
+        var messageExcepted = "Survey 'Sample Survey' already exists";
+        given(surveyRepository.existsByTitle(anyString())).willReturn(true);
+
+        var exception = assertThrows(SurveyAlreadyExistsException.class, () -> surveyService.createSurvey(survey));
+        assertEquals(messageExcepted, exception.getMessage());
+
+        verify(surveyRepository, times(1)).existsByTitle(survey.getTitle());
+        verifyNoMoreInteractions(surveyRepository);
     }
 
     @Test

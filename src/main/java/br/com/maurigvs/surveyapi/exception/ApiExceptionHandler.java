@@ -13,14 +13,21 @@ import java.time.ZonedDateTime;
 @ControllerAdvice
 public class ApiExceptionHandler {
 
+    @ExceptionHandler(BadRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorMessageDto handleMethodArgumentNotValid(BadRequestException ex){
+        return getErrorMessageDto(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ErrorMessageDto handleMethodArgumentNotValid(MethodArgumentNotValidException ex){
-        return new ErrorMessageDto(
-                ZonedDateTime.now(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                ex.getBindingResult().getAllErrors().get(0).getDefaultMessage()
-        );
+        return getErrorMessageDto(HttpStatus.BAD_REQUEST, ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+    }
+
+    private ErrorMessageDto getErrorMessageDto(HttpStatus status, String message){
+        return new ErrorMessageDto(ZonedDateTime.now(), status.getReasonPhrase(), message);
     }
 }

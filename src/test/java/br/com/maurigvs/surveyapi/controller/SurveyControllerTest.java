@@ -1,6 +1,7 @@
 package br.com.maurigvs.surveyapi.controller;
 
 import br.com.maurigvs.surveyapi.dto.ErrorMessageDto;
+import br.com.maurigvs.surveyapi.exception.SurveyAlreadyExistsException;
 import br.com.maurigvs.surveyapi.mocks.Mock;
 import br.com.maurigvs.surveyapi.dto.SurveyDto;
 import br.com.maurigvs.surveyapi.service.SurveyService;
@@ -19,6 +20,7 @@ import java.time.ZonedDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -85,5 +87,23 @@ class SurveyControllerTest {
                 .andExpect(content().json(Mock.toJson(response)));
 
         verifyNoInteractions(surveyService);
+    }
+
+    @Test
+    void should_return_Bad_Request_when_BadRequestException_is_thrown() throws Exception {
+        var request = Mock.ofSurveyDto();
+        var response = new ErrorMessageDto(ZonedDateTime.now(), HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                "Survey 'Sample Survey' already exists");
+        willThrow(new SurveyAlreadyExistsException(request.survey())).given(surveyService).createSurvey(any());
+
+        mockMvc.perform(post("/survey")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(Mock.toJson(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(Mock.toJson(response)));
+
+        verify(surveyService, times(1)).createSurvey(any());
+        verifyNoMoreInteractions(surveyService);
     }
 }

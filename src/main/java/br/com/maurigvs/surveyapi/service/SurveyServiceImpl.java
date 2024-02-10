@@ -1,5 +1,6 @@
 package br.com.maurigvs.surveyapi.service;
 
+import br.com.maurigvs.surveyapi.exception.SurveyAlreadyExistsException;
 import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.repository.SurveyRepository;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public void createSurvey(Survey survey) {
+        if(surveyRepository.existsByTitle(survey.getTitle()))
+            throw new SurveyAlreadyExistsException(survey.getTitle());
+
         surveyRepository.save(survey);
     }
 
