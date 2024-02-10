@@ -43,7 +43,6 @@ class SurveyControllerTest {
 
     @Test
     void should_return_Created_when_post_survey() throws Exception {
-
         var request = Mock.ofSurveyDto();
 
         mockMvc.perform(post("/survey")
@@ -57,14 +56,13 @@ class SurveyControllerTest {
 
     @Test
     void should_return_OK_when_get_survey_list() throws Exception {
-
         var surveys = Mock.ofSurveyList();
         given(surveyService.listAllSurveys()).willReturn(surveys);
 
         mockMvc.perform(get("/survey"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(Mock.toJson(surveys)));
+                .andExpect(content().json(Mock.toJson(Mock.ofSurveyDtoList())));
 
         verify(surveyService, times(1)).listAllSurveys();
         verifyNoMoreInteractions(surveyService);
@@ -72,9 +70,7 @@ class SurveyControllerTest {
 
     @Test
     void should_return_Bad_Request_when_MethodArgumentNotValidException_is_thrown() throws Exception {
-
         var request = new SurveyDto("", Mock.ofSurveyDto().questions());
-
         var response = new ErrorMessageDto(ZonedDateTime.now(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 "Survey title can not be blank");
@@ -92,7 +88,8 @@ class SurveyControllerTest {
     @Test
     void should_return_Bad_Request_when_BadRequestException_is_thrown() throws Exception {
         var request = Mock.ofSurveyDto();
-        var response = new ErrorMessageDto(ZonedDateTime.now(), HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        var response = new ErrorMessageDto(ZonedDateTime.now(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 "Survey 'Sample Survey' already exists");
         willThrow(new SurveyAlreadyExistsException(request.survey())).given(surveyService).createSurvey(any());
 

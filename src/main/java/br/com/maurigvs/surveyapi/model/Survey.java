@@ -1,6 +1,5 @@
 package br.com.maurigvs.surveyapi.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Schema(name = "SurveyResponse")
 public class Survey implements Serializable {
 
     @Id

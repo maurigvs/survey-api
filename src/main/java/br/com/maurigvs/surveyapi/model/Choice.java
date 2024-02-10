@@ -1,7 +1,5 @@
 package br.com.maurigvs.surveyapi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,7 +10,6 @@ import jakarta.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Entity
-@Schema(name = "ChoiceResponse")
 public class Choice implements Serializable {
 
     @Id
@@ -21,7 +18,6 @@ public class Choice implements Serializable {
 
     private String title;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;

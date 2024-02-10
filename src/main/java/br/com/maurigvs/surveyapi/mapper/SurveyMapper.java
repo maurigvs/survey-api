@@ -6,21 +6,23 @@ import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.model.Survey;
 
+import java.util.List;
 import java.util.function.Function;
 
 public class SurveyMapper implements Function<SurveyDto, Survey> {
 
     @Override
     public Survey apply(SurveyDto dto) {
-
-        final var survey = new Survey(null, dto.survey());
-        survey.getQuestions().addAll(
-            dto.questions().stream()
-                    .map(q -> new QuestionMapper(survey).apply(q))
-                    .toList());
+        var survey = new Survey(null, dto.survey());
+        survey.getQuestions().addAll(mapQuestions(survey, dto.questions()));
 
         return survey;
     }
+
+    private List<Question> mapQuestions(Survey survey, List<QuestionDto> questions) {
+        return questions.stream().map(new QuestionMapper(survey)).toList();
+    }
+
 
     static class QuestionMapper implements Function<QuestionDto, Question> {
 
@@ -32,16 +34,17 @@ public class SurveyMapper implements Function<SurveyDto, Survey> {
 
         @Override
         public Question apply(QuestionDto dto) {
-
-            final var question = new Question(null, dto.question(), survey);
-            question.getChoices().addAll(
-                dto.choices().stream()
-                        .map(c -> new ChoiceMapper(question).apply(c))
-                        .toList());
+            var question = new Question(null, dto.question(), survey);
+            question.getChoices().addAll(mapChoices(question, dto.choices()));
 
             return question;
         }
+
+        private List<Choice> mapChoices(Question question, List<String> choices) {
+            return choices.stream().map(new ChoiceMapper(question)).toList();
+        }
     }
+
 
     static class ChoiceMapper implements Function<String, Choice> {
         private final Question question;

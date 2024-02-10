@@ -1,5 +1,6 @@
 package br.com.maurigvs.surveyapi.controller;
 
+import br.com.maurigvs.surveyapi.mapper.SurveyDtoMapper;
 import br.com.maurigvs.surveyapi.mapper.SurveyMapper;
 import br.com.maurigvs.surveyapi.dto.SurveyDto;
 import br.com.maurigvs.surveyapi.model.Survey;
@@ -41,8 +42,7 @@ public class SurveyController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void postSurvey(@RequestBody @Valid SurveyDto dto){
-        final var survey = new SurveyMapper().apply(dto);
-        surveyService.createSurvey(survey);
+        surveyService.createSurvey(new SurveyMapper().apply(dto));
     }
 
     @Tag(name = "survey")
@@ -55,7 +55,7 @@ public class SurveyController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<Survey> getSurveys(){
-        return surveyService.listAllSurveys();
+    public List<SurveyDto> getSurveys(){
+        return surveyService.listAllSurveys().stream().map(new SurveyDtoMapper()).toList();
     }
 }

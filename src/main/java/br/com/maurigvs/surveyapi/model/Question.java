@@ -1,7 +1,5 @@
 package br.com.maurigvs.surveyapi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Schema(name = "QuestionResponse")
 public class Question implements Serializable {
 
     @Id
@@ -28,7 +25,6 @@ public class Question implements Serializable {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Choice> choices = new ArrayList<>();
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "survey_id")
     private Survey survey;

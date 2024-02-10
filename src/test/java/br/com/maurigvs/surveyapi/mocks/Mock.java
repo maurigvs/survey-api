@@ -77,6 +77,10 @@ public class Mock {
                         "Very dissatisfied"));
     }
 
+    public static List<SurveyDto> ofSurveyDtoList(){
+        return List.of(ofSurveyDto());
+    }
+
     public static String toJson(Object object) {
         try {
             ObjectMapper om = new ObjectMapper();

@@ -18,14 +18,17 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public void createSurvey(Survey survey) {
-        if(surveyRepository.existsByTitle(survey.getTitle()))
-            throw new SurveyAlreadyExistsException(survey.getTitle());
-
+        verifyBeforeSave(survey);
         surveyRepository.save(survey);
     }
 
     @Override
     public List<Survey> listAllSurveys() {
         return surveyRepository.findAll();
+    }
+
+    private void verifyBeforeSave(Survey survey) {
+        if(surveyRepository.existsByTitle(survey.getTitle()))
+            throw new SurveyAlreadyExistsException(survey.getTitle());
     }
 }
