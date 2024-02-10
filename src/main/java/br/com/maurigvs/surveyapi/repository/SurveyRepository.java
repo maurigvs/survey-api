@@ -6,7 +6,7 @@ import br.com.maurigvs.surveyapi.model.Survey;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SurveyRepository extends JpaRepository<Survey, Long> {
+public interface SurveyRepository extends JpaRepository<Survey, Integer> {
 
     boolean existsByTitle(String title);
 }

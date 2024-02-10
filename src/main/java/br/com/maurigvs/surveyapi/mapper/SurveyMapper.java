@@ -24,7 +24,7 @@ public class SurveyMapper implements Function<SurveyDto, Survey> {
     }
 
 
-    static class QuestionMapper implements Function<QuestionDto, Question> {
+    public static class QuestionMapper implements Function<QuestionDto, Question> {
 
         private final Survey survey;
 

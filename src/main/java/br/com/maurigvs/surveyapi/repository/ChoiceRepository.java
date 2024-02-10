@@ -6,5 +6,5 @@ import br.com.maurigvs.surveyapi.model.Choice;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ChoiceRepository extends JpaRepository<Choice, Long> {
+public interface ChoiceRepository extends JpaRepository<Choice, Integer> {
 }

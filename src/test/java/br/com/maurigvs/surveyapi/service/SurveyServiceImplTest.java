@@ -1,6 +1,7 @@
 package br.com.maurigvs.surveyapi.service;
 
 import br.com.maurigvs.surveyapi.exception.SurveyAlreadyExistsException;
+import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
 import br.com.maurigvs.surveyapi.mocks.Mock;
 import br.com.maurigvs.surveyapi.repository.SurveyRepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -10,8 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -62,6 +67,31 @@ class SurveyServiceImplTest {
 
         assertEquals(result, surveys);
         verify(surveyRepository, times(1)).findAll();
+        verifyNoMoreInteractions(surveyRepository);
+    }
+
+    @Test
+    void should_return_Survey_given_an_Id() {
+        var surveyId = 1;
+        var survey = Mock.ofSurvey();
+        given(surveyRepository.findById(any())).willReturn(Optional.of(survey));
+
+        var result = surveyService.findById(surveyId);
+
+        verify(surveyRepository, times(1)).findById(surveyId);
+        verifyNoMoreInteractions(surveyRepository);
+        assertSame(survey, result);
+    }
+
+    @Test
+    void should_throw_exception_when_survey_not_found_by_id() {
+        var surveyId = 1;
+        given(surveyRepository.findById(any())).willReturn(Optional.empty());
+
+        var exception = assertThrows(SurveyNotFoundException.class, () -> surveyService.findById(surveyId));
+        assertEquals("Survey not found by Id 1", exception.getMessage());
+
+        verify(surveyRepository, times(1)).findById(surveyId);
         verifyNoMoreInteractions(surveyRepository);
     }
 }
