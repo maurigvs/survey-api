@@ -12,11 +12,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,10 +26,10 @@ import java.util.List;
 @RequestMapping("/survey")
 public class SurveyController {
 
-    private final SurveyService surveyService;
+    private final SurveyService service;
 
-    public SurveyController(SurveyService surveyService) {
-        this.surveyService = surveyService;
+    public SurveyController(SurveyService service) {
+        this.service = service;
     }
 
     @Tag(name = "survey")
@@ -38,10 +39,10 @@ public class SurveyController {
         @ApiResponse(responseCode = "400", description = "Bad Request. Required information is missing.")
     })
     @PostMapping
-    public ResponseEntity<Void> postSurvey(@RequestBody @Valid SurveyDto dto){
+    @ResponseStatus(HttpStatus.CREATED)
+    public void postSurvey(@RequestBody @Valid SurveyDto dto){
         final var survey = new SurveyMapper().apply(dto);
-        surveyService.createSurvey(survey);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        service.createSurvey(survey);
     }
 
     @Tag(name = "survey")
@@ -52,8 +53,9 @@ public class SurveyController {
         })
     })
     @GetMapping
-    public ResponseEntity<List<Survey>> getSurveys(){
-        List<Survey> surveyList = surveyService.findAll();
-        return ResponseEntity.ok(surveyList);
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<Survey> getSurveys(){
+        return service.findAll();
     }
 }
