@@ -2,6 +2,7 @@ package br.com.maurigvs.surveyapi.mocks;
 
 import br.com.maurigvs.surveyapi.dto.AnswerItemRequest;
 import br.com.maurigvs.surveyapi.dto.AnswerRequest;
+import br.com.maurigvs.surveyapi.dto.AnswerResponse;
 import br.com.maurigvs.surveyapi.dto.QuestionRequest;
 import br.com.maurigvs.surveyapi.dto.QuestionResponse;
 import br.com.maurigvs.surveyapi.dto.SurveyRequest;
@@ -139,5 +140,19 @@ public class Mock {
 
     public static AnswerItemRequest ofAnswerRequestItem() {
         return ofAnswerRequest().answers().get(0);
+    }
+
+    public static SurveyResponse ofSurveyResponseOfAnswer() {
+        return new SurveyResponse(1, "Sample Survey",
+            Map.of(
+                1, new QuestionResponse("Where does Santa Claus live?",
+                            Map.of(2, "Finland")),
+                2, new QuestionResponse("Were you satisfied with your Christmas presents?",
+                            Map.of(7, "Neither satisfied or dissatisfied"))
+            ));
+    }
+
+    public static AnswerResponse ofAnswerResponse() {
+        return new AnswerResponse(1, ofSurveyResponseOfAnswer());
     }
 }

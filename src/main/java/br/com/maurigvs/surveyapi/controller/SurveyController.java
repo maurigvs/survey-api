@@ -35,9 +35,7 @@ public class SurveyController {
     }
 
     @Operation(summary = "Create a new Survey")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "New Survey created successfully"),
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "New Survey created successfully")})
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void postSurvey(@RequestBody @Valid SurveyRequest request){
@@ -45,11 +43,7 @@ public class SurveyController {
     }
 
     @Operation(summary = "List all Surveys created")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Surveys listed successfully", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = SurveyResponse.class))
-        })
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Surveys listed successfully", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SurveyResponse.class))})})
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody

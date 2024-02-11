@@ -20,7 +20,7 @@ public class QuestionResponseMapper implements Function<Question, QuestionRespon
 
     private Map<Integer, String> applyChoices(List<Choice> choices) {
         return choices.stream().collect(
-                Collectors.toMap(Choice::getId, Choice::getTitle)
+            Collectors.toMap(Choice::getId, Choice::getTitle)
         );
     }
 }

@@ -31,9 +31,7 @@ public class QuestionController {
     }
 
     @Operation(summary = "Add a new Question to a existing Survey")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "New question created successfully")
-    })
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "New question created successfully")})
     @PutMapping
     public void putQuestionToSurvey(@Parameter(description = "Id of the Survey do the updated")
                                     @PathVariable Integer surveyId,
