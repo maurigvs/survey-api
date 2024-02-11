@@ -7,18 +7,20 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class SurveyMapperTest {
+class ChoiceMapperTest {
 
     @Test
-    void should_return_Survey_given_an_SurveyDto() {
-        var surveyDto = Mock.ofSurveyRequest();
+    void should_return_Choice_given_and_ChoiceDto() {
+        var question = Mock.ofSurvey().getQuestions().get(0);
+        var choiceDto = "China";
 
-        var result = new SurveyMapper().apply(surveyDto);
+        var result = new ChoiceMapper(question).apply(choiceDto);
 
         assertNull(result.getId());
-        assertEquals(surveyDto.survey(), result.getTitle());
-        assertEquals(surveyDto.questions().size(), result.getQuestions().size());
+        assertEquals(choiceDto, result.getTitle());
+        assertSame(question, result.getQuestion());
     }
 }

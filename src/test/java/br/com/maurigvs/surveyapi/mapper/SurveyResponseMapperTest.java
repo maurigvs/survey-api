@@ -21,15 +21,4 @@ class SurveyResponseMapperTest {
         assertEquals(survey.getTitle(), result.survey());
         assertEquals(questions, result.questions());
     }
-
-    @Test
-    void should_return_QuestionResponse_given_an_Question() {
-        var question = Mock.ofSurvey().getQuestions().get(0);
-        var choices = Mock.ofSurveyResponse().questions().get(1).choices();
-
-        var result = new SurveyResponseMapper.QuestionResponseMapper().apply(question);
-
-        assertEquals(question.getTitle(), result.question());
-        assertEquals(choices, result.choices());
-    }
 }

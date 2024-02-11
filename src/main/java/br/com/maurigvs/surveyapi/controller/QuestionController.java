@@ -1,7 +1,7 @@
 package br.com.maurigvs.surveyapi.controller;
 
 import br.com.maurigvs.surveyapi.dto.QuestionRequest;
-import br.com.maurigvs.surveyapi.mapper.SurveyMapper;
+import br.com.maurigvs.surveyapi.mapper.QuestionMapper;
 import br.com.maurigvs.surveyapi.service.QuestionService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,7 +39,7 @@ public class QuestionController {
                                     @PathVariable Integer surveyId,
                                     @RequestBody @Valid QuestionRequest request){
         var survey = surveyService.findById(surveyId);
-        var question = new SurveyMapper.QuestionMapper(survey).apply(request);
+        var question = new QuestionMapper(survey).apply(request);
         questionService.createQuestion(question);
     }
 
