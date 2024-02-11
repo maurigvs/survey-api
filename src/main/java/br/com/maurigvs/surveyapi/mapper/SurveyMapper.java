@@ -10,9 +10,9 @@ import java.util.function.Function;
 public class SurveyMapper implements Function<SurveyRequest, Survey> {
 
     @Override
-    public Survey apply(SurveyRequest surveyRequest) {
-        var survey = new Survey(null, surveyRequest.survey());
-        applyQuestions(survey, surveyRequest.questions());
+    public Survey apply(SurveyRequest request) {
+        var survey = new Survey(null, request.survey());
+        applyQuestions(survey, request.questions());
         return survey;
     }
 

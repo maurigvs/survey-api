@@ -16,16 +16,16 @@ public class QuestionMapper implements Function<QuestionRequest, Question> {
     }
 
     @Override
-    public Question apply(QuestionRequest dto) {
-        var question = new Question(null, dto.question(), survey);
-        applyChoices(question, dto.choices());
+    public Question apply(QuestionRequest request) {
+        var question = new Question(null, request.question(), survey);
+        applyChoices(question, request.choices());
 
         return question;
     }
 
     private void applyChoices(Question question, List<String> choices) {
         question.getChoices().addAll(
-                choices.stream().map(new ChoiceMapper(question)).toList()
+            choices.stream().map(new ChoiceMapper(question)).toList()
         );
     }
 }

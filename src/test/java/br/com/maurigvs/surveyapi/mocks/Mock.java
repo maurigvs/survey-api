@@ -1,9 +1,13 @@
 package br.com.maurigvs.surveyapi.mocks;
 
+import br.com.maurigvs.surveyapi.dto.AnswerItemRequest;
+import br.com.maurigvs.surveyapi.dto.AnswerRequest;
 import br.com.maurigvs.surveyapi.dto.QuestionRequest;
 import br.com.maurigvs.surveyapi.dto.QuestionResponse;
 import br.com.maurigvs.surveyapi.dto.SurveyRequest;
 import br.com.maurigvs.surveyapi.dto.SurveyResponse;
+import br.com.maurigvs.surveyapi.model.Answer;
+import br.com.maurigvs.surveyapi.model.AnswerItem;
 import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.model.Survey;
@@ -115,5 +119,25 @@ public class Mock {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static Answer ofAnswer() {
+        var answer = new Answer(1, 1);
+        answer.getItems().addAll(List.of(
+            new AnswerItem(1, 1, 2, answer),
+            new AnswerItem(2, 2, 7, answer)
+        ));
+        return answer;
+    }
+
+    public static AnswerRequest ofAnswerRequest() {
+        return new AnswerRequest(1, List.of(
+            new AnswerItemRequest(1,2),
+            new AnswerItemRequest(2,7)
+        ));
+    }
+
+    public static AnswerItemRequest ofAnswerRequestItem() {
+        return ofAnswerRequest().answers().get(0);
     }
 }
