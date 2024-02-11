@@ -4,8 +4,6 @@ import br.com.maurigvs.surveyapi.dto.ErrorResponse;
 import br.com.maurigvs.surveyapi.dto.SurveyRequest;
 import br.com.maurigvs.surveyapi.exception.SurveyAlreadyExistsException;
 import br.com.maurigvs.surveyapi.mocks.Mock;
-import br.com.maurigvs.surveyapi.model.Question;
-import br.com.maurigvs.surveyapi.service.QuestionService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -21,17 +19,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.ZonedDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,9 +40,6 @@ class SurveyControllerTest {
 
     @MockBean
     private SurveyService surveyService;
-
-    @MockBean
-    private QuestionService questionService;
 
     @Test
     void should_return_Created_when_post_survey() throws Exception {
@@ -75,33 +67,6 @@ class SurveyControllerTest {
 
         verify(surveyService, times(1)).listAllSurveys();
         verifyNoMoreInteractions(surveyService);
-    }
-
-    @Test
-    void should_return_OK_when_add_question_to_existing_survey() throws Exception {
-        var survey = Mock.ofSurvey();
-        var question = Mock.ofQuestionRequest1();
-        given(surveyService.findById(anyInt())).willReturn(survey);
-
-        mockMvc.perform(put("/survey/1/question")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(Mock.ofJson(question)))
-                .andExpect(status().isOk());
-
-        verify(surveyService, times(1)).findById(1);
-        verify(questionService, times(1)).createQuestion(any(Question.class));
-        verifyNoMoreInteractions(surveyService, questionService);
-    }
-
-    @Test
-    void should_return_OK_when_delete_question_from_existing_survey() throws Exception {
-
-        mockMvc.perform(delete("/survey/1/question/2"))
-                .andExpect(status().isOk());
-
-        verify(questionService, times(1)).deleteById(2,1);
-        verifyNoMoreInteractions(questionService);
-        verifyNoInteractions(surveyService);
     }
 
     @Test

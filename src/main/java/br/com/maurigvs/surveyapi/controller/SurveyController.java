@@ -1,14 +1,11 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.dto.QuestionRequest;
 import br.com.maurigvs.surveyapi.dto.SurveyRequest;
 import br.com.maurigvs.surveyapi.dto.SurveyResponse;
 import br.com.maurigvs.surveyapi.mapper.SurveyMapper;
 import br.com.maurigvs.surveyapi.mapper.SurveyResponseMapper;
-import br.com.maurigvs.surveyapi.service.QuestionService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,11 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,19 +23,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Tag(name = "survey")
 @RestController
 @RequestMapping("/survey")
 public class SurveyController {
 
     private final SurveyService surveyService;
-    private final QuestionService questionService;
 
-    public SurveyController(SurveyService surveyService, QuestionService questionService) {
+    public SurveyController(SurveyService surveyService) {
         this.surveyService = surveyService;
-        this.questionService = questionService;
     }
 
-    @Tag(name = "survey")
     @Operation(summary = "Create a new Survey")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "New Survey created successfully"),
@@ -52,7 +44,6 @@ public class SurveyController {
         surveyService.createSurvey(new SurveyMapper().apply(request));
     }
 
-    @Tag(name = "survey")
     @Operation(summary = "List all Surveys created")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Surveys listed successfully", content = {
@@ -64,32 +55,5 @@ public class SurveyController {
     @ResponseBody
     public List<SurveyResponse> getSurveys(){
         return surveyService.listAllSurveys().stream().map(new SurveyResponseMapper()).toList();
-    }
-
-    @Tag(name = "question")
-    @Operation(summary = "Add a new Question to a existing Survey")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "New question created successfully")
-    })
-    @PutMapping("/{surveyId}/question")
-    public void putQuestionToSurvey(@Parameter(description = "Id of the Survey do the updated")
-                                    @PathVariable Integer surveyId,
-                                    @RequestBody @Valid QuestionRequest request){
-        var survey = surveyService.findById(surveyId);
-        var question = new SurveyMapper.QuestionMapper(survey).apply(request);
-        questionService.createQuestion(question);
-    }
-
-    @Tag(name = "question")
-    @Operation(summary = "Delete a question from a existing survey")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "The question was deleted successfully")
-    })
-    @DeleteMapping("/{surveyId}/question/{questionId}")
-    public void deleteQuestionById(@Parameter(description = "Id of the survey parent of question")
-                                   @PathVariable Integer surveyId,
-                                   @Parameter(description = "Id of the question do be deleted")
-                                   @PathVariable Integer questionId){
-        questionService.deleteById(questionId, surveyId);
     }
 }
