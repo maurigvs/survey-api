@@ -10,11 +10,11 @@ import java.util.List;
 @Schema
 public record SurveyRequest(
 
-        @NotBlank(message = "Survey title can not be blank")
+        @NotBlank
         String survey,
 
         @Valid
-        @NotEmpty(message = "Survey must have questions")
+        @NotEmpty
         List<QuestionRequest> questions
 ) {
 }

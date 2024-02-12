@@ -9,10 +9,10 @@ import java.util.List;
 @Schema
 public record QuestionRequest(
 
-        @NotBlank(message = "Question title can not be blank")
+        @NotBlank
         String question,
 
-        @NotEmpty(message = "Question must have choices")
+        @NotEmpty
         List<String> choices
 ){
 }

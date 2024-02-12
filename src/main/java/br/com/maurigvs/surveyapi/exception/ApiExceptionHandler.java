@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.util.List;
+
 @ControllerAdvice
 public class ApiExceptionHandler {
 
@@ -16,26 +18,33 @@ public class ApiExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ErrorResponse handleBadRequestException(BadRequestException ex){
-        return getErrorMessageDto(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return getErrorMessage(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ErrorResponse handleMethodArgumentNotValid(MethodArgumentNotValidException ex){
-        return getErrorMessageDto(HttpStatus.BAD_REQUEST, ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+        var messages = ex.getFieldErrors().stream().map(
+            error -> ("The field [" + error.getField() + "] " + error.getDefaultMessage())
+        ).toList();
+        return getErrorMessage(HttpStatus.BAD_REQUEST, messages);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public ErrorResponse handleNoResourceFoundException(NoResourceFoundException ex){
-        return getErrorMessageDto(HttpStatus.NOT_FOUND,
+        return getErrorMessage(HttpStatus.NOT_FOUND,
                 "Endpoint inexistent or missing required parameters: " +
                         ex.getHttpMethod() + " /" + ex.getResourcePath());
     }
 
-    private ErrorResponse getErrorMessageDto(HttpStatus status, String message){
+    private ErrorResponse getErrorMessage(HttpStatus status, List<String> messages){
+        return new ErrorResponse(status.getReasonPhrase(), messages);
+    }
+
+    private ErrorResponse getErrorMessage(HttpStatus status, String message){
         return new ErrorResponse(status.getReasonPhrase(), message);
     }
 }
