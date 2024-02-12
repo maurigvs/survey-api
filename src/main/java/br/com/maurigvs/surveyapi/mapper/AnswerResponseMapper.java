@@ -10,22 +10,17 @@ import java.util.stream.Collectors;
 
 public class AnswerResponseMapper implements Function<Answer, AnswerResponse> {
 
-    private final Survey survey;
-
-    public AnswerResponseMapper(Survey survey) {
-        this.survey = survey;
-    }
-
     @Override
     public AnswerResponse apply(Answer answer) {
-        filterSurveyChoices(survey, answer);
+        var survey = filterSurveyChoices(answer);
         var surveyResponse = new SurveyResponseMapper().apply(survey);
 
         return new AnswerResponse(answer.getId(), surveyResponse);
     }
 
-    private void filterSurveyChoices(Survey survey, Answer answer) {
-        var idsMap = answer.getItems().stream().collect(
+    private Survey filterSurveyChoices(Answer answer) {
+        var survey = answer.getSurvey();
+        var idsMap = answer.getAnswerItems().stream().collect(
             Collectors.toMap(AnswerItem::getQuestionId, AnswerItem::getChoiceId)
         );
         survey.getQuestions().removeIf(
@@ -36,5 +31,6 @@ public class AnswerResponseMapper implements Function<Answer, AnswerResponse> {
                 choice -> !idsMap.get(question.getId()).equals(choice.getId())
             )
         );
+        return survey;
     }
 }

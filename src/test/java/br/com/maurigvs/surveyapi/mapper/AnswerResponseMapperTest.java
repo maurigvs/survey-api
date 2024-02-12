@@ -9,13 +9,12 @@ class AnswerResponseMapperTest {
 
     @Test
     void should_return_SurveyResponse_given_an_Answer() {
-        var survey = Mock.ofSurvey();
         var answer = Mock.ofAnswer();
-        var detail = Mock.ofSurveyResponseOfAnswer();
+        var surveyResponse = Mock.ofSurveyResponseOfAnswer();
 
-        var result = new AnswerResponseMapper(survey).apply(answer);
+        var result = new AnswerResponseMapper().apply(answer);
 
         assertEquals(answer.getId(), result.answerId());
-        assertEquals(detail, result.answer());
+        assertEquals(surveyResponse, result.answer());
     }
 }

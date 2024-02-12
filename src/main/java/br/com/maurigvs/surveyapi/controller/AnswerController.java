@@ -40,7 +40,8 @@ public class AnswerController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void postAnswer(@RequestBody @Valid AnswerRequest request){
-        var answer = new AnswerMapper().apply(request);
+        var survey = surveyService.findById(request.surveyId());
+        var answer = new AnswerMapper(survey).apply(request);
         answerService.createAnswer(answer);
     }
 
@@ -50,9 +51,6 @@ public class AnswerController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<AnswerResponse> getList(){
-        return answerService.findAll().stream().map(answer -> {
-            var survey = surveyService.findById(answer.getSurveyId());
-            return new AnswerResponseMapper(survey).apply(answer);
-        }).toList();
+        return answerService.findAll().stream().map(new AnswerResponseMapper()).toList();
     }
 }

@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 import java.io.Serializable;
@@ -18,27 +20,29 @@ public class Answer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer surveyId;
+    @ManyToOne
+    @JoinColumn(name = "survey_id")
+    private Survey survey;
 
     @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<AnswerItem> items = new ArrayList<>();
-
-    public Answer(Integer id, Integer surveyId) {
-        this.id = id;
-        this.surveyId = surveyId;
-    }
+    private final List<AnswerItem> answerItems = new ArrayList<>();
 
     protected Answer() {}
+
+    public Answer(Integer id, Survey survey) {
+        this.id = id;
+        this.survey = survey;
+    }
 
     public Integer getId() {
         return id;
     }
 
-    public Integer getSurveyId() {
-        return surveyId;
+    public Survey getSurvey() {
+        return survey;
     }
 
-    public List<AnswerItem> getItems() {
-        return items;
+    public List<AnswerItem> getAnswerItems() {
+        return answerItems;
     }
 }

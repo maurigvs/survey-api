@@ -23,6 +23,9 @@ public class Survey implements Serializable {
     @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Question> questions = new ArrayList<>();
 
+    @OneToMany(mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Answer> answers = new ArrayList<>();
+
     public Survey(Integer id, String title) {
         this.id = id;
         this.title = title;
@@ -40,5 +43,9 @@ public class Survey implements Serializable {
 
     public List<Question> getQuestions() {
         return questions;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
     }
 }
