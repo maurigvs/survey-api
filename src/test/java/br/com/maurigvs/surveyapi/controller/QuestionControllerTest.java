@@ -42,7 +42,7 @@ class QuestionControllerTest {
     @Test
     void should_return_Created_when_add_question_to_existing_survey() throws Exception {
         var survey = DataMock.ofSurvey();
-        var questionRequest = DataMock.ofQuestionRequest1();
+        var questionRequest = DataMock.ofQuestionRequest();
         given(surveyService.findById(anyLong())).willReturn(survey);
 
         mockMvc.perform(post("/survey/1/question")

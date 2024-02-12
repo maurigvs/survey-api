@@ -17,7 +17,7 @@ class QuestionMapperTest {
     @Test
     void should_return_Question_given_an_QuestionRequest() {
         var survey = DataMock.ofSurvey();
-        var questionRequest = DataMock.ofQuestionRequest1();
+        var questionRequest = DataMock.ofQuestionRequest();
 
         var result = new QuestionMapper(survey).apply(questionRequest);
 
