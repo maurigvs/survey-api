@@ -3,7 +3,9 @@ package br.com.maurigvs.surveyapi.service;
 import br.com.maurigvs.surveyapi.exception.QuestionNotFoundException;
 import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
 import br.com.maurigvs.surveyapi.mocks.Mock;
+import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.repository.QuestionRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -25,55 +27,59 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 class QuestionServiceImplTest {
 
     @Autowired
-    private QuestionService questionService;
+    private QuestionService service;
 
     @MockBean
-    private QuestionRepository questionRepository;
+    private QuestionRepository repository;
+
+    private Question question;
+
+    @BeforeEach
+    void setUp() {
+        question = Mock.ofQuestion();
+    }
 
     @Test
     void should_create_question_in_existing_survey() {
-        var question = Mock.ofSurvey().getQuestions().get(0);
 
-        questionService.createQuestion(question);
+        service.create(question);
 
-        verify(questionRepository, times(1)).save(question);
-        verifyNoMoreInteractions(questionRepository);
+        verify(repository, times(1)).save(question);
+        verifyNoMoreInteractions(repository);
     }
 
     @Test
     void should_delete_question_from_existing_survey() {
         var questionId = 1L;
         var surveyId = 1L;
-        var question = Mock.ofSurvey().getQuestions().get(0);
-        given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
+        given(repository.findById(anyLong())).willReturn(Optional.of(question));
 
-        questionService.deleteById(questionId, surveyId);
+        service.deleteById(questionId, surveyId);
 
-        verify(questionRepository, times(1)).findById(questionId);
-        verify(questionRepository, times(1)).delete(question);
-        verifyNoMoreInteractions(questionRepository);
+        verify(repository, times(1)).findById(questionId);
+        verify(repository, times(1)).delete(question);
+        verifyNoMoreInteractions(repository);
     }
 
     @Test
-    void should_throw_QuestionNotFoundException_when_question_not_found_by_id() {
-        given(questionRepository.findById(anyLong())).willReturn(Optional.empty());
+    void should_throw_exception_when_question_not_found_by_id() {
+        given(repository.findById(anyLong())).willReturn(Optional.empty());
 
-        assertThrows(QuestionNotFoundException.class, ()-> questionService.deleteById(1L, 2L));
+        assertThrows(QuestionNotFoundException.class, ()-> service.deleteById(1L, 2L));
 
-        verify(questionRepository, times(1)).findById(1L);
-        verifyNoMoreInteractions(questionRepository);
+        verify(repository, times(1)).findById(1L);
+        verifyNoMoreInteractions(repository);
     }
 
     @Test
-    void should_throw_SurveyNotFoundException_when_survey_id_does_not_match_id_given() {
+    void should_throw_exception_when_survey_id_does_not_match_given_id() {
         var questionId = 1L;
         var surveyId = 2L;
-        var question = Mock.ofSurvey().getQuestions().get(0);
-        given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
+        given(repository.findById(anyLong())).willReturn(Optional.of(question));
 
-        assertThrows(SurveyNotFoundException.class, ()-> questionService.deleteById(questionId, surveyId));
+        assertThrows(SurveyNotFoundException.class, ()-> service.deleteById(questionId, surveyId));
 
-        verify(questionRepository, times(1)).findById(1L);
-        verifyNoMoreInteractions(questionRepository);
+        verify(repository, times(1)).findById(1L);
+        verifyNoMoreInteractions(repository);
     }
 }

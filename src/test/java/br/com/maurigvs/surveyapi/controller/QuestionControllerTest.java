@@ -51,7 +51,7 @@ class QuestionControllerTest {
                 .andExpect(status().isOk());
 
         verify(surveyService, times(1)).findById(1L);
-        verify(questionService, times(1)).createQuestion(any(Question.class));
+        verify(questionService, times(1)).create(any(Question.class));
         verifyNoMoreInteractions(surveyService, questionService);
     }
 

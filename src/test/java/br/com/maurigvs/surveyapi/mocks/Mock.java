@@ -156,4 +156,8 @@ public class Mock {
     public static AnswerResponse ofAnswerResponse() {
         return new AnswerResponse(1L, ofSurveyResponseOfAnswer());
     }
+
+    public static Question ofQuestion() {
+        return ofSurvey().getQuestions().get(0);
+    }
 }

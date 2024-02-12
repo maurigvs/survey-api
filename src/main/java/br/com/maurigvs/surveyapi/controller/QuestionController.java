@@ -38,7 +38,7 @@ public class QuestionController {
                                     @RequestBody @Valid QuestionRequest request){
         var survey = surveyService.findById(surveyId);
         var question = new QuestionMapper(survey).apply(request);
-        questionService.createQuestion(question);
+        questionService.create(question);
     }
 
     @Operation(summary = "Delete a question from a existing survey")

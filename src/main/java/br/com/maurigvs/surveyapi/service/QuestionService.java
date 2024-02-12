@@ -4,7 +4,7 @@ import br.com.maurigvs.surveyapi.model.Question;
 
 public interface QuestionService {
 
-    void createQuestion(Question question);
+    void create(Question question);
 
     void deleteById(Long questionId, Long surveyId);
 }
