@@ -38,6 +38,6 @@ public class ApiExceptionHandler {
     }
 
     private ErrorResponse getErrorMessageDto(HttpStatus status, String message){
-        return new ErrorResponse(ZonedDateTime.now(), status.getReasonPhrase(), message);
+        return new ErrorResponse(status.getReasonPhrase(), message);
     }
 }

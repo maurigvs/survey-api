@@ -1,8 +1,10 @@
 package br.com.maurigvs.surveyapi.exception;
 
-public class SurveyNotFoundException extends BadRequestException {
+import br.com.maurigvs.surveyapi.model.Survey;
+
+public class SurveyNotFoundException extends EntityNotFoundException {
 
     public SurveyNotFoundException(Integer surveyId) {
-        super("Survey not found by Id " + surveyId);
+        super(Survey.class.getSimpleName(), surveyId);
     }
 }

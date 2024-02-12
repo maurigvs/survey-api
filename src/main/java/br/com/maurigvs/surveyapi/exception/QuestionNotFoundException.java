@@ -1,8 +1,10 @@
 package br.com.maurigvs.surveyapi.exception;
 
-public class QuestionNotFoundException extends BadRequestException {
+import br.com.maurigvs.surveyapi.model.Question;
+
+public class QuestionNotFoundException extends EntityNotFoundException {
 
     public QuestionNotFoundException(Integer questionId) {
-        super("Question not found by Id " + questionId);
+        super(Question.class.getSimpleName(), questionId);
     }
 }

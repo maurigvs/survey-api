@@ -29,13 +29,17 @@ public class Question implements Serializable {
     @JoinColumn(name = "survey_id")
     private Survey survey;
 
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<AnswerItem> answerItems = new ArrayList<>();
+
     public Question(Integer id, String title, Survey survey) {
         this.id = id;
         this.title = title;
         this.survey = survey;
     }
 
-    protected Question() {}
+    protected Question() {
+    }
 
     public Integer getId() {
         return id;
@@ -51,5 +55,9 @@ public class Question implements Serializable {
 
     public Survey getSurvey() {
         return survey;
+    }
+
+    public List<AnswerItem> getAnswerItems() {
+        return answerItems;
     }
 }

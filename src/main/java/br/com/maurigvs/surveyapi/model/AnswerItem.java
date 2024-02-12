@@ -16,33 +16,38 @@ public class AnswerItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer questionId;
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private Question question;
 
-    private Integer choiceId;
+    @ManyToOne
+    @JoinColumn(name = "choice_id")
+    private Choice choice;
 
     @ManyToOne
     @JoinColumn(name = "answer_id")
     private Answer answer;
 
-    public AnswerItem(Integer id, Integer questionId, Integer choiceId, Answer answer) {
-        this.id = id;
-        this.questionId = questionId;
-        this.choiceId = choiceId;
-        this.answer = answer;
+    protected AnswerItem() {
     }
 
-    protected AnswerItem() {}
+    public AnswerItem(Integer id, Question question, Choice choice, Answer answer) {
+        this.id = id;
+        this.question = question;
+        this.choice = choice;
+        this.answer = answer;
+    }
 
     public Integer getId() {
         return id;
     }
 
-    public Integer getQuestionId() {
-        return questionId;
+    public Question getQuestion() {
+        return question;
     }
 
-    public Integer getChoiceId() {
-        return choiceId;
+    public Choice getChoice() {
+        return choice;
     }
 
     public Answer getAnswer() {

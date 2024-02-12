@@ -123,10 +123,11 @@ public class Mock {
     }
 
     public static Answer ofAnswer() {
-        var answer = new Answer(1, Mock.ofSurvey());
+        var survey = ofSurvey();
+        var answer = new Answer(1, survey);
         answer.getAnswerItems().addAll(List.of(
-            new AnswerItem(1, 1, 2, answer),
-            new AnswerItem(2, 2, 7, answer)
+            new AnswerItem(1, survey.getQuestions().get(0), survey.getQuestions().get(0).getChoices().get(1), answer),
+            new AnswerItem(2, survey.getQuestions().get(1), survey.getQuestions().get(1).getChoices().get(2), answer)
         ));
         return answer;
     }

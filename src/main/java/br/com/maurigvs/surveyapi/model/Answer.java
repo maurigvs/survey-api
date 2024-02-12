@@ -27,7 +27,8 @@ public class Answer implements Serializable {
     @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<AnswerItem> answerItems = new ArrayList<>();
 
-    protected Answer() {}
+    protected Answer() {
+    }
 
     public Answer(Integer id, Survey survey) {
         this.id = id;

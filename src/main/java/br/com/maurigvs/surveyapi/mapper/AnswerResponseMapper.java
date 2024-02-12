@@ -12,25 +12,26 @@ public class AnswerResponseMapper implements Function<Answer, AnswerResponse> {
 
     @Override
     public AnswerResponse apply(Answer answer) {
-        var survey = filterSurveyChoices(answer);
+        var survey = applySurvey(answer);
         var surveyResponse = new SurveyResponseMapper().apply(survey);
 
         return new AnswerResponse(answer.getId(), surveyResponse);
     }
 
-    private Survey filterSurveyChoices(Answer answer) {
+    private Survey applySurvey(Answer answer) {
         var survey = answer.getSurvey();
-        var idsMap = answer.getAnswerItems().stream().collect(
-            Collectors.toMap(AnswerItem::getQuestionId, AnswerItem::getChoiceId)
+        var itemsMap = answer.getAnswerItems().stream().collect(
+            Collectors.toMap(AnswerItem::getQuestion, AnswerItem::getChoice)
         );
         survey.getQuestions().removeIf(
-            question -> !idsMap.containsKey(question.getId())
+            question -> !itemsMap.containsKey(question)
         );
         survey.getQuestions().forEach(
             question -> question.getChoices().removeIf(
-                choice -> !idsMap.get(question.getId()).equals(choice.getId())
+                choice -> !itemsMap.get(question).getId().equals(choice.getId())
             )
         );
+
         return survey;
     }
 }

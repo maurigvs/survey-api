@@ -7,9 +7,6 @@ import java.time.ZonedDateTime;
 
 @Schema
 public record ErrorResponse(
-
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T' HH:ss:ss'Z'")
-        ZonedDateTime timestamp,
         String error,
         String message
 ){

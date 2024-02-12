@@ -46,7 +46,7 @@ class SurveyServiceImplTest {
     }
 
     @Test
-    void should_throw_exception_when_survey_already_exists() {
+    void should_throw_SurveyAlreadyExistsException_when_survey_already_exists() {
         var survey = Mock.ofSurvey();
         var messageExcepted = "Survey 'Sample Survey' already exists";
         given(surveyRepository.existsByTitle(anyString())).willReturn(true);
@@ -84,7 +84,7 @@ class SurveyServiceImplTest {
     }
 
     @Test
-    void should_throw_exception_when_survey_not_found_by_id() {
+    void should_throw_SurveyNotFoundException_when_survey_not_found_by_id() {
         var surveyId = 1;
         given(surveyRepository.findById(any())).willReturn(Optional.empty());
 

@@ -56,7 +56,7 @@ class QuestionServiceImplTest {
     }
 
     @Test
-    void should_throw_exception_when_question_not_found_by_id() {
+    void should_throw_QuestionNotFoundException_when_question_not_found_by_id() {
         given(questionRepository.findById(anyInt())).willReturn(Optional.empty());
 
         var exception = assertThrows(QuestionNotFoundException.class,
@@ -69,7 +69,7 @@ class QuestionServiceImplTest {
     }
 
     @Test
-    void should_throw_exception_when_survey_id_does_not_match_id_given() {
+    void should_throw_SurveyNotFoundException_when_survey_id_does_not_match_id_given() {
         var questionId = 1;
         var surveyId = 2;
         var question = Mock.ofSurvey().getQuestions().get(0);

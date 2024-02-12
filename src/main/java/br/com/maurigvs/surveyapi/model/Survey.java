@@ -31,7 +31,8 @@ public class Survey implements Serializable {
         this.title = title;
     }
 
-    protected Survey() {}
+    protected Survey() {
+    }
 
     public Integer getId() {
         return id;

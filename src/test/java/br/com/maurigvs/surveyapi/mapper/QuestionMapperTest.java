@@ -5,6 +5,8 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -22,5 +24,6 @@ class QuestionMapperTest {
         assertNull(result.getId());
         assertEquals(questionDto.choices().size(), result.getChoices().size());
         assertSame(survey, result.getSurvey());
+        assertEquals(Collections.emptyList(), result.getAnswerItems());
     }
 }

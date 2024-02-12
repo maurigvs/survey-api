@@ -72,9 +72,7 @@ class SurveyControllerTest {
     @Test
     void should_return_Bad_Request_when_MethodArgumentNotValidException_is_thrown() throws Exception {
         var request = new SurveyRequest("", Mock.ofSurveyRequest().questions());
-        var response = new ErrorResponse(ZonedDateTime.now(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                "Survey title can not be blank");
+        var response = new ErrorResponse("Bad Request","Survey title can not be blank");
 
         mockMvc.perform(post("/survey")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -89,9 +87,7 @@ class SurveyControllerTest {
     @Test
     void should_return_Bad_Request_when_BadRequestException_is_thrown() throws Exception {
         var request = Mock.ofSurveyRequest();
-        var response = new ErrorResponse(ZonedDateTime.now(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                "Survey 'Sample Survey' already exists");
+        var response = new ErrorResponse("Bad Request","Survey 'Sample Survey' already exists");
         willThrow(new SurveyAlreadyExistsException(request.survey())).given(surveyService).createSurvey(any());
 
         mockMvc.perform(post("/survey")
@@ -107,12 +103,10 @@ class SurveyControllerTest {
 
     @Test
     void should_return_Not_Found_when_NoResourceFoundException_is_thrown() throws Exception {
+        var response = new ErrorResponse("Not Found",
+                "Endpoint inexistent or missing required parameters: POST /inexistent");
 
-        var response = new ErrorResponse(ZonedDateTime.now(),
-                HttpStatus.NOT_FOUND.getReasonPhrase(),
-                "Endpoint inexistent or missing required parameters: POST /survey/1");
-
-        mockMvc.perform(post("/survey/1"))
+        mockMvc.perform(post("/inexistent"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(Mock.ofJson(response)));
