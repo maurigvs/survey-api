@@ -20,7 +20,8 @@ public class QuestionServiceImpl implements QuestionService {
         repository.save(question);
     }
 
-    private Question findById(Long questionId) {
+    @Override
+    public Question findById(Long questionId) {
         return repository.findById(questionId)
                 .orElseThrow(() -> new QuestionNotFoundException(questionId));
     }
@@ -33,8 +34,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     private void verifyBeforeDelete(Question question, Long surveyId) {
-        if(!question.getSurvey().getId().equals(surveyId)){
+        if(!question.getSurvey().getId().equals(surveyId))
             throw new SurveyNotFoundException(surveyId);
-        }
     }
 }

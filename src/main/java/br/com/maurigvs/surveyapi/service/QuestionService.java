@@ -6,5 +6,7 @@ public interface QuestionService {
 
     void create(Question question);
 
+    Question findById(Long questionId);
+
     void deleteById(Long questionId, Long surveyId);
 }

@@ -5,11 +5,6 @@ import br.com.maurigvs.surveyapi.dto.responses.SurveyResponse;
 import br.com.maurigvs.surveyapi.mapper.SurveyMapper;
 import br.com.maurigvs.surveyapi.mapper.SurveyResponseMapper;
 import br.com.maurigvs.surveyapi.service.SurveyService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -34,16 +29,12 @@ public class SurveyController {
         this.surveyService = surveyService;
     }
 
-    @Operation(summary = "Create a new Survey")
-    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "New Survey created successfully")})
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void postSurvey(@RequestBody @Valid SurveyRequest request){
         surveyService.create(new SurveyMapper().apply(request));
     }
 
-    @Operation(summary = "List all Surveys created")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Surveys listed successfully", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = SurveyResponse.class))})})
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody

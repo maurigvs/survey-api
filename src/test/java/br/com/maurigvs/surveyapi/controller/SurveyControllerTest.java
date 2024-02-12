@@ -1,7 +1,7 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.dto.responses.ErrorResponse;
 import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
+import br.com.maurigvs.surveyapi.dto.responses.ErrorResponse;
 import br.com.maurigvs.surveyapi.exception.SurveyAlreadyExistsException;
 import br.com.maurigvs.surveyapi.mocks.Mock;
 import br.com.maurigvs.surveyapi.service.SurveyService;
@@ -14,6 +14,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -69,7 +71,7 @@ class SurveyControllerTest {
     @Test
     void should_return_Bad_Request_when_MethodArgumentNotValidException_is_thrown() throws Exception {
         var request = new SurveyRequest("", Mock.ofSurveyRequest().questions());
-        var response = new ErrorResponse("Bad Request","Survey title can not be blank");
+        var response = new ErrorResponse("Bad Request", List.of("The field [survey] must not be blank"));
 
         mockMvc.perform(post("/survey")
                         .contentType(MediaType.APPLICATION_JSON)

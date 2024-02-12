@@ -2,10 +2,11 @@ package br.com.maurigvs.surveyapi.mocks;
 
 import br.com.maurigvs.surveyapi.dto.requests.AnswerItemRequest;
 import br.com.maurigvs.surveyapi.dto.requests.AnswerRequest;
-import br.com.maurigvs.surveyapi.dto.responses.AnswerResponse;
+import br.com.maurigvs.surveyapi.dto.requests.ChoiceRequest;
 import br.com.maurigvs.surveyapi.dto.requests.QuestionRequest;
-import br.com.maurigvs.surveyapi.dto.responses.QuestionResponse;
 import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
+import br.com.maurigvs.surveyapi.dto.responses.AnswerResponse;
+import br.com.maurigvs.surveyapi.dto.responses.QuestionResponse;
 import br.com.maurigvs.surveyapi.dto.responses.SurveyResponse;
 import br.com.maurigvs.surveyapi.model.Answer;
 import br.com.maurigvs.surveyapi.model.AnswerItem;
@@ -159,5 +160,13 @@ public class Mock {
 
     public static Question ofQuestion() {
         return ofSurvey().getQuestions().get(0);
+    }
+
+    public static Choice ofChoice() {
+        return ofQuestion().getChoices().get(0);
+    }
+
+    public static ChoiceRequest ofChoiceRequest() {
+        return new ChoiceRequest("Argentina");
     }
 }

@@ -1,14 +1,12 @@
 package br.com.maurigvs.surveyapi.controller;
 
 import br.com.maurigvs.surveyapi.mocks.Mock;
-import br.com.maurigvs.surveyapi.model.Question;
+import br.com.maurigvs.surveyapi.service.ChoiceService;
 import br.com.maurigvs.surveyapi.service.QuestionService;
-import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -25,44 +23,44 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(QuestionController.class)
-@AutoConfigureMockMvc
+@WebMvcTest(ChoiceController.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class QuestionControllerTest {
+class ChoiceControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private SurveyService surveyService;
+    private ChoiceService choiceService;
 
     @MockBean
     private QuestionService questionService;
 
     @Test
-    void should_return_Created_when_add_question_to_existing_survey() throws Exception {
-        var survey = Mock.ofSurvey();
-        var questionRequest = Mock.ofQuestionRequest1();
-        given(surveyService.findById(anyLong())).willReturn(survey);
+    void should_return_Created_when_add_choice_to_existing_question() throws Exception {
+        var question = Mock.ofQuestion();
+        var request = Mock.ofChoiceRequest();
+        given(questionService.findById(anyLong())).willReturn(question);
 
-        mockMvc.perform(post("/survey/1/question")
+        mockMvc.perform(post("/survey/1/question/1/choice")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(Mock.ofJson(questionRequest)))
+                        .content(Mock.ofJson(request)))
                 .andExpect(status().isCreated());
 
-        verify(surveyService, times(1)).findById(1L);
-        verify(questionService, times(1)).create(any(Question.class));
-        verifyNoMoreInteractions(surveyService, questionService);
+        verify(questionService, times(1)).findById(1L);
+        verify(choiceService, times(1)).create(any());
+        verifyNoMoreInteractions(choiceService, questionService);
     }
 
     @Test
-    void should_return_OK_when_delete_question_from_existing_survey() throws Exception {
+    void should_return_OK_when_delete_choice_from_existing_question() throws Exception {
 
-        mockMvc.perform(delete("/survey/1/question/2"))
+        mockMvc.perform(delete("/survey/1/question/1/choice/2"))
                 .andExpect(status().isOk());
 
-        verify(questionService, times(1)).deleteById(2L,1L);
-        verifyNoMoreInteractions(questionService);
-        verifyNoInteractions(surveyService);
+        verify(choiceService, times(1)).deleteById(2L,1L, 1L);
+        verifyNoMoreInteractions(choiceService);
+        verifyNoInteractions(questionService);
     }
+
 }
