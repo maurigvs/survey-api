@@ -39,7 +39,7 @@ public class SurveyController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void postSurvey(@RequestBody @Valid SurveyRequest request){
-        surveyService.createSurvey(new SurveyMapper().apply(request));
+        surveyService.create(new SurveyMapper().apply(request));
     }
 
     @Operation(summary = "List all Surveys created")
@@ -48,6 +48,6 @@ public class SurveyController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<SurveyResponse> getSurveys(){
-        return surveyService.listAllSurveys().stream().map(new SurveyResponseMapper()).toList();
+        return surveyService.findAll().stream().map(new SurveyResponseMapper()).toList();
     }
 }

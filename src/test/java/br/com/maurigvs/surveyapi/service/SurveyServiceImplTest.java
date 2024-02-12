@@ -3,7 +3,9 @@ package br.com.maurigvs.surveyapi.service;
 import br.com.maurigvs.surveyapi.exception.SurveyAlreadyExistsException;
 import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
 import br.com.maurigvs.surveyapi.mocks.Mock;
+import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.repository.SurveyRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -11,12 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -28,70 +32,85 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 class SurveyServiceImplTest {
 
     @Autowired
-    private SurveyService surveyService;
+    private SurveyService service;
 
     @MockBean
-    private SurveyRepository surveyRepository;
+    private SurveyRepository repository;
 
-    @Test
-    void should_save_survey(){
-        var survey = Mock.ofSurvey();
-        given(surveyRepository.existsByTitle(anyString())).willReturn(false);
+    private Survey survey;
 
-        surveyService.createSurvey(survey);
-
-        verify(surveyRepository, times(1)).existsByTitle(survey.getTitle());
-        verify(surveyRepository, times(1)).save(survey);
-        verifyNoMoreInteractions(surveyRepository);
+    @BeforeEach
+    void setUp() {
+        survey = Mock.ofSurvey();
     }
 
     @Test
-    void should_throw_SurveyAlreadyExistsException_when_survey_already_exists() {
-        var survey = Mock.ofSurvey();
-        var messageExcepted = "Survey 'Sample Survey' already exists";
-        given(surveyRepository.existsByTitle(anyString())).willReturn(true);
+    void should_create_survey(){
+        given(repository.existsByTitle(anyString())).willReturn(false);
 
-        var exception = assertThrows(SurveyAlreadyExistsException.class, () -> surveyService.createSurvey(survey));
-        assertEquals(messageExcepted, exception.getMessage());
+        service.create(survey);
 
-        verify(surveyRepository, times(1)).existsByTitle(survey.getTitle());
-        verifyNoMoreInteractions(surveyRepository);
+        verify(repository, times(1)).existsByTitle(survey.getTitle());
+        verify(repository, times(1)).save(survey);
+        verifyNoMoreInteractions(repository);
+    }
+
+    @Test
+    void should_throw_exception_when_survey_already_exists() {
+        given(repository.existsByTitle(anyString())).willReturn(true);
+
+        var exception = assertThrows(SurveyAlreadyExistsException.class, () -> service.create(survey));
+        assertEquals("Survey 'Sample Survey' already exists", exception.getMessage());
+
+        verify(repository, times(1)).existsByTitle(survey.getTitle());
+        verifyNoMoreInteractions(repository);
     }
 
     @Test
     void should_return_list_of_surveys(){
-        var surveys = Mock.ofSurveyList();
-        given(surveyRepository.findAll()).willReturn(surveys);
+        var surveys = List.of(survey);
+        given(repository.findAll()).willReturn(surveys);
 
-        var result = surveyService.listAllSurveys();
+        var result = service.findAll();
 
-        assertEquals(result, surveys);
-        verify(surveyRepository, times(1)).findAll();
-        verifyNoMoreInteractions(surveyRepository);
+        assertSame(result, surveys);
+        verify(repository, times(1)).findAll();
+        verifyNoMoreInteractions(repository);
     }
 
     @Test
-    void should_return_Survey_given_an_Id() {
+    void should_return_survey_given_an_id() {
         var surveyId = 1L;
-        var survey = Mock.ofSurvey();
-        given(surveyRepository.findById(any())).willReturn(Optional.of(survey));
+        given(repository.findById(any())).willReturn(Optional.of(survey));
 
-        var result = surveyService.findById(surveyId);
+        var result = service.findById(surveyId);
 
-        verify(surveyRepository, times(1)).findById(surveyId);
-        verifyNoMoreInteractions(surveyRepository);
+        verify(repository, times(1)).findById(surveyId);
+        verifyNoMoreInteractions(repository);
         assertSame(survey, result);
     }
 
     @Test
-    void should_throw_SurveyNotFoundException_when_survey_not_found_by_id() {
+    void should_delete_survey_by_id() {
         var surveyId = 1L;
-        given(surveyRepository.findById(any())).willReturn(Optional.empty());
+        given(repository.findById(anyLong())).willReturn(Optional.of(survey));
 
-        var exception = assertThrows(SurveyNotFoundException.class, () -> surveyService.findById(surveyId));
+        service.deleteById(surveyId);
+
+        verify(repository, times(1)).findById(surveyId);
+        verify(repository, times(1)).delete(survey);
+        verifyNoMoreInteractions(repository);
+    }
+
+    @Test
+    void should_throw_exception_when_survey_not_found_by_id() {
+        var surveyId = 1L;
+        given(repository.findById(any())).willReturn(Optional.empty());
+
+        var exception = assertThrows(SurveyNotFoundException.class, () -> service.findById(surveyId));
         assertEquals("Survey not found by Id 1", exception.getMessage());
 
-        verify(surveyRepository, times(1)).findById(surveyId);
-        verifyNoMoreInteractions(surveyRepository);
+        verify(repository, times(1)).findById(surveyId);
+        verifyNoMoreInteractions(repository);
     }
 }

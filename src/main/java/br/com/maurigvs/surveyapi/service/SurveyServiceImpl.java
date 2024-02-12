@@ -11,31 +11,37 @@ import java.util.List;
 @Service
 public class SurveyServiceImpl implements SurveyService {
 
-    private final SurveyRepository surveyRepository;
+    private final SurveyRepository repository;
 
-    public SurveyServiceImpl(SurveyRepository surveyRepository) {
-        this.surveyRepository = surveyRepository;
+    public SurveyServiceImpl(SurveyRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public void createSurvey(Survey survey) {
+    public void create(Survey survey) {
         verifyBeforeSave(survey);
-        surveyRepository.save(survey);
-    }
-
-    @Override
-    public List<Survey> listAllSurveys() {
-        return surveyRepository.findAll();
+        repository.save(survey);
     }
 
     @Override
     public Survey findById(Long surveyId) {
-        return surveyRepository.findById(surveyId)
+        return repository.findById(surveyId)
                 .orElseThrow(() -> new SurveyNotFoundException(surveyId));
     }
 
+    @Override
+    public List<Survey> findAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public void deleteById(Long surveyId) {
+        var survey = findById(surveyId);
+        repository.delete(survey);
+    }
+
     private void verifyBeforeSave(Survey survey) {
-        if(surveyRepository.existsByTitle(survey.getTitle()))
+        if(repository.existsByTitle(survey.getTitle()))
             throw new SurveyAlreadyExistsException(survey.getTitle());
     }
 }

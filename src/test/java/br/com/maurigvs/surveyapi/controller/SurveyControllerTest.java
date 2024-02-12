@@ -47,7 +47,7 @@ class SurveyControllerTest {
                         .content(Mock.ofJson(request)))
                 .andExpect(status().isCreated());
 
-        verify(surveyService, times(1)).createSurvey(any());
+        verify(surveyService, times(1)).create(any());
         verifyNoMoreInteractions(surveyService);
     }
 
@@ -55,14 +55,14 @@ class SurveyControllerTest {
     void should_return_OK_when_get_survey_list() throws Exception {
         var surveys = Mock.ofSurveyList();
         var response = Mock.ofSurveyResponseList();
-        given(surveyService.listAllSurveys()).willReturn(surveys);
+        given(surveyService.findAll()).willReturn(surveys);
 
         mockMvc.perform(get("/survey"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(Mock.ofJson(response)));
 
-        verify(surveyService, times(1)).listAllSurveys();
+        verify(surveyService, times(1)).findAll();
         verifyNoMoreInteractions(surveyService);
     }
 
@@ -85,7 +85,7 @@ class SurveyControllerTest {
     void should_return_Bad_Request_when_BadRequestException_is_thrown() throws Exception {
         var request = Mock.ofSurveyRequest();
         var response = new ErrorResponse("Bad Request","Survey 'Sample Survey' already exists");
-        willThrow(new SurveyAlreadyExistsException(request.survey())).given(surveyService).createSurvey(any());
+        willThrow(new SurveyAlreadyExistsException(request.survey())).given(surveyService).create(any());
 
         mockMvc.perform(post("/survey")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -94,7 +94,7 @@ class SurveyControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(Mock.ofJson(response)));
 
-        verify(surveyService, times(1)).createSurvey(any());
+        verify(surveyService, times(1)).create(any());
         verifyNoMoreInteractions(surveyService);
     }
 
