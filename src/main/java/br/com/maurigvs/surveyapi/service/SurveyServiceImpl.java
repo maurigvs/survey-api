@@ -29,7 +29,7 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-    public Survey findById(Integer surveyId) {
+    public Survey findById(Long surveyId) {
         return surveyRepository.findById(surveyId)
                 .orElseThrow(() -> new SurveyNotFoundException(surveyId));
     }

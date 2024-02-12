@@ -72,7 +72,7 @@ class SurveyServiceImplTest {
 
     @Test
     void should_return_Survey_given_an_Id() {
-        var surveyId = 1;
+        var surveyId = 1L;
         var survey = Mock.ofSurvey();
         given(surveyRepository.findById(any())).willReturn(Optional.of(survey));
 
@@ -85,7 +85,7 @@ class SurveyServiceImplTest {
 
     @Test
     void should_throw_SurveyNotFoundException_when_survey_not_found_by_id() {
-        var surveyId = 1;
+        var surveyId = 1L;
         given(surveyRepository.findById(any())).willReturn(Optional.empty());
 
         var exception = assertThrows(SurveyNotFoundException.class, () -> surveyService.findById(surveyId));

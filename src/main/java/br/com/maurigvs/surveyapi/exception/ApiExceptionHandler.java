@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import java.time.ZonedDateTime;
-
 @ControllerAdvice
 public class ApiExceptionHandler {
 

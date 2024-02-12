@@ -18,7 +18,7 @@ public class QuestionResponseMapper implements Function<Question, QuestionRespon
         return new QuestionResponse(question.getTitle(), choicesMap);
     }
 
-    private Map<Integer, String> applyChoices(List<Choice> choices) {
+    private Map<Long, String> applyChoices(List<Choice> choices) {
         return choices.stream().collect(
             Collectors.toMap(Choice::getId, Choice::getTitle)
         );

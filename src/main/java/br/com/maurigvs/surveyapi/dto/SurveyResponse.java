@@ -6,8 +6,8 @@ import java.util.Map;
 
 @Schema
 public record SurveyResponse(
-        Integer surveyId,
+        Long surveyId,
         String survey,
-        Map<Integer, QuestionResponse> questions
+        Map<Long, QuestionResponse> questions
 ) {
 }

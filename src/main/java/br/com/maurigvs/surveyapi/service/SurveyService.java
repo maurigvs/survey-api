@@ -28,5 +28,5 @@ public interface SurveyService {
      * @return Survey found.
      * @throws SurveyNotFoundException when a survey is not found by the Id given.
      */
-    Survey findById(Integer surveyId) throws SurveyNotFoundException;
+    Survey findById(Long surveyId) throws SurveyNotFoundException;
 }

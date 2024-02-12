@@ -11,7 +11,7 @@ import java.util.List;
 public record AnswerRequest(
 
         @NotNull
-        Integer surveyId,
+        Long surveyId,
 
         @Valid
         @NotEmpty

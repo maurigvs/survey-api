@@ -34,7 +34,7 @@ public class QuestionController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "New question created successfully")})
     @PutMapping
     public void putQuestionToSurvey(@Parameter(description = "Id of the Survey do the updated")
-                                    @PathVariable Integer surveyId,
+                                    @PathVariable Long surveyId,
                                     @RequestBody @Valid QuestionRequest request){
         var survey = surveyService.findById(surveyId);
         var question = new QuestionMapper(survey).apply(request);
@@ -47,9 +47,9 @@ public class QuestionController {
     })
     @DeleteMapping("/{questionId}")
     public void deleteQuestionById(@Parameter(description = "Id of the survey parent of question")
-                                   @PathVariable Integer surveyId,
+                                   @PathVariable Long surveyId,
                                    @Parameter(description = "Id of the question do be deleted")
-                                   @PathVariable Integer questionId){
+                                   @PathVariable Long questionId){
         questionService.deleteById(questionId, surveyId);
     }
 }

@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema
 public record AnswerResponse(
-        Integer answerId,
+        Long answerId,
         SurveyResponse answer
 ) {
 }

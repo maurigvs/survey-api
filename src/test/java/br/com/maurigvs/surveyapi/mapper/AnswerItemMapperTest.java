@@ -40,7 +40,7 @@ class AnswerItemMapperTest {
 
     @Test
     void should_throw_QuestionNotFoundException_when_question_not_found_in_a_given_survey() {
-        var request = new AnswerItemRequest(10,15);
+        var request = new AnswerItemRequest(10L,15L);
 
         var exception = assertThrows(QuestionNotFoundException.class,
                 () -> new AnswerItemMapper(answer).apply(request));
@@ -50,7 +50,7 @@ class AnswerItemMapperTest {
 
     @Test
     void should_throw_ChoiceNotFoundException_when_choice_not_found_in_a_given_survey() {
-        var request = new AnswerItemRequest(2,20);
+        var request = new AnswerItemRequest(2L,20L);
 
         var exception = assertThrows(ChoiceNotFoundException.class,
                 () -> new AnswerItemMapper(answer).apply(request));

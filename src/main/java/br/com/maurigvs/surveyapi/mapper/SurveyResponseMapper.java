@@ -19,7 +19,7 @@ public class SurveyResponseMapper implements Function<Survey, SurveyResponse> {
         return new SurveyResponse(survey.getId(), survey.getTitle(), questionsMap);
     }
 
-    private Map<Integer, QuestionResponse> applyQuestions(List<Question> questions) {
+    private Map<Long, QuestionResponse> applyQuestions(List<Question> questions) {
         return questions.stream().collect(
             Collectors.toMap(Question::getId, new QuestionResponseMapper())
         );

@@ -21,18 +21,18 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void deleteById(Integer questionId, Integer surveyId) {
+    public void deleteById(Long questionId, Long surveyId) {
         var question = findById(questionId);
         verifyBeforeDelete(question, surveyId);
         questionRepository.delete(question);
     }
 
-    private Question findById(Integer id) {
+    private Question findById(Long id) {
         return questionRepository.findById(id)
                 .orElseThrow(() -> new QuestionNotFoundException(id));
     }
 
-    private void verifyBeforeDelete(Question question, Integer surveyId) {
+    private void verifyBeforeDelete(Question question, Long surveyId) {
         if(!question.getSurvey().getId().equals(surveyId)){
             throw new SurveyNotFoundException(surveyId);
         }

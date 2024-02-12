@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -41,7 +41,7 @@ class AnswerControllerTest {
     @Test
     void should_return_Created_when_post_answer() throws Exception {
         var request = Mock.ofAnswerRequest();
-        given(surveyService.findById(anyInt())).willReturn(Mock.ofSurvey());
+        given(surveyService.findById(anyLong())).willReturn(Mock.ofSurvey());
 
         mockMvc.perform(post("/answer")
                         .contentType(MediaType.APPLICATION_JSON)

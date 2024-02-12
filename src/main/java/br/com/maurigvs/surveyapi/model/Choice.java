@@ -18,7 +18,7 @@ public class Choice implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String title;
 
@@ -29,7 +29,7 @@ public class Choice implements Serializable {
     @OneToMany(mappedBy = "choice", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<AnswerItem> answerItems = new ArrayList<>();
 
-    public Choice(Integer id, String title, Question question) {
+    public Choice(Long id, String title, Question question) {
         this.id = id;
         this.title = title;
         this.question = question;
@@ -38,7 +38,7 @@ public class Choice implements Serializable {
     protected Choice() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

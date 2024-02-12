@@ -7,9 +7,9 @@ import jakarta.validation.constraints.NotNull;
 public record AnswerItemRequest(
 
         @NotNull
-        Integer questionId,
+        Long questionId,
 
         @NotNull
-        Integer choiceId
+        Long choiceId
 ) {
 }

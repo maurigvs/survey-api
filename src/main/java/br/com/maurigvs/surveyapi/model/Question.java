@@ -18,7 +18,7 @@ public class Question implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String title;
 
@@ -32,7 +32,7 @@ public class Question implements Serializable {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<AnswerItem> answerItems = new ArrayList<>();
 
-    public Question(Integer id, String title, Survey survey) {
+    public Question(Long id, String title, Survey survey) {
         this.id = id;
         this.title = title;
         this.survey = survey;
@@ -41,7 +41,7 @@ public class Question implements Serializable {
     protected Question() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

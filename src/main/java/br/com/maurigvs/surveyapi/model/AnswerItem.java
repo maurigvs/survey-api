@@ -14,7 +14,7 @@ public class AnswerItem implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "question_id")
@@ -31,14 +31,14 @@ public class AnswerItem implements Serializable {
     protected AnswerItem() {
     }
 
-    public AnswerItem(Integer id, Question question, Choice choice, Answer answer) {
+    public AnswerItem(Long id, Question question, Choice choice, Answer answer) {
         this.id = id;
         this.question = question;
         this.choice = choice;
         this.answer = answer;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

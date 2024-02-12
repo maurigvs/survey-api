@@ -13,7 +13,7 @@ class QuestionResponseMapperTest {
     @Test
     void should_return_QuestionResponse_given_an_Question() {
         var question = Mock.ofSurvey().getQuestions().get(0);
-        var choices = Mock.ofSurveyResponse().questions().get(1).choices();
+        var choices = Mock.ofSurveyResponse().questions().get(1L).choices();
 
         var result = new QuestionResponseMapper().apply(question);
 

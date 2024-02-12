@@ -4,7 +4,7 @@ import br.com.maurigvs.surveyapi.model.Choice;
 
 public class ChoiceNotFoundException extends EntityNotFoundException {
 
-    public ChoiceNotFoundException(Integer choiceId) {
+    public ChoiceNotFoundException(Long choiceId) {
         super(Choice.class.getSimpleName(), choiceId);
     }
 }

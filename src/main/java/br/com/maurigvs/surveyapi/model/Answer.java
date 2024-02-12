@@ -18,7 +18,7 @@ public class Answer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "survey_id")
@@ -30,12 +30,12 @@ public class Answer implements Serializable {
     protected Answer() {
     }
 
-    public Answer(Integer id, Survey survey) {
+    public Answer(Long id, Survey survey) {
         this.id = id;
         this.survey = survey;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 

@@ -15,7 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -43,14 +43,14 @@ class QuestionControllerTest {
     void should_return_OK_when_add_question_to_existing_survey() throws Exception {
         var survey = Mock.ofSurvey();
         var question = Mock.ofQuestionRequest1();
-        given(surveyService.findById(anyInt())).willReturn(survey);
+        given(surveyService.findById(anyLong())).willReturn(survey);
 
         mockMvc.perform(put("/survey/1/question")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(Mock.ofJson(question)))
                 .andExpect(status().isOk());
 
-        verify(surveyService, times(1)).findById(1);
+        verify(surveyService, times(1)).findById(1L);
         verify(questionService, times(1)).createQuestion(any(Question.class));
         verifyNoMoreInteractions(surveyService, questionService);
     }
@@ -61,7 +61,7 @@ class QuestionControllerTest {
         mockMvc.perform(delete("/survey/1/question/2"))
                 .andExpect(status().isOk());
 
-        verify(questionService, times(1)).deleteById(2,1);
+        verify(questionService, times(1)).deleteById(2L,1L);
         verifyNoMoreInteractions(questionService);
         verifyNoInteractions(surveyService);
     }

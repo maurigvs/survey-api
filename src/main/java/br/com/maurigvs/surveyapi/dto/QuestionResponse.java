@@ -7,6 +7,6 @@ import java.util.Map;
 @Schema
 public record QuestionResponse(
         String question,
-        Map<Integer, String> choices
+        Map<Long, String> choices
 ){
 }
