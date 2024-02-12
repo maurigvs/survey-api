@@ -49,7 +49,7 @@ class AnswerControllerTest {
                 .andExpect(status().isCreated());
 
         verify(surveyService, times(1)).findById(request.surveyId());
-        verify(answerService, times(1)).createAnswer(any());
+        verify(answerService, times(1)).create(any());
         verifyNoMoreInteractions(surveyService, answerService);
     }
 

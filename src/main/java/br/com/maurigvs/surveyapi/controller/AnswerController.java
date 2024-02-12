@@ -42,7 +42,7 @@ public class AnswerController {
     public void postAnswer(@RequestBody @Valid AnswerRequest request){
         var survey = surveyService.findById(request.surveyId());
         var answer = new AnswerMapper(survey).apply(request);
-        answerService.createAnswer(answer);
+        answerService.create(answer);
     }
 
     @Operation(summary = "List all answers")

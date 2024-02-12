@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface AnswerService {
 
-    void createAnswer(Answer answer);
+    void create(Answer answer);
 
     List<Answer> findAll();
+
+    void deleteById(Long answerId);
 }
