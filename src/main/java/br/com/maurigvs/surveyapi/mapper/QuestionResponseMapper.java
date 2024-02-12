@@ -13,9 +13,9 @@ public class QuestionResponseMapper implements Function<Question, QuestionRespon
 
     @Override
     public QuestionResponse apply(Question question) {
-        return new QuestionResponse(
-                question.getTitle(),
-                applyChoices(question.getChoices()));
+        var choicesMap = applyChoices(question.getChoices());
+
+        return new QuestionResponse(question.getTitle(), choicesMap);
     }
 
     private Map<Integer, String> applyChoices(List<Choice> choices) {

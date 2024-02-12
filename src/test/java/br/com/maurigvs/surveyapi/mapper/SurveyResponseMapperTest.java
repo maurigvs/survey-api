@@ -17,7 +17,7 @@ class SurveyResponseMapperTest {
 
         var result = new SurveyResponseMapper().apply(survey);
 
-        assertEquals(survey.getId(), result.id());
+        assertEquals(survey.getId(), result.surveyId());
         assertEquals(survey.getTitle(), result.survey());
         assertEquals(questions, result.questions());
     }

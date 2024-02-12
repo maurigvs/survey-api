@@ -14,10 +14,9 @@ public class SurveyResponseMapper implements Function<Survey, SurveyResponse> {
 
     @Override
     public SurveyResponse apply(Survey survey) {
-        return new SurveyResponse(
-                survey.getId(),
-                survey.getTitle(),
-                applyQuestions(survey.getQuestions()));
+        var questionsMap = applyQuestions(survey.getQuestions());
+
+        return new SurveyResponse(survey.getId(), survey.getTitle(), questionsMap);
     }
 
     private Map<Integer, QuestionResponse> applyQuestions(List<Question> questions) {

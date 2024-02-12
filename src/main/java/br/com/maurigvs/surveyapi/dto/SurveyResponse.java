@@ -6,7 +6,7 @@ import java.util.Map;
 
 @Schema
 public record SurveyResponse(
-        Integer id,
+        Integer surveyId,
         String survey,
         Map<Integer, QuestionResponse> questions
 ) {

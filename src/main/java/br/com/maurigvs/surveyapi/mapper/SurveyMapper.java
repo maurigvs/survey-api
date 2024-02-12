@@ -13,6 +13,7 @@ public class SurveyMapper implements Function<SurveyRequest, Survey> {
     public Survey apply(SurveyRequest request) {
         var survey = new Survey(null, request.survey());
         applyQuestions(survey, request.questions());
+
         return survey;
     }
 

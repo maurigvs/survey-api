@@ -19,9 +19,9 @@ public class AnswerResponseMapper implements Function<Answer, AnswerResponse> {
     @Override
     public AnswerResponse apply(Answer answer) {
         filterSurveyChoices(survey, answer);
-        return new AnswerResponse(
-                answer.getId(),
-                new SurveyResponseMapper().apply(survey));
+        var surveyResponse = new SurveyResponseMapper().apply(survey);
+
+        return new AnswerResponse(answer.getId(), surveyResponse);
     }
 
     private void filterSurveyChoices(Survey survey, Answer answer) {
