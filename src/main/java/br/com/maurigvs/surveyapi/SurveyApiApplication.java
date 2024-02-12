@@ -21,7 +21,7 @@ public class SurveyApiApplication {
 				.info(new Info()
 						.title("Survey API")
 						.description("A simple Survey application")
-						.version("v0.0.1")
+						.version("v2.0")
 						.license(new License()
 								.name("Apache 2.0")
 								.url("http://springdoc.org")))

@@ -1,9 +1,10 @@
-package br.com.maurigvs.surveyapi.service;
+package br.com.maurigvs.surveyapi.service.impl;
 
 import br.com.maurigvs.surveyapi.exception.SurveyAlreadyExistsException;
 import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
 import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.repository.SurveyRepository;
+import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

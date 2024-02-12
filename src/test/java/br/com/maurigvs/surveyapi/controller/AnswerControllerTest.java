@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.mocks.Mock;
+import br.com.maurigvs.surveyapi.mocks.DataMock;
 import br.com.maurigvs.surveyapi.service.AnswerService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -40,12 +40,12 @@ class AnswerControllerTest {
 
     @Test
     void should_return_Created_when_post_answer() throws Exception {
-        var request = Mock.ofAnswerRequest();
-        given(surveyService.findById(anyLong())).willReturn(Mock.ofSurvey());
+        var request = DataMock.ofAnswerRequest();
+        given(surveyService.findById(anyLong())).willReturn(DataMock.ofSurvey());
 
         mockMvc.perform(post("/answer")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(Mock.ofJson(request)))
+                        .content(DataMock.ofJson(request)))
                 .andExpect(status().isCreated());
 
         verify(surveyService, times(1)).findById(request.surveyId());
@@ -55,12 +55,12 @@ class AnswerControllerTest {
 
     @Test
     void should_return_Ok_when_get_answers() throws Exception {
-        var response = Mock.ofAnswerResponse();
-        given(answerService.findAll()).willReturn(List.of(Mock.ofAnswer()));
+        var response = DataMock.ofAnswerResponse();
+        given(answerService.findAll()).willReturn(List.of(DataMock.ofAnswer()));
 
         mockMvc.perform(get("/answer"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(Mock.ofJson(List.of(response))));
+                .andExpect(content().json(DataMock.ofJson(List.of(response))));
     }
 }

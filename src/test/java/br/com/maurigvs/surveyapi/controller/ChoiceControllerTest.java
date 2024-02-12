@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.mocks.Mock;
+import br.com.maurigvs.surveyapi.mocks.DataMock;
 import br.com.maurigvs.surveyapi.service.ChoiceService;
 import br.com.maurigvs.surveyapi.service.QuestionService;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -38,13 +38,13 @@ class ChoiceControllerTest {
 
     @Test
     void should_return_Created_when_add_choice_to_existing_question() throws Exception {
-        var question = Mock.ofQuestion();
-        var request = Mock.ofChoiceRequest();
+        var question = DataMock.ofQuestion();
+        var request = DataMock.ofChoiceRequest();
         given(questionService.findById(anyLong())).willReturn(question);
 
         mockMvc.perform(post("/survey/1/question/1/choice")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(Mock.ofJson(request)))
+                        .content(DataMock.ofJson(request)))
                 .andExpect(status().isCreated());
 
         verify(questionService, times(1)).findById(1L);

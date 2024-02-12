@@ -3,9 +3,10 @@ package br.com.maurigvs.surveyapi.service;
 import br.com.maurigvs.surveyapi.exception.ChoiceNotFoundException;
 import br.com.maurigvs.surveyapi.exception.QuestionNotFoundException;
 import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
-import br.com.maurigvs.surveyapi.mocks.Mock;
+import br.com.maurigvs.surveyapi.mocks.DataMock;
 import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.repository.ChoiceRepository;
+import br.com.maurigvs.surveyapi.service.impl.ChoiceServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -37,7 +38,7 @@ class ChoiceServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        choice = Mock.ofChoice();
+        choice = DataMock.ofChoice();
     }
 
     @Test

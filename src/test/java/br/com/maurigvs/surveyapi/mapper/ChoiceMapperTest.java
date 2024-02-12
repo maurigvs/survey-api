@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.mapper;
 
-import br.com.maurigvs.surveyapi.mocks.Mock;
+import br.com.maurigvs.surveyapi.mocks.DataMock;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -15,8 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 class ChoiceMapperTest {
 
     @Test
-    void should_return_Choice_given_and_ChoiceDto() {
-        var question = Mock.ofSurvey().getQuestions().get(0);
+    void should_return_Choice_given_and_ChoiceRequest() {
+        var question = DataMock.ofQuestion();
         var choiceDto = "China";
 
         var result = new ChoiceMapper(question).apply(choiceDto);

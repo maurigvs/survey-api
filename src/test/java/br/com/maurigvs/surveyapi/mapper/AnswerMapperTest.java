@@ -1,19 +1,22 @@
 package br.com.maurigvs.surveyapi.mapper;
 
-import br.com.maurigvs.surveyapi.mocks.Mock;
+import br.com.maurigvs.surveyapi.mocks.DataMock;
 import br.com.maurigvs.surveyapi.model.Answer;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class AnswerMapperTest {
 
     @Test
     void should_return_AnswerItem_given_and_AnswerItemRequest() {
-        var survey = Mock.ofSurvey();
-        var request = Mock.ofAnswerRequest();
+        var survey = DataMock.ofSurvey();
+        var request = DataMock.ofAnswerRequest();
 
         Answer result = new AnswerMapper(survey).apply(request);
 

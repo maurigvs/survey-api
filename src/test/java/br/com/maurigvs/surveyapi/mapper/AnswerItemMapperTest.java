@@ -3,7 +3,7 @@ package br.com.maurigvs.surveyapi.mapper;
 import br.com.maurigvs.surveyapi.dto.requests.AnswerItemRequest;
 import br.com.maurigvs.surveyapi.exception.ChoiceNotFoundException;
 import br.com.maurigvs.surveyapi.exception.QuestionNotFoundException;
-import br.com.maurigvs.surveyapi.mocks.Mock;
+import br.com.maurigvs.surveyapi.mocks.DataMock;
 import br.com.maurigvs.surveyapi.model.Answer;
 import br.com.maurigvs.surveyapi.model.AnswerItem;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,12 +23,12 @@ class AnswerItemMapperTest {
 
     @BeforeEach
     void setUp() {
-        answer = Mock.ofAnswer();
+        answer = DataMock.ofAnswer();
     }
 
     @Test
     void should_return_AnswerItem_given_and_AnswerItemRequest() {
-        var request = Mock.ofAnswerRequestItem();
+        var request = DataMock.ofAnswerRequestItem();
 
         AnswerItem result = new AnswerItemMapper(answer).apply(request);
 
@@ -39,7 +39,7 @@ class AnswerItemMapperTest {
     }
 
     @Test
-    void should_throw_QuestionNotFoundException_when_question_not_found_in_a_given_survey() {
+    void should_throw_exception_when_question_not_found_in_a_given_survey() {
         var request = new AnswerItemRequest(10L,15L);
 
         var exception = assertThrows(QuestionNotFoundException.class,
@@ -49,7 +49,7 @@ class AnswerItemMapperTest {
     }
 
     @Test
-    void should_throw_ChoiceNotFoundException_when_choice_not_found_in_a_given_survey() {
+    void should_throw_exception_when_choice_not_found_in_a_given_survey() {
         var request = new AnswerItemRequest(2L,20L);
 
         var exception = assertThrows(ChoiceNotFoundException.class,

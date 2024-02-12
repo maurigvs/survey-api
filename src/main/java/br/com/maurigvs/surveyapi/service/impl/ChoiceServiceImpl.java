@@ -1,14 +1,15 @@
-package br.com.maurigvs.surveyapi.service;
+package br.com.maurigvs.surveyapi.service.impl;
 
 import br.com.maurigvs.surveyapi.exception.ChoiceNotFoundException;
 import br.com.maurigvs.surveyapi.exception.QuestionNotFoundException;
 import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
 import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.repository.ChoiceRepository;
+import br.com.maurigvs.surveyapi.service.ChoiceService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ChoiceServiceImpl implements ChoiceService{
+public class ChoiceServiceImpl implements ChoiceService {
 
     private final ChoiceRepository repository;
 

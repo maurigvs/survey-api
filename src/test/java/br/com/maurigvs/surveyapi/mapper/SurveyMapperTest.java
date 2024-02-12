@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.mapper;
 
-import br.com.maurigvs.surveyapi.mocks.Mock;
+import br.com.maurigvs.surveyapi.mocks.DataMock;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -14,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class SurveyMapperTest {
 
     @Test
-    void should_return_Survey_given_an_SurveyDto() {
-        var surveyDto = Mock.ofSurveyRequest();
+    void should_return_Survey_given_an_SurveyRequest() {
+        var surveyRequest = DataMock.ofSurveyRequest();
 
-        var result = new SurveyMapper().apply(surveyDto);
+        var result = new SurveyMapper().apply(surveyRequest);
 
         assertNull(result.getId());
-        assertEquals(surveyDto.survey(), result.getTitle());
-        assertEquals(surveyDto.questions().size(), result.getQuestions().size());
+        assertEquals(surveyRequest.survey(), result.getTitle());
+        assertEquals(surveyRequest.questions().size(), result.getQuestions().size());
         assertEquals(Collections.emptyList(), result.getAnswers());
     }
 }

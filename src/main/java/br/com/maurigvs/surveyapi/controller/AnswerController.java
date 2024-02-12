@@ -7,6 +7,8 @@ import br.com.maurigvs.surveyapi.mapper.AnswerResponseMapper;
 import br.com.maurigvs.surveyapi.service.AnswerService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,8 +37,11 @@ public class AnswerController {
         this.surveyService = surveyService;
     }
 
-    @Operation(summary = "Create a new survey answer")
-    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "New answer created successfully")})
+    @Operation(summary = "create a new answer to a survey")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "new answer created successfully"),
+            @ApiResponse(responseCode = "400", description = "survey not found")
+    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void postAnswer(@RequestBody @Valid AnswerRequest request){
@@ -45,12 +50,16 @@ public class AnswerController {
         answerService.create(answer);
     }
 
-    @Operation(summary = "List all answers")
-    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Answers listed successfully")})
+    @Operation(summary = "list of all answers to all surveys")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "answers listed successfully", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = AnswerResponse.class))
+            })
+    })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<AnswerResponse> getList(){
+    public List<AnswerResponse> findAllAnswers(){
         return answerService.findAll().stream().map(new AnswerResponseMapper()).toList();
     }
 }

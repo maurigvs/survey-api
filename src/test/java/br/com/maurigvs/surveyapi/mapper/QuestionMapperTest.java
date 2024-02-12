@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.mapper;
 
-import br.com.maurigvs.surveyapi.mocks.Mock;
+import br.com.maurigvs.surveyapi.mocks.DataMock;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -15,14 +15,14 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 class QuestionMapperTest {
 
     @Test
-    void should_return_Question_given_and_QuestionDto() {
-        var survey = Mock.ofSurvey();
-        var questionDto = Mock.ofQuestionRequest1();
+    void should_return_Question_given_an_QuestionRequest() {
+        var survey = DataMock.ofSurvey();
+        var questionRequest = DataMock.ofQuestionRequest1();
 
-        var result = new QuestionMapper(survey).apply(questionDto);
+        var result = new QuestionMapper(survey).apply(questionRequest);
 
         assertNull(result.getId());
-        assertEquals(questionDto.choices().size(), result.getChoices().size());
+        assertEquals(questionRequest.choices().size(), result.getChoices().size());
         assertSame(survey, result.getSurvey());
         assertEquals(Collections.emptyList(), result.getAnswerItems());
     }

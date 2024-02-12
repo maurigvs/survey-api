@@ -4,6 +4,9 @@ import br.com.maurigvs.surveyapi.dto.requests.QuestionRequest;
 import br.com.maurigvs.surveyapi.mapper.QuestionMapper;
 import br.com.maurigvs.surveyapi.service.QuestionService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -28,17 +31,29 @@ public class QuestionController {
         this.surveyService = surveyService;
     }
 
+    @Operation(summary = "create a new question to a survey")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "new question created successfully"),
+            @ApiResponse(responseCode = "400", description = "survey not found")
+    })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void postQuestion(@PathVariable Long surveyId, @RequestBody @Valid QuestionRequest request){
+    public void postQuestion(@PathVariable Long surveyId,
+                             @RequestBody @Valid QuestionRequest request){
         var survey = surveyService.findById(surveyId);
         var question = new QuestionMapper(survey).apply(request);
         questionService.create(question);
     }
 
+    @Operation(summary = "delete a question from a survey")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "question deleted successfully"),
+            @ApiResponse(responseCode = "400", description = "survey not found")
+    })
     @DeleteMapping("/{questionId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteQuestionById(@PathVariable Long surveyId, @PathVariable Long questionId){
+    public void deleteQuestionById(@PathVariable Long surveyId,
+                                   @PathVariable Long questionId){
         questionService.deleteById(questionId, surveyId);
     }
 }

@@ -2,9 +2,10 @@ package br.com.maurigvs.surveyapi.service;
 
 import br.com.maurigvs.surveyapi.exception.SurveyAlreadyExistsException;
 import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
-import br.com.maurigvs.surveyapi.mocks.Mock;
+import br.com.maurigvs.surveyapi.mocks.DataMock;
 import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.repository.SurveyRepository;
+import br.com.maurigvs.surveyapi.service.impl.SurveyServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -41,7 +42,7 @@ class SurveyServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        survey = Mock.ofSurvey();
+        survey = DataMock.ofSurvey();
     }
 
     @Test

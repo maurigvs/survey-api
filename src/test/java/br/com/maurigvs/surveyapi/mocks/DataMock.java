@@ -20,13 +20,11 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.util.List;
 import java.util.Map;
 
-public class Mock {
+public class DataMock {
 
     public static Survey ofSurvey() {
         var survey = new Survey(1L, "Sample Survey");
-        survey.getQuestions().addAll(
-                List.of(ofQuestion1(survey),
-                        ofQuestion2(survey)));
+        survey.getQuestions().addAll(List.of(ofQuestion1(survey), ofQuestion2(survey)));
 
         return survey;
     }
@@ -38,8 +36,7 @@ public class Mock {
                 new Choice(1L, "Hawaii", question),
                 new Choice(2L, "Finland", question),
                 new Choice(3L, "Sweden", question),
-                new Choice(4L, "China", question)
-            ));
+                new Choice(4L, "China", question)));
 
         return question;
     }
