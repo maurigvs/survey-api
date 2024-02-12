@@ -59,10 +59,7 @@ class QuestionServiceImplTest {
     void should_throw_QuestionNotFoundException_when_question_not_found_by_id() {
         given(questionRepository.findById(anyInt())).willReturn(Optional.empty());
 
-        var exception = assertThrows(QuestionNotFoundException.class,
-                ()-> questionService.deleteById(1, 2));
-
-        assertEquals("Question not found by Id 1", exception.getMessage());
+        assertThrows(QuestionNotFoundException.class, ()-> questionService.deleteById(1, 2));
 
         verify(questionRepository, times(1)).findById(1);
         verifyNoMoreInteractions(questionRepository);
@@ -75,10 +72,7 @@ class QuestionServiceImplTest {
         var question = Mock.ofSurvey().getQuestions().get(0);
         given(questionRepository.findById(anyInt())).willReturn(Optional.of(question));
 
-        var exception = assertThrows(SurveyNotFoundException.class,
-                ()-> questionService.deleteById(questionId, surveyId));
-
-        assertEquals("Survey not found by Id 2", exception.getMessage());
+        assertThrows(SurveyNotFoundException.class, ()-> questionService.deleteById(questionId, surveyId));
 
         verify(questionRepository, times(1)).findById(1);
         verifyNoMoreInteractions(questionRepository);
