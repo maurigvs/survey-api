@@ -1,7 +1,7 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.dto.SurveyRequest;
-import br.com.maurigvs.surveyapi.dto.SurveyResponse;
+import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
+import br.com.maurigvs.surveyapi.dto.responses.SurveyResponse;
 import br.com.maurigvs.surveyapi.mapper.SurveyMapper;
 import br.com.maurigvs.surveyapi.mapper.SurveyResponseMapper;
 import br.com.maurigvs.surveyapi.service.SurveyService;

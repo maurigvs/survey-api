@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.mapper;
 
-import br.com.maurigvs.surveyapi.dto.AnswerItemRequest;
+import br.com.maurigvs.surveyapi.dto.requests.AnswerItemRequest;
 import br.com.maurigvs.surveyapi.exception.ChoiceNotFoundException;
 import br.com.maurigvs.surveyapi.exception.QuestionNotFoundException;
 import br.com.maurigvs.surveyapi.model.Answer;

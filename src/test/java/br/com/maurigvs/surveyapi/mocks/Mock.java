@@ -1,12 +1,12 @@
 package br.com.maurigvs.surveyapi.mocks;
 
-import br.com.maurigvs.surveyapi.dto.AnswerItemRequest;
-import br.com.maurigvs.surveyapi.dto.AnswerRequest;
-import br.com.maurigvs.surveyapi.dto.AnswerResponse;
-import br.com.maurigvs.surveyapi.dto.QuestionRequest;
-import br.com.maurigvs.surveyapi.dto.QuestionResponse;
-import br.com.maurigvs.surveyapi.dto.SurveyRequest;
-import br.com.maurigvs.surveyapi.dto.SurveyResponse;
+import br.com.maurigvs.surveyapi.dto.requests.AnswerItemRequest;
+import br.com.maurigvs.surveyapi.dto.requests.AnswerRequest;
+import br.com.maurigvs.surveyapi.dto.responses.AnswerResponse;
+import br.com.maurigvs.surveyapi.dto.requests.QuestionRequest;
+import br.com.maurigvs.surveyapi.dto.responses.QuestionResponse;
+import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
+import br.com.maurigvs.surveyapi.dto.responses.SurveyResponse;
 import br.com.maurigvs.surveyapi.model.Answer;
 import br.com.maurigvs.surveyapi.model.AnswerItem;
 import br.com.maurigvs.surveyapi.model.Choice;

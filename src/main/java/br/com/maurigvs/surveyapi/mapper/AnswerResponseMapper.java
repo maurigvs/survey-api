@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.mapper;
 
-import br.com.maurigvs.surveyapi.dto.AnswerResponse;
+import br.com.maurigvs.surveyapi.dto.responses.AnswerResponse;
 import br.com.maurigvs.surveyapi.model.Answer;
 import br.com.maurigvs.surveyapi.model.AnswerItem;
 import br.com.maurigvs.surveyapi.model.Survey;

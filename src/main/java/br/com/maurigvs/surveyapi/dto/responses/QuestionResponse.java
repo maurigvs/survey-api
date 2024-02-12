@@ -1,4 +1,4 @@
-package br.com.maurigvs.surveyapi.dto;
+package br.com.maurigvs.surveyapi.dto.responses;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
