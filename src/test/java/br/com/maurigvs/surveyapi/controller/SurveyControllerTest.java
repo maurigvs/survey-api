@@ -3,7 +3,7 @@ package br.com.maurigvs.surveyapi.controller;
 import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
 import br.com.maurigvs.surveyapi.dto.responses.ErrorResponse;
 import br.com.maurigvs.surveyapi.exception.SurveyAlreadyExistsException;
-import br.com.maurigvs.surveyapi.mocks.DataMock;
+import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -42,11 +42,11 @@ class SurveyControllerTest {
 
     @Test
     void should_return_Created_when_post_survey() throws Exception {
-        var request = DataMock.ofSurveyRequest();
+        var request = MockData.ofSurveyRequest();
 
         mockMvc.perform(post("/survey")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(DataMock.ofJson(request)))
+                        .content(MockData.ofJson(request)))
                 .andExpect(status().isCreated());
 
         verify(surveyService, times(1)).create(any());
@@ -55,14 +55,14 @@ class SurveyControllerTest {
 
     @Test
     void should_return_OK_when_get_survey_list() throws Exception {
-        var surveys = DataMock.ofSurveyList();
-        var response = DataMock.ofSurveyResponseList();
+        var surveys = MockData.ofSurveyList();
+        var response = MockData.ofSurveyResponseList();
         given(surveyService.findAll()).willReturn(surveys);
 
         mockMvc.perform(get("/survey"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(DataMock.ofJson(response)));
+                .andExpect(content().json(MockData.ofJson(response)));
 
         verify(surveyService, times(1)).findAll();
         verifyNoMoreInteractions(surveyService);
@@ -70,31 +70,31 @@ class SurveyControllerTest {
 
     @Test
     void should_return_Bad_Request_when_MethodArgumentNotValidException_is_thrown() throws Exception {
-        var request = new SurveyRequest("", DataMock.ofSurveyRequest().questions());
+        var request = new SurveyRequest("", MockData.ofSurveyRequest().questions());
         var response = new ErrorResponse("Bad Request", List.of("The field [survey] must not be blank"));
 
         mockMvc.perform(post("/survey")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(DataMock.ofJson(request)))
+                        .content(MockData.ofJson(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(DataMock.ofJson(response)));
+                .andExpect(content().json(MockData.ofJson(response)));
 
         verifyNoInteractions(surveyService);
     }
 
     @Test
     void should_return_Bad_Request_when_BadRequestException_is_thrown() throws Exception {
-        var request = DataMock.ofSurveyRequest();
+        var request = MockData.ofSurveyRequest();
         var response = new ErrorResponse("Bad Request","Survey 'Sample Survey' already exists");
         willThrow(new SurveyAlreadyExistsException(request.survey())).given(surveyService).create(any());
 
         mockMvc.perform(post("/survey")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(DataMock.ofJson(request)))
+                        .content(MockData.ofJson(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(DataMock.ofJson(response)));
+                .andExpect(content().json(MockData.ofJson(response)));
 
         verify(surveyService, times(1)).create(any());
         verifyNoMoreInteractions(surveyService);
@@ -108,7 +108,7 @@ class SurveyControllerTest {
         mockMvc.perform(post("/inexistent"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(DataMock.ofJson(response)));
+                .andExpect(content().json(MockData.ofJson(response)));
 
         verifyNoInteractions(surveyService);
     }

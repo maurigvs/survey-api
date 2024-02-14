@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.mapper;
 
-import br.com.maurigvs.surveyapi.mocks.DataMock;
+import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.model.Answer;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -15,8 +15,8 @@ class AnswerMapperTest {
 
     @Test
     void should_return_AnswerItem_given_and_AnswerItemRequest() {
-        var survey = DataMock.ofSurvey();
-        var request = DataMock.ofAnswerRequest();
+        var survey = MockData.ofSurvey();
+        var request = MockData.ofAnswerRequest();
 
         Answer result = new AnswerMapper(survey).apply(request);
 

@@ -3,7 +3,7 @@ package br.com.maurigvs.surveyapi.service;
 import br.com.maurigvs.surveyapi.exception.ChoiceNotFoundException;
 import br.com.maurigvs.surveyapi.exception.QuestionNotFoundException;
 import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
-import br.com.maurigvs.surveyapi.mocks.DataMock;
+import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.repository.ChoiceRepository;
 import br.com.maurigvs.surveyapi.service.impl.ChoiceServiceImpl;
@@ -38,7 +38,7 @@ class ChoiceServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        choice = DataMock.ofChoice();
+        choice = MockData.ofChoice();
     }
 
     @Test

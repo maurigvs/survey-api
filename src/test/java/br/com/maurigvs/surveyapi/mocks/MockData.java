@@ -20,7 +20,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.util.List;
 import java.util.Map;
 
-public class DataMock {
+public class MockData {
 
     public static String ofJson(Object object) {
         try {
@@ -64,6 +64,10 @@ public class DataMock {
         return ofQuestion().getChoices().get(0);
     }
 
+    public static List<Survey> ofSurveyList() {
+        return List.of(ofSurvey());
+    }
+
     public static SurveyRequest ofSurveyRequest() {
         return new SurveyRequest("Sample Survey", List.of(
                 new QuestionRequest("Where does Santa Claus live?", List.of(
@@ -80,6 +84,14 @@ public class DataMock {
         ));
     }
 
+    public static QuestionRequest ofQuestionRequest() {
+        return ofSurveyRequest().questions().get(0);
+    }
+
+    public static ChoiceRequest ofChoiceRequest() {
+        return new ChoiceRequest("Argentina");
+    }
+
     public static SurveyResponse ofSurveyResponse() {
         return new SurveyResponse(1L, "Sample Survey", Map.of(
                 1L, new QuestionResponse("Where does Santa Claus live?", Map.of(
@@ -93,28 +105,6 @@ public class DataMock {
                         7L, "Neither satisfied or dissatisfied",
                         8L, "Dissatisfied",
                         9L, "Very dissatisfied"))));
-    }
-
-    public static SurveyResponse ofSurveyResponseOfAnswer() {
-        return new SurveyResponse(1L, "Sample Survey",
-                Map.of(
-                        1L, new QuestionResponse("Where does Santa Claus live?",
-                                Map.of(2L, "Finland")),
-                        2L, new QuestionResponse("Were you satisfied with your Christmas presents?",
-                                Map.of(7L, "Neither satisfied or dissatisfied"))
-                ));
-    }
-
-    public static QuestionRequest ofQuestionRequest() {
-        return ofSurveyRequest().questions().get(0);
-    }
-
-    public static ChoiceRequest ofChoiceRequest() {
-        return new ChoiceRequest("Argentina");
-    }
-
-    public static List<Survey> ofSurveyList() {
-        return List.of(ofSurvey());
     }
 
     public static List<SurveyResponse> ofSurveyResponseList() {
@@ -152,5 +142,15 @@ public class DataMock {
 
     public static AnswerResponse ofAnswerResponse() {
         return new AnswerResponse(1L, ofSurveyResponseOfAnswer());
+    }
+
+    public static SurveyResponse ofSurveyResponseOfAnswer() {
+        return new SurveyResponse(1L, "Sample Survey",
+                Map.of(
+                        1L, new QuestionResponse("Where does Santa Claus live?",
+                                Map.of(2L, "Finland")),
+                        2L, new QuestionResponse("Were you satisfied with your Christmas presents?",
+                                Map.of(7L, "Neither satisfied or dissatisfied"))
+                ));
     }
 }

@@ -3,7 +3,7 @@ package br.com.maurigvs.surveyapi.mapper;
 import br.com.maurigvs.surveyapi.dto.requests.AnswerItemRequest;
 import br.com.maurigvs.surveyapi.exception.ChoiceNotFoundException;
 import br.com.maurigvs.surveyapi.exception.QuestionNotFoundException;
-import br.com.maurigvs.surveyapi.mocks.DataMock;
+import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.model.Answer;
 import br.com.maurigvs.surveyapi.model.AnswerItem;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,12 +23,12 @@ class AnswerItemMapperTest {
 
     @BeforeEach
     void setUp() {
-        answer = DataMock.ofAnswer();
+        answer = MockData.ofAnswer();
     }
 
     @Test
     void should_return_AnswerItem_given_and_AnswerItemRequest() {
-        var request = DataMock.ofAnswerRequestItem();
+        var request = MockData.ofAnswerRequestItem();
 
         AnswerItem result = new AnswerItemMapper(answer).apply(request);
 

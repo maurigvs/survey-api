@@ -1,7 +1,7 @@
 package br.com.maurigvs.surveyapi.service;
 
 import br.com.maurigvs.surveyapi.exception.AnswerNotFoundException;
-import br.com.maurigvs.surveyapi.mocks.DataMock;
+import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.model.Answer;
 import br.com.maurigvs.surveyapi.repository.AnswerRepository;
 import br.com.maurigvs.surveyapi.service.impl.AnswerServiceImpl;
@@ -39,7 +39,7 @@ class AnswerServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        answer = DataMock.ofAnswer();
+        answer = MockData.ofAnswer();
     }
 
     @Test

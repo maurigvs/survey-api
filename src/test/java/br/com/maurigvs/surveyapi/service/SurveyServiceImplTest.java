@@ -2,7 +2,7 @@ package br.com.maurigvs.surveyapi.service;
 
 import br.com.maurigvs.surveyapi.exception.SurveyAlreadyExistsException;
 import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
-import br.com.maurigvs.surveyapi.mocks.DataMock;
+import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.repository.SurveyRepository;
 import br.com.maurigvs.surveyapi.service.impl.SurveyServiceImpl;
@@ -42,7 +42,7 @@ class SurveyServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        survey = DataMock.ofSurvey();
+        survey = MockData.ofSurvey();
     }
 
     @Test

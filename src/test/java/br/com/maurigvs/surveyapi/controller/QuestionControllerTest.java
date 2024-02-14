@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.mocks.DataMock;
+import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.service.QuestionService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
@@ -41,13 +41,13 @@ class QuestionControllerTest {
 
     @Test
     void should_return_Created_when_add_question_to_existing_survey() throws Exception {
-        var survey = DataMock.ofSurvey();
-        var questionRequest = DataMock.ofQuestionRequest();
+        var survey = MockData.ofSurvey();
+        var questionRequest = MockData.ofQuestionRequest();
         given(surveyService.findById(anyLong())).willReturn(survey);
 
         mockMvc.perform(post("/survey/1/question")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(DataMock.ofJson(questionRequest)))
+                        .content(MockData.ofJson(questionRequest)))
                 .andExpect(status().isCreated());
 
         verify(surveyService, times(1)).findById(1L);
