@@ -16,14 +16,12 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
     public ErrorResponse handleBadRequestException(BadRequestException ex){
         return getErrorMessage(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
     public ErrorResponse handleMethodArgumentNotValid(MethodArgumentNotValidException ex){
         var messages = ex.getFieldErrors().stream().map(
             error -> ("The field [" + error.getField() + "] " + error.getDefaultMessage())
@@ -33,7 +31,6 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(NoResourceFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ResponseBody
     public ErrorResponse handleNoResourceFoundException(NoResourceFoundException ex){
         return getErrorMessage(HttpStatus.NOT_FOUND,
                 "Endpoint inexistent or missing required parameters: " +

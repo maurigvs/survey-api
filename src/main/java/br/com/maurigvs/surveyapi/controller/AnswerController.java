@@ -58,7 +58,6 @@ public class AnswerController {
     })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public List<AnswerResponse> findAllAnswers(){
         return answerService.findAll().stream().map(new AnswerResponseMapper()).toList();
     }

@@ -53,7 +53,6 @@ public class SurveyController {
     })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public List<SurveyResponse> findAllSurveys(){
         return surveyService.findAll().stream().map(new SurveyResponseMapper()).toList();
     }
