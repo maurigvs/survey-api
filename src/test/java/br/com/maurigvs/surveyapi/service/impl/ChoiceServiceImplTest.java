@@ -1,4 +1,4 @@
-package br.com.maurigvs.surveyapi.service;
+package br.com.maurigvs.surveyapi.service.impl;
 
 import br.com.maurigvs.surveyapi.exception.ChoiceNotFoundException;
 import br.com.maurigvs.surveyapi.exception.QuestionNotFoundException;
@@ -6,6 +6,7 @@ import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
 import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.repository.ChoiceRepository;
+import br.com.maurigvs.surveyapi.service.ChoiceService;
 import br.com.maurigvs.surveyapi.service.impl.ChoiceServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;

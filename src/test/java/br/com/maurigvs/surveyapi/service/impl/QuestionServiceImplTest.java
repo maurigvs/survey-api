@@ -1,10 +1,11 @@
-package br.com.maurigvs.surveyapi.service;
+package br.com.maurigvs.surveyapi.service.impl;
 
 import br.com.maurigvs.surveyapi.exception.QuestionNotFoundException;
 import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
 import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.repository.QuestionRepository;
+import br.com.maurigvs.surveyapi.service.QuestionService;
 import br.com.maurigvs.surveyapi.service.impl.QuestionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
