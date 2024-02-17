@@ -1,10 +1,8 @@
 package br.com.maurigvs.surveyapi.exception;
 
-import br.com.maurigvs.surveyapi.model.Choice;
-
-public class ChoiceNotFoundException extends EntityNotFoundException {
+public class ChoiceNotFoundException extends BadRequestException {
 
     public ChoiceNotFoundException(Long choiceId) {
-        super(Choice.class.getSimpleName(), choiceId);
+        super("Choice not found by Id " + choiceId);
     }
 }

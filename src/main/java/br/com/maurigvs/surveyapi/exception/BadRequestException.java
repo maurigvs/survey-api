@@ -1,8 +1,8 @@
 package br.com.maurigvs.surveyapi.exception;
 
-public abstract class BadRequestException extends RuntimeException {
+abstract class BadRequestException extends RuntimeException {
 
-    public BadRequestException(String message) {
+    BadRequestException(String message) {
         super(message);
     }
 }
