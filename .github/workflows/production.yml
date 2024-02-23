@@ -11,8 +11,12 @@ jobs:
     uses: maurigvs/survey-api/.github/workflows/gradle.yml@v2.0
   build-image:
     uses: maurigvs/survey-api/.github/workflows/docker-image.yml@v2.0
+    needs:
+      - build-gradle
   push-image:
     uses: maurigvs/survey-api/.github/workflows/docker-publish.yml@v2.0
+    needs:
+      - build-image
     permissions:
       packages: write
       contents: read
