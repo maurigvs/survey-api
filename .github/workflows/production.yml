@@ -11,6 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: ./gradle.yml@master
-      - uses: ./docker-image.yml@master
-      - uses: ./docker-publish.yml@master
+      - uses: gradle.yml@master
+      - uses: docker-image.yml@master
+      - uses: docker-publish.yml@master
