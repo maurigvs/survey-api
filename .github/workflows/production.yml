@@ -13,3 +13,6 @@ jobs:
     uses: maurigvs/survey-api/.github/workflows/docker-image.yml@v2.0
   push-image:
     uses: maurigvs/survey-api/.github/workflows/docker-publish.yml@v2.0
+    permissions:
+      packages: write
+      id-token: write
