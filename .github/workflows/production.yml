@@ -22,8 +22,6 @@ jobs:
     steps:
       - name: Checkout ${{ env.IMAGE_NAME }}
         uses: actions/checkout@v4
-        with:
-          path: /opt/app
 
       - name: Install cosign
         uses: sigstore/cosign-installer@v3.1.1
