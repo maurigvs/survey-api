@@ -1,5 +1,7 @@
-FROM adoptopenjdk/openjdk11:alpine
+FROM eclipse-temurin:11
 
-COPY build/libs/survey-api-0.0.1-SNAPSHOT.jar survey-api.jar
+RUN mkdir /opt/app
 
-ENTRYPOINT ["java","-jar","/survey-api.jar"]
+COPY build/libs/survey-api-0.0.1-SNAPSHOT.jar /opt/app/survey-api.jar
+
+CMD ["java", "-jar", "/opt/app/survey-api.jar"]
