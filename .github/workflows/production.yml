@@ -43,9 +43,6 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - name: Print path
-        run: echo ${PWD} && ls -lR
-
       - name: Build and push Docker image
         id: build-and-push
         uses: docker/build-push-action@v5
