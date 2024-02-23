@@ -7,11 +7,11 @@ env:
   IMAGE_TAG: ${{ github.repository }}:latest
 
 jobs:
-  build:
+  build-gradle:
+    uses: maurigvs/survey-api/.github/workflows/gradle.yml@v2.0
+
+  build-image:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: maurigvs/survey-api/.github/workflows/gradle.yml@v2.0
-
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag ${{ env.IMAGE_TAG }}
