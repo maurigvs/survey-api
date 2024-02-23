@@ -15,4 +15,5 @@ jobs:
     uses: maurigvs/survey-api/.github/workflows/docker-publish.yml@v2.0
     permissions:
       packages: write
+      contents: read
       id-token: write
