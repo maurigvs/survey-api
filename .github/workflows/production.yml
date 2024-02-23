@@ -11,6 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: ${{ github.repository }}/.github/workflows/gradle.yml@v2.0
-      - uses: ${{ github.repository }}/.github/workflows/docker-image.yml@v2.0
-      - uses: ${{ github.repository }}/.github/workflows/docker-publish.yml@v2.0
+      - uses: maurigvs/survey-api/.github/workflows/gradle.yml@v2.0
+      - uses: maurigvs/survey-api/.github/workflows/docker-image.yml@v2.0
+      - uses: maurigvs/survey-api/.github/workflows/docker-publish.yml@v2.0
