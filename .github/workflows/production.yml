@@ -6,15 +6,11 @@ on:
     branches:
       - v2.0
 
-env:
-  context: ${{ github.repository }}/.github/workflows
-  version: v2.0
-
 jobs:
   pipeline:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: ${{ env.context }}/gradle.yml@${{ env.version }}
-      - uses: ${{ env.context }}/docker-image.yml@${{ env.version }}
-      - uses: ${{ env.context }}/docker-publish.yml@${{ env.version }}
+      - uses: ${{ github.repository }}/.github/workflows/gradle.yml@v2.0
+      - uses: ${{ github.repository }}/.github/workflows/docker-image.yml@v2.0
+      - uses: ${{ github.repository }}/.github/workflows/docker-publish.yml@v2.0
