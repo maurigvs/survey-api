@@ -1,9 +1,6 @@
 name: Build & Deploy
 
-on:
-  push:
-    branches:
-      - v2.0
+on: workflow_call
 
 env:
   REGISTRY: docker.io
