@@ -1,7 +1,25 @@
 package br.com.maurigvs.surveyapi.controller;
 
+import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
+import br.com.maurigvs.surveyapi.dto.responses.ErrorResponse;
+import br.com.maurigvs.surveyapi.exception.SurveyAlreadyExistsException;
+import br.com.maurigvs.surveyapi.mocks.MockData;
+import br.com.maurigvs.surveyapi.service.SurveyService;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -11,152 +29,87 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.List;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
-import br.com.maurigvs.surveyapi.exception.StandardError;
-import br.com.maurigvs.surveyapi.mocks.Mocks;
-import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
-import br.com.maurigvs.surveyapi.model.entity.Survey;
-import br.com.maurigvs.surveyapi.service.SurveyService;
-
 @WebMvcTest(SurveyController.class)
 @AutoConfigureMockMvc
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class SurveyControllerTest {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @MockBean
-    SurveyService surveyService;
+    private SurveyService surveyService;
 
-    @Nested
-    @DisplayName("Success Tests")
-    class SuccessTests{
+    @Test
+    void should_return_Created_when_post_survey() throws Exception {
+        var request = MockData.ofSurveyRequest();
 
-        @Test
-        @DisplayName("Post Survey correctly")
-        void should_ReturnCreated_when_PostSurveyWithData() throws Exception {
-            SurveyDto surveyDto = Mocks.mockSurveyDto();
-            String surveyAsJson = Mocks.parseToJson(surveyDto);
+        mockMvc.perform(post("/survey")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(MockData.ofJson(request)))
+                .andExpect(status().isCreated());
 
-            mockMvc.perform(post("/survey").contentType(MediaType.APPLICATION_JSON)
-                    .content(surveyAsJson)).andExpect(status().isCreated());
-
-            verify(surveyService, times(1)).createSurvey(any(SurveyDto.class));
-            verifyNoMoreInteractions(surveyService);
-        }
-
-        @Test
-        @DisplayName("Get Surveys empty")
-        void should_ReturnOk_when_GetSurveys() throws Exception {
-            mockMvc.perform(get("/survey")).andExpect(status().isOk());
-        }
-
-        @Test
-        @DisplayName("Get Surveys correctly")
-        void should_ReturnSurveyList_when_GetSurveys() throws Exception {
-            Survey survey = Mocks.mockSurveyWithIds();
-            List<Survey> surveyList = List.of(survey);
-            String listAsJson = Mocks.parseToJson(surveyList);
-            given(surveyService.findAll()).willReturn(surveyList);
-
-            mockMvc.perform(get("/survey"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(content().json(listAsJson));
-
-            verify(surveyService, times(1)).findAll();
-            verifyNoMoreInteractions(surveyService);
-        }
+        verify(surveyService, times(1)).create(any());
+        verifyNoMoreInteractions(surveyService);
     }
 
-    @Nested
-    @DisplayName("Failure Tests")
-    class FailureTests {
+    @Test
+    void should_return_OK_when_get_survey_list() throws Exception {
+        var surveys = MockData.ofSurveyList();
+        var response = MockData.ofSurveyResponseList();
+        given(surveyService.findAll()).willReturn(surveys);
 
-        @Test
-        @DisplayName("Post Survey without body")
-        void should_ReturnBadRequest_when_PostSurveyWithoutBody() throws Exception {
-            mockMvc.perform(post("/survey")).andExpect(status().isBadRequest());
-        }
+        mockMvc.perform(get("/survey"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(MockData.ofJson(response)));
 
-        @Test
-        @DisplayName("Post Survey without title")
-        void should_ReturnBadRequest_when_PostSurveyWithoutTitle() throws Exception {
-            SurveyDto surveyDto = Mocks.mockSurveyDto();
-            surveyDto.setSurvey("");
-            String surveyAsJson = Mocks.parseToJson(surveyDto);
+        verify(surveyService, times(1)).findAll();
+        verifyNoMoreInteractions(surveyService);
+    }
 
-            StandardError error = new StandardError(HttpStatus.BAD_REQUEST.getReasonPhrase(), "Survey title can not be blank");
-            String errorAsJson = Mocks.parseToJson(error);
+    @Test
+    void should_return_Bad_Request_when_MethodArgumentNotValidException_is_thrown() throws Exception {
+        var request = new SurveyRequest("", MockData.ofSurveyRequest().questions());
+        var response = new ErrorResponse("Bad Request", List.of("The field [survey] must not be blank"));
 
-            mockMvc.perform(post("/survey").contentType(MediaType.APPLICATION_JSON).content(surveyAsJson))
-                    .andExpect(status().isBadRequest()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(content().json(errorAsJson));
+        mockMvc.perform(post("/survey")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(MockData.ofJson(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(MockData.ofJson(response)));
 
-            verifyNoInteractions(surveyService);
-        }
+        verifyNoInteractions(surveyService);
+    }
 
-        @Test
-        @DisplayName("Post Survey without questions")
-        void should_ReturnBadRequest_when_PostSurveyWithoutQuestions() throws Exception {
-            SurveyDto surveyDto = Mocks.mockSurveyDto();
-            surveyDto.getQuestions().clear();
-            String surveyAsJson = Mocks.parseToJson(surveyDto);
+    @Test
+    void should_return_Bad_Request_when_BadRequestException_is_thrown() throws Exception {
+        var request = MockData.ofSurveyRequest();
+        var response = new ErrorResponse("Bad Request","Survey 'Sample Survey' already exists");
+        willThrow(new SurveyAlreadyExistsException(request.survey())).given(surveyService).create(any());
 
-            StandardError error = new StandardError(HttpStatus.BAD_REQUEST.getReasonPhrase(), "Survey must have questions");
-            String errorAsJson = Mocks.parseToJson(error);
+        mockMvc.perform(post("/survey")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(MockData.ofJson(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(MockData.ofJson(response)));
 
-            mockMvc.perform(post("/survey").contentType(MediaType.APPLICATION_JSON).content(surveyAsJson))
-                    .andExpect(status().isBadRequest()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(content().json(errorAsJson));
+        verify(surveyService, times(1)).create(any());
+        verifyNoMoreInteractions(surveyService);
+    }
 
-            verifyNoInteractions(surveyService);
-        }
+    @Test
+    void should_return_Not_Found_when_NoResourceFoundException_is_thrown() throws Exception {
+        var response = new ErrorResponse("Not Found",
+                "Endpoint inexistent or missing required parameters: POST /inexistent");
 
-        @Test
-        @DisplayName("Post Survey with questions without title")
-        void should_ReturnBadRequest_when_PostSurveyWithQuestionWithoutTitle() throws Exception {
-            SurveyDto surveyDto = Mocks.mockSurveyDto();
-            surveyDto.getQuestions().get(0).setQuestion("");
-            String surveyAsJson = Mocks.parseToJson(surveyDto);
+        mockMvc.perform(post("/inexistent"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(MockData.ofJson(response)));
 
-            StandardError error = new StandardError(HttpStatus.BAD_REQUEST.getReasonPhrase(), "Question title can not be blank");
-            String errorAsJson = Mocks.parseToJson(error);
-
-            mockMvc.perform(post("/survey").contentType(MediaType.APPLICATION_JSON).content(surveyAsJson))
-                    .andExpect(status().isBadRequest()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(content().json(errorAsJson));
-
-            verifyNoInteractions(surveyService);
-        }
-
-        @Test
-        @DisplayName("Post Survey with questions without choices")
-        void should_ReturnBadRequest_when_PostSurveyWithQuestionWithoutChoices() throws Exception {
-            SurveyDto surveyDto = Mocks.mockSurveyDto();
-            surveyDto.getQuestions().get(0).getChoices().clear();
-            String surveyAsJson = Mocks.parseToJson(surveyDto);
-
-            StandardError error = new StandardError(HttpStatus.BAD_REQUEST.getReasonPhrase(), "Question must have choices");
-            String errorAsJson = Mocks.parseToJson(error);
-
-            mockMvc.perform(post("/survey").contentType(MediaType.APPLICATION_JSON).content(surveyAsJson))
-                    .andExpect(status().isBadRequest()).andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(content().json(errorAsJson));
-
-            verifyNoInteractions(surveyService);
-        }
+        verifyNoInteractions(surveyService);
     }
 }

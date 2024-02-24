@@ -20,4 +20,5 @@ spring:
 
 springdoc:
     api-docs:
-        path: /docs
+        path: /api-docs
+        enabled: true

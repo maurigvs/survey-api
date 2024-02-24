@@ -1,28 +1,17 @@
 package br.com.maurigvs.surveyapi.service;
 
+import br.com.maurigvs.surveyapi.model.Survey;
+
 import java.util.List;
 
-import org.springframework.stereotype.Service;
+public interface SurveyService {
 
-import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
-import br.com.maurigvs.surveyapi.model.entity.Survey;
-import br.com.maurigvs.surveyapi.repository.SurveyRepository;
+    void create(Survey survey);
 
-@Service
-public class SurveyService {
+    Survey findById(Long surveyId);
 
-    private final SurveyRepository surveyRepository;
+    List<Survey> findAll();
 
-    public SurveyService(SurveyRepository surveyRepository) {
-        this.surveyRepository = surveyRepository;
-    }
+    void deleteById(Long surveyId);
 
-    public Survey createSurvey(SurveyDto dto) {
-        Survey survey = new Survey(dto);
-        return surveyRepository.save(survey);
-    }
-
-    public List<Survey> findAll() {
-        return surveyRepository.findAll();
-    }
 }

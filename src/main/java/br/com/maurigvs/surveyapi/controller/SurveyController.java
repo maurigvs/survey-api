@@ -1,19 +1,9 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import br.com.maurigvs.surveyapi.model.dto.SurveyDto;
-import br.com.maurigvs.surveyapi.model.entity.Survey;
+import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
+import br.com.maurigvs.surveyapi.dto.responses.SurveyResponse;
+import br.com.maurigvs.surveyapi.mapper.SurveyMapper;
+import br.com.maurigvs.surveyapi.mapper.SurveyResponseMapper;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,7 +11,18 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
+@Tag(name = "survey")
 @RestController
 @RequestMapping("/survey")
 public class SurveyController {
@@ -32,28 +33,26 @@ public class SurveyController {
         this.surveyService = surveyService;
     }
 
-    @Tag(name = "survey")
-    @Operation(summary = "Creates a new survey")
+    @Operation(summary = "create a new survey")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Survey created"),
-        @ApiResponse(responseCode = "400", description = "Bad Request. Required information is missing.")
+            @ApiResponse(responseCode = "201", description = "new survey created successfully"),
+            @ApiResponse(responseCode = "400", description = "survey already exists")
     })
     @PostMapping
-    public ResponseEntity<Void> postSurvey(@RequestBody @Valid SurveyDto dto){
-        surveyService.createSurvey(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @ResponseStatus(HttpStatus.CREATED)
+    public void postSurvey(@RequestBody @Valid SurveyRequest request){
+        surveyService.create(new SurveyMapper().apply(request));
     }
 
-    @Tag(name = "survey")
-    @Operation(summary = "List all the surveys available")
+    @Operation(summary = "list of all surveys")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Surveys listed", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = Survey.class))
-        })
+            @ApiResponse(responseCode = "200", description = "surveys listed successfully", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = SurveyResponse.class))
+            })
     })
     @GetMapping
-    public ResponseEntity<List<Survey>> getSurveys(){
-        List<Survey> surveyList = surveyService.findAll();
-        return ResponseEntity.ok(surveyList);
+    @ResponseStatus(HttpStatus.OK)
+    public List<SurveyResponse> findAllSurveys(){
+        return surveyService.findAll().stream().map(new SurveyResponseMapper()).toList();
     }
 }
