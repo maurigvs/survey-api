@@ -1,4 +1,4 @@
-name: Build Test
+name: Build Application
 
 on:
   push:
@@ -6,13 +6,16 @@ on:
       - master
 
 jobs:
-  build-test:
+  build-application:
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
+
     env:
       java-version: '17'
       java-dist: 'temurin'
+
     steps:
       - name: Checking out ${{ github.repository }}
         uses: actions/checkout@v4
@@ -28,18 +31,5 @@ jobs:
         with:
           dependency-graph: generate-and-submit
 
-      - name: Building with Gradle
-        run: ./gradlew test
-
-  dependency-submission:
-    needs: build-test
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      - uses: gradle/actions/dependency-submission@v3
+      - name: Building ${{ github.repository }}
+        run: ./gradlew build
