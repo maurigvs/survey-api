@@ -36,6 +36,9 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Checking out ${{ github.repository }}
+        uses: actions/checkout@v4
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
