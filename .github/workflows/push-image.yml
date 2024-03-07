@@ -15,9 +15,12 @@ jobs:
       java-dist: 'temurin'
 
     steps:
-      - uses: ./.github/workflows/build-app.yml
+      - name: Checking out ${{ github.repository }}
+        uses: actions/checkout@v4
         with:
           ref: github/actions
+
+      - uses: ./.github/workflows/build-app.yml
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
