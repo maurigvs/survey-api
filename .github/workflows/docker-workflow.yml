@@ -1,16 +1,23 @@
 name: Docker Pipeline
 
-on: push
+on:
+  pull_request_target:
+    branches:
+      - master
+  push:
+    branches:
+      - master
 
 jobs:
-  test-and-build:
-    name: Test & Build
+  build-and-publish:
+    name: Build and Publish
     runs-on: ubuntu-latest
     permissions:
       contents: read
     env:
       java-version: '17'
       java-dist: 'temurin'
+
     steps:
       - name: Checking out ${{ github.repository }}
         uses: actions/checkout@v4
@@ -29,16 +36,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-  push-to-docker:
-    needs: test-and-build
-    name: Push to Docker
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - name: Checking out ${{ github.repository }}
-        uses: actions/checkout@v4
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -50,7 +47,6 @@ jobs:
           password: ${{ secrets.TOKEN }}
 
       - name: Build and push Docker image
-        id: build-and-push
         uses: docker/build-push-action@v5
         with:
           context: .
