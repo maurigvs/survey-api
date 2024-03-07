@@ -1,12 +1,6 @@
 name: Build Test
 
-on:
-  workflow_call:
-    secrets:
-      USER:
-        required: true
-      TOKEN:
-        required: true
+on: push
 
 jobs:
   build-test:
