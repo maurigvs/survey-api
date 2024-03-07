@@ -1,4 +1,4 @@
-name: Build Application
+name: Build Test
 
 on:
   push:
@@ -6,7 +6,8 @@ on:
       - master
 
 jobs:
-  build-application:
+  build-test:
+    name: Build Test
     runs-on: ubuntu-latest
 
     permissions:
@@ -31,5 +32,5 @@ jobs:
         with:
           dependency-graph: generate-and-submit
 
-      - name: Building ${{ github.repository }}
+      - name: Build with Gradle
         run: ./gradlew build
