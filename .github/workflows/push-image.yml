@@ -17,8 +17,6 @@ jobs:
     steps:
       - name: Checking out ${{ github.repository }}
         uses: actions/checkout@v4
-        with:
-          ref: github/actions
 
       - uses: ./.github/workflows/build-app.yml
 
