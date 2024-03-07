@@ -16,6 +16,8 @@ jobs:
 
     steps:
       - uses: ./.github/workflows/build-app.yml
+        with:
+          ref: github/actions
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
