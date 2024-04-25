@@ -3,17 +3,15 @@ package br.com.maurigvs.surveyapi.mapper;
 import br.com.maurigvs.surveyapi.dto.requests.QuestionRequest;
 import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.model.Survey;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.function.Function;
 
+@RequiredArgsConstructor
 public class QuestionMapper implements Function<QuestionRequest, Question> {
 
     private final Survey survey;
-
-    public QuestionMapper(Survey survey) {
-        this.survey = survey;
-    }
 
     @Override
     public Question apply(QuestionRequest request) {

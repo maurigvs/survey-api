@@ -2,18 +2,26 @@ package br.com.maurigvs.surveyapi.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Getter
 public class Question implements Serializable {
 
     @Id
@@ -22,7 +30,7 @@ public class Question implements Serializable {
 
     private String title;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private final List<Choice> choices = new ArrayList<>();
 
     @ManyToOne
@@ -31,33 +39,4 @@ public class Question implements Serializable {
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<AnswerItem> answerItems = new ArrayList<>();
-
-    public Question(Long id, String title, Survey survey) {
-        this.id = id;
-        this.title = title;
-        this.survey = survey;
-    }
-
-    protected Question() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public List<Choice> getChoices() {
-        return choices;
-    }
-
-    public Survey getSurvey() {
-        return survey;
-    }
-
-    public List<AnswerItem> getAnswerItems() {
-        return answerItems;
-    }
 }

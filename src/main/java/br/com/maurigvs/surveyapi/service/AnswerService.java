@@ -1,14 +1,14 @@
 package br.com.maurigvs.surveyapi.service;
 
 import br.com.maurigvs.surveyapi.model.Answer;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface AnswerService {
 
-    void create(Answer answer);
+    Mono<Answer> create(Mono<Answer> answerMono);
 
-    List<Answer> findAll();
+    Flux<Answer> findAll();
 
-    void deleteById(Long answerId);
+    Mono<Void> deleteById(Long answerId);
 }

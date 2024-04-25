@@ -6,10 +6,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Getter
 public class AnswerItem implements Serializable {
 
     @Id
@@ -27,30 +34,4 @@ public class AnswerItem implements Serializable {
     @ManyToOne
     @JoinColumn(name = "answer_id")
     private Answer answer;
-
-    protected AnswerItem() {
-    }
-
-    public AnswerItem(Long id, Question question, Choice choice, Answer answer) {
-        this.id = id;
-        this.question = question;
-        this.choice = choice;
-        this.answer = answer;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Question getQuestion() {
-        return question;
-    }
-
-    public Choice getChoice() {
-        return choice;
-    }
-
-    public Answer getAnswer() {
-        return answer;
-    }
 }

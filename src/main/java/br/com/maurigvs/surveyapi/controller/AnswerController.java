@@ -12,41 +12,39 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Tag(name = "answer")
 @RestController
-@RequestMapping("/answer")
+@RequiredArgsConstructor
 public class AnswerController {
 
     private final AnswerService answerService;
     private final SurveyService surveyService;
-
-    public AnswerController(AnswerService answerService, SurveyService surveyService) {
-        this.answerService = answerService;
-        this.surveyService = surveyService;
-    }
 
     @Operation(summary = "create a new answer to a survey")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "new answer created successfully"),
             @ApiResponse(responseCode = "400", description = "survey not found")
     })
-    @PostMapping
+    @PostMapping("/survey/{surveyId}/answer")
     @ResponseStatus(HttpStatus.CREATED)
-    public void postAnswer(@RequestBody @Valid AnswerRequest request){
-        var survey = surveyService.findById(request.surveyId());
-        var answer = new AnswerMapper(survey).apply(request);
-        answerService.create(answer);
+    public Mono<Void> postAnswer(@PathVariable Long surveyId, @RequestBody Mono<AnswerRequest> requestMono){
+        return surveyService.findById(surveyId)
+                .zipWith(requestMono)
+                .map(tuple -> new AnswerMapper(tuple.getT1()).apply(tuple.getT2()))
+                .map(Mono::just)
+                .flatMap(answerService::create)
+                .then();
     }
 
     @Operation(summary = "list of all answers to all surveys")
@@ -55,9 +53,9 @@ public class AnswerController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = AnswerResponse.class))
             })
     })
-    @GetMapping
+    @GetMapping("/survey/answer")
     @ResponseStatus(HttpStatus.OK)
-    public List<AnswerResponse> findAllAnswers(){
-        return answerService.findAll().stream().map(new AnswerResponseMapper()).toList();
+    public Flux<AnswerResponse> findAllAnswers(){
+        return answerService.findAll().map(new AnswerResponseMapper());
     }
 }

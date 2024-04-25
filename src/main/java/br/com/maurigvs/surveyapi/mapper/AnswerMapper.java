@@ -4,17 +4,15 @@ import br.com.maurigvs.surveyapi.dto.requests.AnswerItemRequest;
 import br.com.maurigvs.surveyapi.dto.requests.AnswerRequest;
 import br.com.maurigvs.surveyapi.model.Answer;
 import br.com.maurigvs.surveyapi.model.Survey;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.function.Function;
 
+@RequiredArgsConstructor
 public class AnswerMapper implements Function<AnswerRequest, Answer> {
 
     private final Survey survey;
-
-    public AnswerMapper(Survey survey) {
-        this.survey = survey;
-    }
 
     @Override
     public Answer apply(AnswerRequest request) {

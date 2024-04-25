@@ -8,16 +8,14 @@ import br.com.maurigvs.surveyapi.model.AnswerItem;
 import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.model.Survey;
+import lombok.RequiredArgsConstructor;
 
 import java.util.function.Function;
 
+@RequiredArgsConstructor
 public class AnswerItemMapper implements Function<AnswerItemRequest, AnswerItem> {
 
     private final Answer answer;
-
-    public AnswerItemMapper(Answer answer) {
-        this.answer = answer;
-    }
 
     @Override
     public AnswerItem apply(AnswerItemRequest request) {

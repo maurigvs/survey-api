@@ -6,39 +6,43 @@ import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
 import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.repository.ChoiceRepository;
 import br.com.maurigvs.surveyapi.service.ChoiceService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ChoiceServiceImpl implements ChoiceService {
 
     private final ChoiceRepository repository;
 
-    public ChoiceServiceImpl(ChoiceRepository repository) {
-        this.repository = repository;
+    @Override
+    public Mono<Choice> create(Mono<Choice> choiceMono) {
+        return choiceMono
+                .map(repository::save)
+                .subscribeOn(Schedulers.boundedElastic());
+    }
+
+    private Mono<Choice> findById(Long choiceId){
+        return Mono.fromSupplier(() -> repository.findById(choiceId))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .switchIfEmpty(Mono.error(new ChoiceNotFoundException(choiceId)))
+                .subscribeOn(Schedulers.boundedElastic());
     }
 
     @Override
-    public void create(Choice choice) {
-        repository.save(choice);
-    }
-
-    private Choice findById(Long choiceId){
-        return repository.findById(choiceId)
-                .orElseThrow(() -> new ChoiceNotFoundException(choiceId));
-    }
-
-    @Override
-    public void deleteById(Long choiceId, Long questionId, Long surveyId) {
-        var choice = findById(choiceId);
-        verifyBeforeDelete(choice, questionId, surveyId);
-        repository.delete(choice);
-    }
-
-    private void verifyBeforeDelete(Choice choice, Long questionId, Long surveyId) {
-        if(!choice.getQuestion().getId().equals(questionId))
-            throw new QuestionNotFoundException(questionId);
-
-        if(!choice.getQuestion().getSurvey().getId().equals(surveyId))
-            throw new SurveyNotFoundException(surveyId);
+    public Mono<Void> deleteById(Long choiceId, Long questionId, Long surveyId) {
+        return findById(choiceId)
+                .filter(choice -> choice.getQuestion().getId().equals(questionId))
+                .switchIfEmpty(Mono.error(new QuestionNotFoundException(questionId)))
+                .filter(choice -> choice.getQuestion().getSurvey().getId().equals(surveyId))
+                .switchIfEmpty(Mono.error(new SurveyNotFoundException(surveyId)))
+                .doOnNext(repository::delete)
+                .then()
+                .subscribeOn(Schedulers.boundedElastic());
     }
 }
