@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,11 +21,15 @@ import reactor.core.publisher.Mono;
 @Tag(name = "question")
 @RestController
 @RequestMapping("/survey/{surveyId}/question")
-@RequiredArgsConstructor
 public class QuestionController {
 
     private final QuestionService questionService;
     private final SurveyService surveyService;
+
+    public QuestionController(QuestionService questionService, SurveyService surveyService) {
+        this.questionService = questionService;
+        this.surveyService = surveyService;
+    }
 
     @Operation(summary = "create a new question to a survey")
     @ApiResponses(value = {
@@ -35,7 +38,8 @@ public class QuestionController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Void> postQuestion(@PathVariable Long surveyId, @RequestBody Mono<QuestionRequest> requestMono){
+    public Mono<Void> postQuestion(@PathVariable Long surveyId,
+                                   @RequestBody Mono<QuestionRequest> requestMono){
         return surveyService
                 .findById(surveyId)
                 .zipWith(requestMono)
@@ -52,7 +56,8 @@ public class QuestionController {
     })
     @DeleteMapping("/{questionId}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<Void> deleteQuestionById(@PathVariable Long surveyId, @PathVariable Long questionId){
+    public Mono<Void> deleteQuestionById(@PathVariable Long surveyId,
+                                         @PathVariable Long questionId){
         return questionService.deleteById(questionId, surveyId);
     }
 }

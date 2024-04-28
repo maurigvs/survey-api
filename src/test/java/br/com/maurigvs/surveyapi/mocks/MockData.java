@@ -170,6 +170,7 @@ public class MockData {
         return new User(null,
                 "John Snow",
                 "john.snow@gmail.com",
+                "john.snow",
                 "snowjon1986",
                 createdAt);
     }

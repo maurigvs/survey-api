@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,11 +21,15 @@ import reactor.core.publisher.Mono;
 @Tag(name = "choice")
 @RestController
 @RequestMapping("/survey/{surveyId}/question/{questionId}/choice")
-@RequiredArgsConstructor
 public class ChoiceController {
 
     private final ChoiceService choiceService;
     private final QuestionService questionService;
+
+    public ChoiceController(ChoiceService choiceService, QuestionService questionService) {
+        this.choiceService = choiceService;
+        this.questionService = questionService;
+    }
 
     @Operation(summary = "create a new choice to a question")
     @ApiResponses(value = {
@@ -35,7 +38,9 @@ public class ChoiceController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Void> postChoice(@PathVariable Long surveyId, @PathVariable Long questionId, @RequestBody Mono<ChoiceRequest> requestMono){
+    public Mono<Void> postChoice(@PathVariable Long surveyId,
+                                 @PathVariable Long questionId,
+                                 @RequestBody Mono<ChoiceRequest> requestMono){
         return questionService.findById(questionId)
                 .zipWith(requestMono)
                 .map(tuple -> new ChoiceMapper(tuple.getT1()).apply(tuple.getT2().choice()))
@@ -51,7 +56,9 @@ public class ChoiceController {
     })
     @DeleteMapping("/{choiceId}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<Void> deleteChoiceById(@PathVariable Long surveyId, @PathVariable Long questionId, @PathVariable Long choiceId){
+    public Mono<Void> deleteChoiceById(@PathVariable Long surveyId,
+                                       @PathVariable Long questionId,
+                                       @PathVariable Long choiceId){
         return choiceService.deleteById(choiceId, questionId, surveyId);
     }
 }

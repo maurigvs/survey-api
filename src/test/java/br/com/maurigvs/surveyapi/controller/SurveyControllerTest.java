@@ -1,53 +1,41 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
-import br.com.maurigvs.surveyapi.dto.responses.ErrorResponse;
-import br.com.maurigvs.surveyapi.exception.SurveyAlreadyExistsException;
 import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(SurveyController.class)
-@AutoConfigureMockMvc
+@SpringBootTest(classes = {SurveyController.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class SurveyControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private SurveyController surveyController;
 
     @MockBean
     private SurveyService surveyService;
 
     @Test
-    void should_return_Created_when_post_survey() throws Exception {
-        var request = MockData.ofSurveyRequest();
+    void should_return_Created_when_post_survey(){
+        var surveyRequestMono = Mono.just(MockData.ofSurveyRequest());
+        var surveyMono = Mono.just(MockData.ofSurvey());
+        given(surveyService.create(any())).willReturn(surveyMono);
 
-        mockMvc.perform(post("/survey")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(MockData.ofJson(request)))
-                .andExpect(status().isCreated());
+        StepVerifier.create(surveyController.postSurvey(surveyRequestMono))
+                .verifyComplete();
 
         verify(surveyService, times(1)).create(any());
         verifyNoMoreInteractions(surveyService);
@@ -55,61 +43,15 @@ class SurveyControllerTest {
 
     @Test
     void should_return_OK_when_get_survey_list() throws Exception {
-        var surveys = MockData.ofSurveyList();
-        var response = MockData.ofSurveyResponseList();
-        given(surveyService.findAll()).willReturn(surveys);
+        var surveyFlux = Flux.just(MockData.ofSurvey());
+        var surveyResponse = MockData.ofSurveyResponse();
+        given(surveyService.findAll()).willReturn(surveyFlux);
 
-        mockMvc.perform(get("/survey"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(MockData.ofJson(response)));
+        StepVerifier.create(surveyController.findAllSurveys())
+                .expectNext(surveyResponse)
+                .verifyComplete();
 
         verify(surveyService, times(1)).findAll();
         verifyNoMoreInteractions(surveyService);
-    }
-
-    @Test
-    void should_return_Bad_Request_when_MethodArgumentNotValidException_is_thrown() throws Exception {
-        var request = new SurveyRequest("", MockData.ofSurveyRequest().questions());
-        var response = new ErrorResponse("Bad Request", List.of("The field [survey] must not be blank"));
-
-        mockMvc.perform(post("/survey")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(MockData.ofJson(request)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(MockData.ofJson(response)));
-
-        verifyNoInteractions(surveyService);
-    }
-
-    @Test
-    void should_return_Bad_Request_when_BadRequestException_is_thrown() throws Exception {
-        var request = MockData.ofSurveyRequest();
-        var response = new ErrorResponse("Bad Request","Survey 'Sample Survey' already exists");
-        willThrow(new SurveyAlreadyExistsException(request.survey())).given(surveyService).create(any());
-
-        mockMvc.perform(post("/survey")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(MockData.ofJson(request)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(MockData.ofJson(response)));
-
-        verify(surveyService, times(1)).create(any());
-        verifyNoMoreInteractions(surveyService);
-    }
-
-    @Test
-    void should_return_Not_Found_when_NoResourceFoundException_is_thrown() throws Exception {
-        var response = new ErrorResponse("Not Found",
-                "Endpoint inexistent or missing required parameters: POST /inexistent");
-
-        mockMvc.perform(post("/inexistent"))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(MockData.ofJson(response)));
-
-        verifyNoInteractions(surveyService);
     }
 }

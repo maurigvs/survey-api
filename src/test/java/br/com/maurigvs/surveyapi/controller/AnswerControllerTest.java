@@ -7,30 +7,24 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(AnswerController.class)
+@SpringBootTest(classes = {AnswerController.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class AnswerControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private AnswerController answerController;
 
     @MockBean
     private AnswerService answerService;
@@ -40,27 +34,27 @@ class AnswerControllerTest {
 
     @Test
     void should_return_Created_when_post_answer() throws Exception {
-        var request = MockData.ofAnswerRequest();
-        given(surveyService.findById(anyLong())).willReturn(MockData.ofSurvey());
+        var answerMono = Mono.just(MockData.ofAnswer());
+        var surveyMono = Mono.just(MockData.ofSurvey());
+        var answerRequestMono = Mono.just(MockData.ofAnswerRequest());
+        given(surveyService.findById(1L)).willReturn(surveyMono);
+        given(answerService.create(any())).willReturn(answerMono);
 
-        mockMvc.perform(post("/answer")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(MockData.ofJson(request)))
-                .andExpect(status().isCreated());
-
-        verify(surveyService, times(1)).findById(request.surveyId());
-        verify(answerService, times(1)).create(any());
-        verifyNoMoreInteractions(surveyService, answerService);
+        StepVerifier.create(answerController.postAnswer(1L, answerRequestMono))
+                .verifyComplete();
     }
 
     @Test
-    void should_return_Ok_when_get_answers() throws Exception {
-        var response = MockData.ofAnswerResponse();
-        given(answerService.findAll()).willReturn(List.of(MockData.ofAnswer()));
+    void should_return_Ok_when_get_answers() {
+        var answerFlux = Flux.just(MockData.ofAnswer());
+        var answerResponse = MockData.ofAnswerResponse();
+        given(answerService.findAll()).willReturn(answerFlux);
 
-        mockMvc.perform(get("/answer"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(MockData.ofJson(List.of(response))));
+        StepVerifier.create(answerController.findAllAnswers())
+                .expectNext(answerResponse)
+                .verifyComplete();
+
+        verify(answerService, times(1)).findAll();
+        verifyNoMoreInteractions(answerService);
     }
 }

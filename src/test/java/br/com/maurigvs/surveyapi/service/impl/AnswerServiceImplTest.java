@@ -12,13 +12,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -44,8 +44,11 @@ class AnswerServiceImplTest {
 
     @Test
     void should_create_answer() {
+        given(repository.save(any())).willReturn(answer);
 
-        service.create(answer);
+        StepVerifier.create(service.create(Mono.just(answer)))
+                .expectNext(answer)
+                .verifyComplete();
 
         verify(repository, times(1)).save(answer);
         verifyNoMoreInteractions(repository);
@@ -56,9 +59,10 @@ class AnswerServiceImplTest {
         var answers = List.of(answer);
         given(repository.findAll()).willReturn(answers);
 
-        var result = service.findAll();
+        StepVerifier.create(service.findAll())
+                .expectNext(answer)
+                .verifyComplete();
 
-        assertSame(answers, result);
         verify(repository, times(1)).findAll();
         verifyNoMoreInteractions(repository);
     }
@@ -68,7 +72,8 @@ class AnswerServiceImplTest {
         var answerId = 1L;
         given(repository.findById(anyLong())).willReturn(Optional.of(answer));
 
-        service.deleteById(answerId);
+        StepVerifier.create(service.deleteById(answerId))
+                .verifyComplete();
 
         verify(repository, times(1)).findById(answerId);
         verify(repository, times(1)).delete(answer);
@@ -80,8 +85,11 @@ class AnswerServiceImplTest {
         var answerId = 1L;
         given(repository.findById(anyLong())).willReturn(Optional.empty());
 
-        var exception = assertThrows(AnswerNotFoundException.class, () -> service.deleteById(answerId));
-        assertEquals("Answer not found by Id 1", exception.getMessage());
+        StepVerifier.create(service.deleteById(answerId))
+                .expectErrorMatches(throwable ->
+                        throwable instanceof AnswerNotFoundException &&
+                        throwable.getMessage().equals("Answer not found by Id 1"))
+                .verify();
 
         verify(repository, times(1)).findById(answerId);
         verifyNoMoreInteractions(repository);

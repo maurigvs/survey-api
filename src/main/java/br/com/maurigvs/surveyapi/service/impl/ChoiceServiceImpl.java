@@ -6,7 +6,6 @@ import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
 import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.repository.ChoiceRepository;
 import br.com.maurigvs.surveyapi.service.ChoiceService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -14,10 +13,13 @@ import reactor.core.scheduler.Schedulers;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class ChoiceServiceImpl implements ChoiceService {
 
     private final ChoiceRepository repository;
+
+    public ChoiceServiceImpl(ChoiceRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Mono<Choice> create(Mono<Choice> choiceMono) {

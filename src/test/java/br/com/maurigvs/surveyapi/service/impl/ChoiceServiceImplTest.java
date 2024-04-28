@@ -7,7 +7,6 @@ import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.repository.ChoiceRepository;
 import br.com.maurigvs.surveyapi.service.ChoiceService;
-import br.com.maurigvs.surveyapi.service.impl.ChoiceServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -15,10 +14,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -44,8 +45,11 @@ class ChoiceServiceImplTest {
 
     @Test
     void should_create_choice_in_existing_question() {
+        given(repository.save(any())).willReturn(choice);
 
-        service.create(choice);
+        StepVerifier.create(service.create(Mono.just(choice)))
+                .expectNext(choice)
+                .verifyComplete();
 
         verify(repository, times(1)).save(choice);
         verifyNoMoreInteractions(repository);
@@ -58,7 +62,8 @@ class ChoiceServiceImplTest {
         var surveyId = 1L;
         given(repository.findById(anyLong())).willReturn(Optional.of(choice));
 
-        service.deleteById(choiceId, questionId, surveyId);
+        StepVerifier.create(service.deleteById(choiceId, questionId, surveyId))
+                .verifyComplete();
 
         verify(repository, times(1)).findById(choiceId);
         verify(repository, times(1)).delete(choice);
@@ -69,7 +74,9 @@ class ChoiceServiceImplTest {
     void should_throw_exception_when_choice_not_found_by_id() {
         given(repository.findById(anyLong())).willReturn(Optional.empty());
 
-        assertThrows(ChoiceNotFoundException.class, ()-> service.deleteById(1L, 2L, 3L));
+        StepVerifier.create(service.deleteById(1L, 2L, 3L))
+                .expectErrorMatches(throwable -> throwable instanceof ChoiceNotFoundException)
+                .verify();
 
         verify(repository, times(1)).findById(1L);
         verifyNoMoreInteractions(repository);
@@ -82,7 +89,9 @@ class ChoiceServiceImplTest {
         var surveyId = 1L;
         given(repository.findById(anyLong())).willReturn(Optional.of(choice));
 
-        assertThrows(QuestionNotFoundException.class, ()-> service.deleteById(choiceId, questionId, surveyId));
+        StepVerifier.create(service.deleteById(choiceId, questionId, surveyId))
+                .expectErrorMatches(throwable -> throwable instanceof QuestionNotFoundException)
+                .verify();
 
         verify(repository, times(1)).findById(1L);
         verifyNoMoreInteractions(repository);
@@ -95,7 +104,9 @@ class ChoiceServiceImplTest {
         var surveyId = 2L;
         given(repository.findById(anyLong())).willReturn(Optional.of(choice));
 
-        assertThrows(SurveyNotFoundException.class, ()-> service.deleteById(choiceId, questionId, surveyId));
+        StepVerifier.create(service.deleteById(choiceId, questionId, surveyId))
+                .expectErrorMatches(throwable -> throwable instanceof SurveyNotFoundException)
+                .verify();
 
         verify(repository, times(1)).findById(1L);
         verifyNoMoreInteractions(repository);

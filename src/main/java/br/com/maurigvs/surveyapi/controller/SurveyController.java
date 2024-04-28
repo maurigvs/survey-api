@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,10 +24,13 @@ import reactor.core.publisher.Mono;
 @Tag(name = "survey")
 @RestController
 @RequestMapping("/survey")
-@RequiredArgsConstructor
 public class SurveyController {
 
     private final SurveyService surveyService;
+
+    public SurveyController(SurveyService surveyService) {
+        this.surveyService = surveyService;
+    }
 
     @Operation(summary = "create a new survey")
     @ApiResponses(value = {

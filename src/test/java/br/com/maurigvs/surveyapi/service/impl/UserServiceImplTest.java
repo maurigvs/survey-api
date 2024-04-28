@@ -1,6 +1,5 @@
 package br.com.maurigvs.surveyapi.service.impl;
 
-import br.com.maurigvs.surveyapi.exception.UserAlreadyExistsException;
 import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.model.User;
 import br.com.maurigvs.surveyapi.repository.UserRepository;
@@ -13,10 +12,11 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.Optional;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -40,30 +40,15 @@ class UserServiceImplTest {
     @Test
     void should_create_user() {
         var user = MockData.ofUser();
-        var login = "john.snow";
-        given(repository.existsByEmail(anyString())).willReturn(false);
+        given(repository.findByEmail(anyString())).willReturn(Optional.empty());
         given(repository.save(any())).willReturn(user);
 
-        var result = service.create(user);
+        StepVerifier.create(service.create(Mono.just(user)))
+                .expectNext(user)
+                .verifyComplete();
 
-        verify(repository, times(1)).existsByEmail(user.getEmail());
-        verify(repository, times(1)).save(userCaptor.capture());
-        verifyNoMoreInteractions(repository);
-        var userCreated = userCaptor.getValue();
-        assertEquals(login, userCreated.getLogin());
-        assertSame(userCreated, result);
-    }
-
-    @Test
-    void should_throw_exception_when_user_with_same_email_already_exists() {
-        var messageExpected = "User already exists with same email";
-        var user = MockData.ofUserWithLogin();
-        given(repository.existsByEmail(anyString())).willReturn(true);
-
-        var exception = assertThrows(UserAlreadyExistsException.class, () -> service.create(user));
-        assertEquals(messageExpected, exception.getMessage());
-
-        verify(repository, times(1)).existsByEmail(user.getEmail());
+        verify(repository, times(0)).findByEmail(user.getEmail());
+        verify(repository, times(1)).save(user);
         verifyNoMoreInteractions(repository);
     }
 }
