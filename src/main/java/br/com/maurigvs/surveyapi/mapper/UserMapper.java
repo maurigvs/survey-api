@@ -19,6 +19,7 @@ public class UserMapper implements Function<UserRequest, User> {
         return new User(null,
                 request.name(),
                 request.email(),
+                request.name().toLowerCase().replace(" ", "."),
                 request.password(),
                 createdAt);
     }

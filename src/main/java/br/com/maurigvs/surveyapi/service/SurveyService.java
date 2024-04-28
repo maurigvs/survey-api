@@ -1,17 +1,16 @@
 package br.com.maurigvs.surveyapi.service;
 
 import br.com.maurigvs.surveyapi.model.Survey;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface SurveyService {
 
-    void create(Survey survey);
+    Mono<Survey> create(Mono<Survey> surveyMono);
 
-    Survey findById(Long surveyId);
+    Mono<Survey> findById(Long surveyId);
 
-    List<Survey> findAll();
+    Flux<Survey> findAll();
 
-    void deleteById(Long surveyId);
-
+    Mono<Void> deleteById(Long surveyId);
 }

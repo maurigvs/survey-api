@@ -26,10 +26,11 @@ public class User {
 
     private LocalDateTime createdAt;
 
-    public User(Long id, String name, String email, String password, LocalDateTime createdAt) {
+    public User(Long id, String name, String email, String login, String password, LocalDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.login = login;
         this.password = password;
         this.createdAt = createdAt;
     }
@@ -51,10 +52,6 @@ public class User {
 
     public String getLogin() {
         return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
 
     public String getPassword() {

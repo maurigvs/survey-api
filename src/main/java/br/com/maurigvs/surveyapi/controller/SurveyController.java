@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Tag(name = "survey")
 @RestController
@@ -40,8 +40,12 @@ public class SurveyController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void postSurvey(@RequestBody @Valid SurveyRequest request){
-        surveyService.create(new SurveyMapper().apply(request));
+    public Mono<Void> postSurvey(@RequestBody @Valid Mono<SurveyRequest> requestMono){
+        return requestMono
+                .map(new SurveyMapper())
+                .map(Mono::just)
+                .flatMap(surveyService::create)
+                .then();
     }
 
     @Operation(summary = "list of all surveys")
@@ -52,7 +56,7 @@ public class SurveyController {
     })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<SurveyResponse> findAllSurveys(){
-        return surveyService.findAll().stream().map(new SurveyResponseMapper()).toList();
+    public Flux<SurveyResponse> findAllSurveys(){
+        return surveyService.findAll().map(new SurveyResponseMapper());
     }
 }

@@ -12,13 +12,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -30,10 +30,10 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 class AnswerServiceImplTest {
 
     @Autowired
-    private AnswerService service;
+    private AnswerService answerService;
 
     @MockBean
-    private AnswerRepository repository;
+    private AnswerRepository answerRepository;
 
     private Answer answer;
 
@@ -44,46 +44,54 @@ class AnswerServiceImplTest {
 
     @Test
     void should_create_answer() {
+        given(answerRepository.save(any())).willReturn(answer);
 
-        service.create(answer);
+        StepVerifier.create(answerService.create(Mono.just(answer)))
+                .expectNext(answer)
+                .verifyComplete();
 
-        verify(repository, times(1)).save(answer);
-        verifyNoMoreInteractions(repository);
+        verify(answerRepository, times(1)).save(answer);
+        verifyNoMoreInteractions(answerRepository);
     }
 
     @Test
     void should_return_list_of_answers() {
         var answers = List.of(answer);
-        given(repository.findAll()).willReturn(answers);
+        given(answerRepository.findAll()).willReturn(answers);
 
-        var result = service.findAll();
+        StepVerifier.create(answerService.findAll())
+                .expectNext(answer)
+                .verifyComplete();
 
-        assertSame(answers, result);
-        verify(repository, times(1)).findAll();
-        verifyNoMoreInteractions(repository);
+        verify(answerRepository, times(1)).findAll();
+        verifyNoMoreInteractions(answerRepository);
     }
 
     @Test
     void should_delete_answer_by_id() {
         var answerId = 1L;
-        given(repository.findById(anyLong())).willReturn(Optional.of(answer));
+        given(answerRepository.findById(anyLong())).willReturn(Optional.of(answer));
 
-        service.deleteById(answerId);
+        StepVerifier.create(answerService.deleteById(answerId))
+                .verifyComplete();
 
-        verify(repository, times(1)).findById(answerId);
-        verify(repository, times(1)).delete(answer);
-        verifyNoMoreInteractions(repository);
+        verify(answerRepository, times(1)).findById(answerId);
+        verify(answerRepository, times(1)).delete(answer);
+        verifyNoMoreInteractions(answerRepository);
     }
 
     @Test
     void should_throw_exception_when_answer_not_found_by_id() {
         var answerId = 1L;
-        given(repository.findById(anyLong())).willReturn(Optional.empty());
+        given(answerRepository.findById(anyLong())).willReturn(Optional.empty());
 
-        var exception = assertThrows(AnswerNotFoundException.class, () -> service.deleteById(answerId));
-        assertEquals("Answer not found by Id 1", exception.getMessage());
+        StepVerifier.create(answerService.deleteById(answerId))
+                .expectErrorMatches(throwable ->
+                        throwable instanceof AnswerNotFoundException &&
+                        throwable.getMessage().equals("Answer not found by Id 1"))
+                .verify();
 
-        verify(repository, times(1)).findById(answerId);
-        verifyNoMoreInteractions(repository);
+        verify(answerRepository, times(1)).findById(answerId);
+        verifyNoMoreInteractions(answerRepository);
     }
 }

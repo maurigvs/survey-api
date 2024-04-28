@@ -1,12 +1,13 @@
 package br.com.maurigvs.surveyapi.service;
 
 import br.com.maurigvs.surveyapi.model.Question;
+import reactor.core.publisher.Mono;
 
 public interface QuestionService {
 
-    void create(Question question);
+    Mono<Question> create(Mono<Question> questionMono);
 
-    Question findById(Long questionId);
+    Mono<Question> findById(Long questionId);
 
-    void deleteById(Long questionId, Long surveyId);
+    Mono<Void> deleteById(Long questionId, Long surveyId);
 }

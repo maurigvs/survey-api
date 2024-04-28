@@ -1,13 +1,15 @@
 package br.com.maurigvs.surveyapi.service.impl;
 
-import br.com.maurigvs.surveyapi.exception.SurveyAlreadyExistsException;
 import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
 import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.repository.SurveyRepository;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SurveyServiceImpl implements SurveyService {
@@ -19,30 +21,32 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-    public void create(Survey survey) {
-        verifyBeforeSave(survey);
-        repository.save(survey);
+    public Mono<Survey> create(Mono<Survey> surveyMono) {
+        return surveyMono
+                .map(repository::save)
+                .subscribeOn(Schedulers.boundedElastic());
     }
 
     @Override
-    public Survey findById(Long surveyId) {
-        return repository.findById(surveyId)
-                .orElseThrow(() -> new SurveyNotFoundException(surveyId));
+    public Mono<Survey> findById(Long surveyId) {
+        return Mono.fromSupplier(() -> repository.findById(surveyId))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .switchIfEmpty(Mono.error(new SurveyNotFoundException(surveyId)))
+                .subscribeOn(Schedulers.boundedElastic());
     }
 
     @Override
-    public List<Survey> findAll() {
-        return repository.findAll();
+    public Flux<Survey> findAll() {
+        return Flux.fromStream(repository.findAll().stream());
     }
 
     @Override
-    public void deleteById(Long surveyId) {
-        var survey = findById(surveyId);
-        repository.delete(survey);
+    public Mono<Void> deleteById(Long surveyId) {
+        return findById(surveyId)
+                .doOnNext(repository::delete)
+                .then()
+                .subscribeOn(Schedulers.boundedElastic());
     }
 
-    private void verifyBeforeSave(Survey survey) {
-        if(repository.existsByTitle(survey.getTitle()))
-            throw new SurveyAlreadyExistsException(survey.getTitle());
-    }
 }

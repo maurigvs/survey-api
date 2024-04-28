@@ -6,6 +6,10 @@ import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.repository.QuestionRepository;
 import br.com.maurigvs.surveyapi.service.QuestionService;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
+import java.util.Optional;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -17,25 +21,28 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void create(Question question) {
-        repository.save(question);
+    public Mono<Question> create(Mono<Question> questionMono) {
+        return questionMono
+                .map(repository::save)
+                .subscribeOn(Schedulers.boundedElastic());
     }
 
     @Override
-    public Question findById(Long questionId) {
-        return repository.findById(questionId)
-                .orElseThrow(() -> new QuestionNotFoundException(questionId));
+    public Mono<Question> findById(Long questionId) {
+        return Mono.fromSupplier(() -> repository.findById(questionId))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .switchIfEmpty(Mono.error(new QuestionNotFoundException(questionId)))
+                .subscribeOn(Schedulers.boundedElastic());
     }
 
     @Override
-    public void deleteById(Long questionId, Long surveyId) {
-        var question = findById(questionId);
-        verifyBeforeDelete(question, surveyId);
-        repository.delete(question);
-    }
-
-    private void verifyBeforeDelete(Question question, Long surveyId) {
-        if(!question.getSurvey().getId().equals(surveyId))
-            throw new SurveyNotFoundException(surveyId);
+    public Mono<Void> deleteById(Long questionId, Long surveyId) {
+        return findById(questionId)
+                .filter(question -> question.getSurvey().getId().equals(surveyId))
+                .switchIfEmpty(Mono.error(new SurveyNotFoundException(surveyId)))
+                .doOnNext(repository::delete)
+                .then()
+                .subscribeOn(Schedulers.boundedElastic());
     }
 }

@@ -23,7 +23,7 @@ class UserMapperTest {
         assertNull(result.getId());
         assertEquals(request.name(), result.getName());
         assertEquals(request.email(), result.getEmail());
-        assertNull(result.getLogin());
+        assertEquals("john.snow", result.getLogin());
         assertEquals(request.password(), result.getPassword());
         assertEquals(createdAt, result.getCreatedAt());
     }

@@ -170,22 +170,13 @@ public class MockData {
         return new User(null,
                 "John Snow",
                 "john.snow@gmail.com",
+                "john.snow",
                 "snowjon1986",
                 createdAt);
     }
 
     public static User ofUser() {
         return ofUser(LocalDateTime.now());
-    }
-
-    public static User ofUserWithLogin(LocalDateTime createdAt) {
-        var user = ofUser(createdAt);
-        user.setLogin("john.snow");
-        return user;
-    }
-
-    public static User ofUserWithLogin() {
-        return ofUserWithLogin(LocalDateTime.now());
     }
 
     public static UserCreatedResponse ofUserCreatedResponse(LocalDateTime createdAt) {
