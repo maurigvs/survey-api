@@ -30,10 +30,10 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 class SurveyServiceImplTest {
 
     @Autowired
-    private SurveyService service;
+    private SurveyService surveyService;
 
     @MockBean
-    private SurveyRepository repository;
+    private SurveyRepository surveyRepository;
 
     private Survey survey;
 
@@ -44,15 +44,15 @@ class SurveyServiceImplTest {
 
     @Test
     void should_create_survey(){
-        given(repository.save(any())).willReturn(survey);
+        given(surveyRepository.save(any())).willReturn(survey);
 
-        StepVerifier.create(service.create(Mono.just(survey)))
+        StepVerifier.create(surveyService.create(Mono.just(survey)))
                 .expectNext(survey)
                 .verifyComplete();
 
         //verify(repository, times(0)).existsByTitle(survey.getTitle());
-        verify(repository, times(1)).save(survey);
-        verifyNoMoreInteractions(repository);
+        verify(surveyRepository, times(1)).save(survey);
+        verifyNoMoreInteractions(surveyRepository);
     }
 
 //    @Test
@@ -69,54 +69,54 @@ class SurveyServiceImplTest {
     @Test
     void should_return_list_of_surveys(){
         var surveys = List.of(survey);
-        given(repository.findAll()).willReturn(surveys);
+        given(surveyRepository.findAll()).willReturn(surveys);
 
-        StepVerifier.create(service.findAll())
+        StepVerifier.create(surveyService.findAll())
                 .expectNext(survey)
                 .verifyComplete();
 
-        verify(repository, times(1)).findAll();
-        verifyNoMoreInteractions(repository);
+        verify(surveyRepository, times(1)).findAll();
+        verifyNoMoreInteractions(surveyRepository);
     }
 
     @Test
     void should_return_survey_given_an_id() {
         var surveyId = 1L;
-        given(repository.findById(any())).willReturn(Optional.of(survey));
+        given(surveyRepository.findById(any())).willReturn(Optional.of(survey));
 
-        StepVerifier.create(service.findById(surveyId))
+        StepVerifier.create(surveyService.findById(surveyId))
                 .expectNext(survey)
                 .verifyComplete();
 
-        verify(repository, times(1)).findById(surveyId);
-        verifyNoMoreInteractions(repository);
+        verify(surveyRepository, times(1)).findById(surveyId);
+        verifyNoMoreInteractions(surveyRepository);
     }
 
     @Test
     void should_delete_survey_by_id() {
         var surveyId = 1L;
-        given(repository.findById(anyLong())).willReturn(Optional.of(survey));
+        given(surveyRepository.findById(anyLong())).willReturn(Optional.of(survey));
 
-        StepVerifier.create(service.deleteById(surveyId))
+        StepVerifier.create(surveyService.deleteById(surveyId))
                 .verifyComplete();
 
-        verify(repository, times(1)).findById(surveyId);
-        verify(repository, times(1)).delete(survey);
-        verifyNoMoreInteractions(repository);
+        verify(surveyRepository, times(1)).findById(surveyId);
+        verify(surveyRepository, times(1)).delete(survey);
+        verifyNoMoreInteractions(surveyRepository);
     }
 
     @Test
     void should_throw_exception_when_survey_not_found_by_id() {
         var surveyId = 1L;
-        given(repository.findById(any())).willReturn(Optional.empty());
+        given(surveyRepository.findById(any())).willReturn(Optional.empty());
 
-        StepVerifier.create(service.findById(surveyId))
+        StepVerifier.create(surveyService.findById(surveyId))
                 .expectErrorMatches(throwable ->
                         throwable instanceof SurveyNotFoundException &&
                         throwable.getMessage().equals("Survey not found by Id 1"))
                 .verify();
 
-        verify(repository, times(1)).findById(surveyId);
-        verifyNoMoreInteractions(repository);
+        verify(surveyRepository, times(1)).findById(surveyId);
+        verifyNoMoreInteractions(surveyRepository);
     }
 }

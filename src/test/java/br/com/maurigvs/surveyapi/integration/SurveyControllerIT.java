@@ -1,7 +1,7 @@
-package br.com.maurigvs.surveyapi.controller.integration;
+package br.com.maurigvs.surveyapi.integration;
 
-import br.com.maurigvs.surveyapi.controller.ChoiceController;
-import br.com.maurigvs.surveyapi.dto.requests.ChoiceRequest;
+import br.com.maurigvs.surveyapi.controller.SurveyController;
+import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
 import br.com.maurigvs.surveyapi.mocks.MockData;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.BDDMockito.given;
@@ -19,36 +20,38 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest(properties = "spring.main.web-application-type=reactive")
 @AutoConfigureWebTestClient
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class ChoiceControllerTest {
+class SurveyControllerIT {
 
     @Autowired
     private WebTestClient webTestClient;
 
     @MockBean
-    private ChoiceController choiceController;
+    private SurveyController surveyController;
 
     @Test
-    void should_return_Created_when_add_choice_to_existing_question() throws Exception {
-        var choiceRequestMono = Mono.just(MockData.ofChoiceRequest());
-        given(choiceController.postChoice(1L,1L,choiceRequestMono)).willReturn(Mono.empty());
+    void should_return_Created_when_post_survey() {
+        var surveyRequestMono = Mono.just(MockData.ofSurveyRequest());
+        given(surveyController.postSurvey(surveyRequestMono)).willReturn(Mono.empty());
 
         webTestClient.post()
-                .uri("/survey/1/question/1/choice")
+                .uri("/survey")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(choiceRequestMono, ChoiceRequest.class)
+                .body(surveyRequestMono, SurveyRequest.class)
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody().isEmpty();
     }
 
     @Test
-    void should_return_OK_when_delete_choice_from_existing_question() throws Exception {
-        given(choiceController.deleteChoiceById(1L,1L,2L)).willReturn(Mono.empty());
+    void should_return_OK_when_get_survey_list() {
+        var surveyResponseFlux = Flux.just(MockData.ofSurveyResponse());
+        given(surveyController.findAllSurveys()).willReturn(surveyResponseFlux);
 
-        webTestClient.delete()
-                .uri("/survey/1/question/1/choice/2")
+        webTestClient.get()
+                .uri("/survey")
                 .exchange()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectStatus().isOk()
-                .expectBody().isEmpty();
+                .expectBody().equals(surveyResponseFlux);
     }
 }

@@ -1,14 +1,11 @@
 package br.com.maurigvs.surveyapi.service.impl;
 
 import br.com.maurigvs.surveyapi.mocks.MockData;
-import br.com.maurigvs.surveyapi.model.User;
 import br.com.maurigvs.surveyapi.repository.UserRepository;
 import br.com.maurigvs.surveyapi.service.UserService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -29,26 +26,23 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 class UserServiceImplTest {
 
     @Autowired
-    private UserService service;
+    private UserService userService;
 
     @MockBean
-    private UserRepository repository;
-
-    @Captor
-    private ArgumentCaptor<User> userCaptor;
+    private UserRepository userRepository;
 
     @Test
     void should_create_user() {
         var user = MockData.ofUser();
-        given(repository.findByEmail(anyString())).willReturn(Optional.empty());
-        given(repository.save(any())).willReturn(user);
+        given(userRepository.findByEmail(anyString())).willReturn(Optional.empty());
+        given(userRepository.save(any())).willReturn(user);
 
-        StepVerifier.create(service.create(Mono.just(user)))
+        StepVerifier.create(userService.create(Mono.just(user)))
                 .expectNext(user)
                 .verifyComplete();
 
-        verify(repository, times(0)).findByEmail(user.getEmail());
-        verify(repository, times(1)).save(user);
-        verifyNoMoreInteractions(repository);
+        verify(userRepository, times(0)).findByEmail(user.getEmail());
+        verify(userRepository, times(1)).save(user);
+        verifyNoMoreInteractions(userRepository);
     }
 }

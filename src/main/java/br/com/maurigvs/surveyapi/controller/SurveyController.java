@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +40,7 @@ public class SurveyController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Void> postSurvey(@RequestBody Mono<SurveyRequest> requestMono){
+    public Mono<Void> postSurvey(@RequestBody @Valid Mono<SurveyRequest> requestMono){
         return requestMono
                 .map(new SurveyMapper())
                 .map(Mono::just)

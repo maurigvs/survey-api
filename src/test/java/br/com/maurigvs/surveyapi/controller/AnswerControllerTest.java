@@ -1,5 +1,6 @@
 package br.com.maurigvs.surveyapi.controller;
 
+import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
 import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.service.AnswerService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
@@ -17,6 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @SpringBootTest(classes = {AnswerController.class})
@@ -42,6 +44,20 @@ class AnswerControllerTest {
 
         StepVerifier.create(answerController.postAnswer(1L, answerRequestMono))
                 .verifyComplete();
+    }
+
+    @Test
+    void should_return_error_when_post_answer() {
+        var answerRequestMono = Mono.just(MockData.ofAnswerRequest());
+        given(surveyService.findById(1L)).willReturn(Mono.error(new SurveyNotFoundException(1L)));
+
+        StepVerifier.create(answerController.postAnswer(1L, answerRequestMono))
+                .expectErrorMatches(throwable ->
+                        throwable instanceof SurveyNotFoundException &&
+                        throwable.getMessage().equals("Survey not found by Id 1"))
+                .verify();
+
+        verifyNoInteractions(answerService);
     }
 
     @Test

@@ -31,10 +31,10 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 class ChoiceServiceImplTest {
     
     @Autowired
-    private ChoiceService service;
+    private ChoiceService choiceService;
     
     @MockBean
-    private ChoiceRepository repository;
+    private ChoiceRepository choiceRepository;
 
     private Choice choice;
 
@@ -45,14 +45,14 @@ class ChoiceServiceImplTest {
 
     @Test
     void should_create_choice_in_existing_question() {
-        given(repository.save(any())).willReturn(choice);
+        given(choiceRepository.save(any())).willReturn(choice);
 
-        StepVerifier.create(service.create(Mono.just(choice)))
+        StepVerifier.create(choiceService.create(Mono.just(choice)))
                 .expectNext(choice)
                 .verifyComplete();
 
-        verify(repository, times(1)).save(choice);
-        verifyNoMoreInteractions(repository);
+        verify(choiceRepository, times(1)).save(choice);
+        verifyNoMoreInteractions(choiceRepository);
     }
 
     @Test
@@ -60,26 +60,26 @@ class ChoiceServiceImplTest {
         var choiceId = 1L;
         var questionId = 1L;
         var surveyId = 1L;
-        given(repository.findById(anyLong())).willReturn(Optional.of(choice));
+        given(choiceRepository.findById(anyLong())).willReturn(Optional.of(choice));
 
-        StepVerifier.create(service.deleteById(choiceId, questionId, surveyId))
+        StepVerifier.create(choiceService.deleteById(choiceId, questionId, surveyId))
                 .verifyComplete();
 
-        verify(repository, times(1)).findById(choiceId);
-        verify(repository, times(1)).delete(choice);
-        verifyNoMoreInteractions(repository);
+        verify(choiceRepository, times(1)).findById(choiceId);
+        verify(choiceRepository, times(1)).delete(choice);
+        verifyNoMoreInteractions(choiceRepository);
     }
 
     @Test
     void should_throw_exception_when_choice_not_found_by_id() {
-        given(repository.findById(anyLong())).willReturn(Optional.empty());
+        given(choiceRepository.findById(anyLong())).willReturn(Optional.empty());
 
-        StepVerifier.create(service.deleteById(1L, 2L, 3L))
+        StepVerifier.create(choiceService.deleteById(1L, 2L, 3L))
                 .expectErrorMatches(throwable -> throwable instanceof ChoiceNotFoundException)
                 .verify();
 
-        verify(repository, times(1)).findById(1L);
-        verifyNoMoreInteractions(repository);
+        verify(choiceRepository, times(1)).findById(1L);
+        verifyNoMoreInteractions(choiceRepository);
     }
 
     @Test
@@ -87,14 +87,14 @@ class ChoiceServiceImplTest {
         var choiceId = 1L;
         var questionId = 5L;
         var surveyId = 1L;
-        given(repository.findById(anyLong())).willReturn(Optional.of(choice));
+        given(choiceRepository.findById(anyLong())).willReturn(Optional.of(choice));
 
-        StepVerifier.create(service.deleteById(choiceId, questionId, surveyId))
+        StepVerifier.create(choiceService.deleteById(choiceId, questionId, surveyId))
                 .expectErrorMatches(throwable -> throwable instanceof QuestionNotFoundException)
                 .verify();
 
-        verify(repository, times(1)).findById(1L);
-        verifyNoMoreInteractions(repository);
+        verify(choiceRepository, times(1)).findById(1L);
+        verifyNoMoreInteractions(choiceRepository);
     }
 
     @Test
@@ -102,13 +102,13 @@ class ChoiceServiceImplTest {
         var choiceId = 1L;
         var questionId = 1L;
         var surveyId = 2L;
-        given(repository.findById(anyLong())).willReturn(Optional.of(choice));
+        given(choiceRepository.findById(anyLong())).willReturn(Optional.of(choice));
 
-        StepVerifier.create(service.deleteById(choiceId, questionId, surveyId))
+        StepVerifier.create(choiceService.deleteById(choiceId, questionId, surveyId))
                 .expectErrorMatches(throwable -> throwable instanceof SurveyNotFoundException)
                 .verify();
 
-        verify(repository, times(1)).findById(1L);
-        verifyNoMoreInteractions(repository);
+        verify(choiceRepository, times(1)).findById(1L);
+        verifyNoMoreInteractions(choiceRepository);
     }
 }
