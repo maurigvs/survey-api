@@ -4,6 +4,7 @@ on: workflow_dispatch
 
 jobs:
   build-push-image:
+    name: Docker Build & Push
     uses: maurigvs/ga-self-service/.github/workflows/build-push-image.yml@main
     secrets: inherit
     permissions:
