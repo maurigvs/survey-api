@@ -1,11 +1,11 @@
 name: Docker Pipeline v2
-run-name: Docker Build for ${{ github.ref_name }}
+run-name: Docker Pipeline for ${{ github.ref_name }}
 
 on: push
 
 jobs:
   build-push-image:
-    name: Build and Push Docker Image
+    name: Build and Push
     uses: maurigvs/ga-self-service/.github/workflows/build-push-image.yml@main
     secrets: inherit
     permissions:
