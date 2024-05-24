@@ -1,21 +1,11 @@
 name: Docker Pipeline v2
 
-on:
-  workflow_dispatch:
-    inputs:
-      namespace:
-        description: 'Namespace for the Docker image'
-        required: true
-        default: 'latest'
-
-run-name: ${{ inputs.namespace }}
+on: workflow_dispatch
 
 jobs:
   build-push-image:
     name: Build and Push
     uses: maurigvs/ga-self-service/.github/workflows/build-push-image.yml@main
-    with:
-      namespace: ${{ inputs.namespace }}
     secrets: inherit
     permissions:
       contents: read
