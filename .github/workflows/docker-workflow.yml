@@ -1,6 +1,9 @@
 name: Docker Pipeline
 
-on: push
+on:
+  push:
+    branches-ignore:
+      - master
 
 jobs:
   build-and-publish:
