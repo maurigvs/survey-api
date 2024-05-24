@@ -1,5 +1,5 @@
 name: Docker Pipeline v2
-run-name: Docker Pipeline for ${{ github.ref_name }}
+run-name: Building ${{ github.ref_name }}
 
 on: push
 
