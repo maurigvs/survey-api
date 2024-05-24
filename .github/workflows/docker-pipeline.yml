@@ -4,7 +4,6 @@ on: workflow_dispatch
 
 jobs:
   build-push-image:
-    name: Build and Push
     uses: maurigvs/ga-self-service/.github/workflows/build-push-image.yml@main
     secrets: inherit
     permissions:
