@@ -3,8 +3,7 @@ on: push
 
 jobs:
   docker-hub-publisher:
-    name: Docker Hub
-    uses: maurigvs/ga-self-service/.github/workflows/docker-hub-publisher.yml@main
+    uses: maurigvs/ga-self-service/.github/workflows/docker-hub-publisher.yml@reusing-tag-generator
     secrets: inherit
     permissions:
       contents: write
