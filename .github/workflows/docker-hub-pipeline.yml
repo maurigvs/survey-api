@@ -1,0 +1,10 @@
+name: Docker Hub Pipeline
+on: push
+
+jobs:
+  docker-hub-pipeline:
+    uses: maurigvs/ga-self-service/.github/workflows/docker-hub-pipeline.yml@reusing-tag-generator
+    secrets: inherit
+    permissions:
+      contents: write
+      packages: write
