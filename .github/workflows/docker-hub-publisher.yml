@@ -1,0 +1,10 @@
+name: Docker Hub Publisher
+on: push
+
+jobs:
+  docker-hub-publisher:
+    uses: maurigvs/ga-self-service/.github/workflows/docker-hub-publisher.yml@main
+    secrets: inherit
+    permissions:
+      contents: read
+      packages: write
