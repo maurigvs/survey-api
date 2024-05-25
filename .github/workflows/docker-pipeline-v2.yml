@@ -1,7 +1,6 @@
 name: Docker Pipeline v2
 run-name: Building ${{ github.ref_name }}
-
-on: push
+on: workflow_dispatch
 
 jobs:
   build-push-image:
