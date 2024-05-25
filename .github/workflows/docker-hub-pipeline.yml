@@ -4,7 +4,7 @@ on: push
 jobs:
   docker-hub-pipeline:
     name: Pipeline
-    uses: maurigvs/ga-self-service/.github/workflows/docker-hub-pipeline.yml@breaking-docker-pipeline
+    uses: maurigvs/ga-self-service/.github/workflows/docker-hub-pipeline.yml@main
     secrets: inherit
     permissions:
       contents: write
