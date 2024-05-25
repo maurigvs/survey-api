@@ -3,6 +3,7 @@ on: push
 
 jobs:
   docker-hub-pipeline:
+    name: Pipeline
     uses: maurigvs/ga-self-service/.github/workflows/docker-hub-pipeline.yml@reusing-tag-generator
     secrets: inherit
     permissions:
