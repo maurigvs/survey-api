@@ -11,7 +11,7 @@ import reactor.core.scheduler.Schedulers;
 import java.util.Optional;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-class AbstractCrudService<T, R extends JpaRepository<T, Long>> {
+abstract class AbstractCrudService<T, R extends JpaRepository<T, Long>> {
 
     private final R repository;
     private final Class<?> entity;

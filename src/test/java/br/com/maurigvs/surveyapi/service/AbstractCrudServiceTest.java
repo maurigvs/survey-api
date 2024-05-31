@@ -10,6 +10,8 @@ import reactor.test.StepVerifier;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -55,8 +57,10 @@ abstract class AbstractCrudServiceTest<M, R extends JpaRepository<M, Long>, S ex
         given(repository.findById(anyLong())).willReturn(Optional.empty());
 
         StepVerifier.create(service.findById(id))
-                .expectErrorMatches(throwable -> throwable instanceof NotFoundException &&
-                        throwable.getMessage().equals(message))
+                .expectErrorSatisfies(throwable -> {
+                    var exception = assertInstanceOf(NotFoundException.class, throwable);
+                    assertEquals(message, exception.getMessage());
+                })
                 .verify();
 
         then(repository).should(times(1)).findById(id);
