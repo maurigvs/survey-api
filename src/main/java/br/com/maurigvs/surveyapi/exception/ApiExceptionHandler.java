@@ -23,7 +23,7 @@ public class ApiExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public Mono<ErrorResponse> handleMethodArgumentNotValid(WebExchangeBindException ex){
-        var messages = ex.getFieldErrors().stream().map(error -> ("The field [" + error.getField() + "] " + error.getDefaultMessage())).toList();
+        var messages = ex.getFieldErrors().stream().map(error -> ("The field [" + error.getField() + "] " + error.getDefaultMessage())).toArray(String[]::new);
         return Mono.just(new ErrorResponse(HttpStatus.BAD_REQUEST.getReasonPhrase(), messages));
     }
 }

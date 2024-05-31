@@ -13,8 +13,19 @@ public record AnswerRequest(
         @NotNull
         Long surveyId,
 
-        @Valid
         @NotEmpty
-        List<AnswerItemRequest> answers
+        @Valid
+        List<Item> answers
 ) {
+
+        @Schema
+        public record Item(
+
+                @NotNull
+                Long questionId,
+
+                @NotNull
+                Long choiceId
+        ) {
+        }
 }

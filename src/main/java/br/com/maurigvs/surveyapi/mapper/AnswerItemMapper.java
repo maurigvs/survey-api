@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.mapper;
 
-import br.com.maurigvs.surveyapi.dto.requests.AnswerItemRequest;
+import br.com.maurigvs.surveyapi.dto.requests.AnswerRequest;
 import br.com.maurigvs.surveyapi.exception.ChoiceNotFoundException;
 import br.com.maurigvs.surveyapi.exception.QuestionNotFoundException;
 import br.com.maurigvs.surveyapi.model.Answer;
@@ -11,7 +11,7 @@ import br.com.maurigvs.surveyapi.model.Survey;
 
 import java.util.function.Function;
 
-public class AnswerItemMapper implements Function<AnswerItemRequest, AnswerItem> {
+public class AnswerItemMapper implements Function<AnswerRequest.Item, AnswerItem> {
 
     private final Answer answer;
 
@@ -20,21 +20,21 @@ public class AnswerItemMapper implements Function<AnswerItemRequest, AnswerItem>
     }
 
     @Override
-    public AnswerItem apply(AnswerItemRequest request) {
-        var question = applyQuestion(answer.getSurvey(), request);
-        var choice = applyChoice(question, request);
+    public AnswerItem apply(AnswerRequest.Item item) {
+        var question = applyQuestion(answer.getSurvey(), item);
+        var choice = applyChoice(question, item);
 
         return new AnswerItem(null, question, choice, answer);
     }
 
-    private Question applyQuestion(Survey survey, AnswerItemRequest request) {
+    private Question applyQuestion(Survey survey, AnswerRequest.Item item) {
         return survey.getQuestions().stream()
-                .filter(question -> question.getId().equals(request.questionId()))
+                .filter(question -> question.getId().equals(item.questionId()))
                 .findFirst()
-                .orElseThrow(() -> new QuestionNotFoundException(request.questionId()));
+                .orElseThrow(() -> new QuestionNotFoundException(item.questionId()));
     }
 
-    private Choice applyChoice(Question question, AnswerItemRequest request) {
+    private Choice applyChoice(Question question, AnswerRequest.Item request) {
         return question.getChoices().stream()
                 .filter(choice -> choice.getId().equals(request.choiceId()))
                 .findFirst()

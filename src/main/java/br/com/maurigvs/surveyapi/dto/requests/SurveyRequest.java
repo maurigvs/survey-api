@@ -13,8 +13,8 @@ public record SurveyRequest(
         @NotBlank
         String survey,
 
-        @Valid
         @NotEmpty
+        @Valid
         List<QuestionRequest> questions
 ) {
 }

@@ -1,6 +1,5 @@
 package br.com.maurigvs.surveyapi.mocks;
 
-import br.com.maurigvs.surveyapi.dto.requests.AnswerItemRequest;
 import br.com.maurigvs.surveyapi.dto.requests.AnswerRequest;
 import br.com.maurigvs.surveyapi.dto.requests.ChoiceRequest;
 import br.com.maurigvs.surveyapi.dto.requests.QuestionRequest;
@@ -131,12 +130,12 @@ public class MockData {
 
     public static AnswerRequest ofAnswerRequest() {
         return new AnswerRequest(1L, List.of(
-                new AnswerItemRequest(1L,2L),
-                new AnswerItemRequest(2L,7L)
+                new AnswerRequest.Item(1L,2L),
+                new AnswerRequest.Item(2L,7L)
         ));
     }
 
-    public static AnswerItemRequest ofAnswerRequestItem() {
+    public static AnswerRequest.Item ofAnswerRequestItem() {
         return ofAnswerRequest().answers().get(0);
     }
 
