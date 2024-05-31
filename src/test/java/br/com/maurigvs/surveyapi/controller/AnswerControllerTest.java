@@ -1,7 +1,8 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
+import br.com.maurigvs.surveyapi.exception.NotFoundException;
 import br.com.maurigvs.surveyapi.mocks.MockData;
+import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.service.AnswerService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -49,11 +50,11 @@ class AnswerControllerTest {
     @Test
     void should_return_error_when_post_answer() {
         var answerRequestMono = Mono.just(MockData.ofAnswerRequest());
-        given(surveyService.findById(1L)).willReturn(Mono.error(new SurveyNotFoundException(1L)));
+        given(surveyService.findById(1L)).willReturn(Mono.error(new NotFoundException(Survey.class, 1L)));
 
         StepVerifier.create(answerController.postAnswer(1L, answerRequestMono))
                 .expectErrorMatches(throwable ->
-                        throwable instanceof SurveyNotFoundException &&
+                        throwable instanceof NotFoundException &&
                         throwable.getMessage().equals("Survey not found by Id 1"))
                 .verify();
 

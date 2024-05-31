@@ -1,9 +1,9 @@
 package br.com.maurigvs.surveyapi.service.impl;
 
-import br.com.maurigvs.surveyapi.exception.ChoiceNotFoundException;
-import br.com.maurigvs.surveyapi.exception.QuestionNotFoundException;
-import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
+import br.com.maurigvs.surveyapi.exception.NotFoundException;
 import br.com.maurigvs.surveyapi.model.Choice;
+import br.com.maurigvs.surveyapi.model.Question;
+import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.repository.ChoiceRepository;
 import br.com.maurigvs.surveyapi.service.ChoiceService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class ChoiceServiceImpl implements ChoiceService {
         return Mono.fromSupplier(() -> repository.findById(choiceId))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .switchIfEmpty(Mono.error(new ChoiceNotFoundException(choiceId)))
+                .switchIfEmpty(Mono.error(new NotFoundException(Choice.class, choiceId)))
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
@@ -38,9 +38,9 @@ public class ChoiceServiceImpl implements ChoiceService {
     public Mono<Void> deleteById(Long choiceId, Long questionId, Long surveyId) {
         return findById(choiceId)
                 .filter(choice -> choice.getQuestion().getId().equals(questionId))
-                .switchIfEmpty(Mono.error(new QuestionNotFoundException(questionId)))
+                .switchIfEmpty(Mono.error(new NotFoundException(Question.class, questionId)))
                 .filter(choice -> choice.getQuestion().getSurvey().getId().equals(surveyId))
-                .switchIfEmpty(Mono.error(new SurveyNotFoundException(surveyId)))
+                .switchIfEmpty(Mono.error(new NotFoundException(Survey.class, surveyId)))
                 .doOnNext(repository::delete)
                 .then()
                 .subscribeOn(Schedulers.boundedElastic());

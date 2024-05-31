@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.service.impl;
 
-import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
+import br.com.maurigvs.surveyapi.exception.NotFoundException;
 import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.repository.SurveyRepository;
 import br.com.maurigvs.surveyapi.service.SurveyService;
@@ -30,7 +30,7 @@ public class SurveyServiceImpl implements SurveyService {
         return Mono.fromSupplier(() -> repository.findById(surveyId))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .switchIfEmpty(Mono.error(new SurveyNotFoundException(surveyId)))
+                .switchIfEmpty(Mono.error(new NotFoundException(Survey.class, surveyId)))
                 .subscribeOn(Schedulers.boundedElastic());
     }
 

@@ -1,8 +1,6 @@
 package br.com.maurigvs.surveyapi.service.impl;
 
-import br.com.maurigvs.surveyapi.exception.ChoiceNotFoundException;
-import br.com.maurigvs.surveyapi.exception.QuestionNotFoundException;
-import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
+import br.com.maurigvs.surveyapi.exception.NotFoundException;
 import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.repository.ChoiceRepository;
@@ -75,7 +73,8 @@ class ChoiceServiceImplTest {
         given(choiceRepository.findById(anyLong())).willReturn(Optional.empty());
 
         StepVerifier.create(choiceService.deleteById(1L, 2L, 3L))
-                .expectErrorMatches(throwable -> throwable instanceof ChoiceNotFoundException)
+                .expectErrorMatches(throwable -> throwable instanceof NotFoundException &&
+                        throwable.getMessage().equals("Choice not found by Id 1"))
                 .verify();
 
         verify(choiceRepository, times(1)).findById(1L);
@@ -90,7 +89,8 @@ class ChoiceServiceImplTest {
         given(choiceRepository.findById(anyLong())).willReturn(Optional.of(choice));
 
         StepVerifier.create(choiceService.deleteById(choiceId, questionId, surveyId))
-                .expectErrorMatches(throwable -> throwable instanceof QuestionNotFoundException)
+                .expectErrorMatches(throwable -> throwable instanceof NotFoundException &&
+                        throwable.getMessage().equals("Question not found by Id 5"))
                 .verify();
 
         verify(choiceRepository, times(1)).findById(1L);
@@ -105,7 +105,8 @@ class ChoiceServiceImplTest {
         given(choiceRepository.findById(anyLong())).willReturn(Optional.of(choice));
 
         StepVerifier.create(choiceService.deleteById(choiceId, questionId, surveyId))
-                .expectErrorMatches(throwable -> throwable instanceof SurveyNotFoundException)
+                .expectErrorMatches(throwable -> throwable instanceof NotFoundException &&
+                        throwable.getMessage().equals("Survey not found by Id 2"))
                 .verify();
 
         verify(choiceRepository, times(1)).findById(1L);

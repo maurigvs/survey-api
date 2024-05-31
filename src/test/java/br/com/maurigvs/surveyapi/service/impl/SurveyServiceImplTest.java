@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.service.impl;
 
-import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
+import br.com.maurigvs.surveyapi.exception.NotFoundException;
 import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.repository.SurveyRepository;
@@ -112,7 +112,7 @@ class SurveyServiceImplTest {
 
         StepVerifier.create(surveyService.findById(surveyId))
                 .expectErrorMatches(throwable ->
-                        throwable instanceof SurveyNotFoundException &&
+                        throwable instanceof NotFoundException &&
                         throwable.getMessage().equals("Survey not found by Id 1"))
                 .verify();
 

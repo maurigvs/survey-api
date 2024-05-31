@@ -1,7 +1,6 @@
 package br.com.maurigvs.surveyapi.service.impl;
 
-import br.com.maurigvs.surveyapi.exception.QuestionNotFoundException;
-import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
+import br.com.maurigvs.surveyapi.exception.NotFoundException;
 import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.repository.QuestionRepository;
@@ -73,7 +72,8 @@ class QuestionServiceImplTest {
         given(questionRepository.findById(anyLong())).willReturn(Optional.empty());
 
         StepVerifier.create(questionService.deleteById(1L, 2L))
-                .expectErrorMatches(throwable -> throwable instanceof QuestionNotFoundException)
+                .expectErrorMatches(throwable -> throwable instanceof NotFoundException &&
+                        throwable.getMessage().equals("Question not found by Id 1"))
                 .verify();
 
         verify(questionRepository, times(1)).findById(1L);
@@ -87,7 +87,8 @@ class QuestionServiceImplTest {
         given(questionRepository.findById(anyLong())).willReturn(Optional.of(question));
 
         StepVerifier.create(questionService.deleteById(questionId, surveyId))
-                .expectErrorMatches(throwable -> throwable instanceof SurveyNotFoundException)
+                .expectErrorMatches(throwable -> throwable instanceof NotFoundException &&
+                        throwable.getMessage().equals("Survey not found by Id 2"))
                 .verify();
 
         verify(questionRepository, times(1)).findById(1L);
