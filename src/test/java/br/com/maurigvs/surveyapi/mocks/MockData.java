@@ -5,23 +5,18 @@ import br.com.maurigvs.surveyapi.dto.requests.AnswerRequest;
 import br.com.maurigvs.surveyapi.dto.requests.ChoiceRequest;
 import br.com.maurigvs.surveyapi.dto.requests.QuestionRequest;
 import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
-import br.com.maurigvs.surveyapi.dto.requests.UserRequest;
 import br.com.maurigvs.surveyapi.dto.responses.AnswerResponse;
 import br.com.maurigvs.surveyapi.dto.responses.QuestionResponse;
 import br.com.maurigvs.surveyapi.dto.responses.SurveyResponse;
-import br.com.maurigvs.surveyapi.dto.responses.UserCreatedResponse;
-import br.com.maurigvs.surveyapi.mapper.LocalDateTimeMapper;
 import br.com.maurigvs.surveyapi.model.Answer;
 import br.com.maurigvs.surveyapi.model.AnswerItem;
 import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.model.Survey;
-import br.com.maurigvs.surveyapi.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -157,30 +152,5 @@ public class MockData {
                         2L, new QuestionResponse("Were you satisfied with your Christmas presents?",
                                 Map.of(7L, "Neither satisfied or dissatisfied"))
                 ));
-    }
-
-    public static UserRequest ofUserRequest() {
-        return new UserRequest(
-                "John Snow",
-                "john.snow@gmail.com",
-                "snowjon1986");
-    }
-
-    private static User ofUser(LocalDateTime createdAt) {
-        return new User(null,
-                "John Snow",
-                "john.snow@gmail.com",
-                "john.snow",
-                "snowjon1986",
-                createdAt);
-    }
-
-    public static User ofUser() {
-        return ofUser(LocalDateTime.now());
-    }
-
-    public static UserCreatedResponse ofUserCreatedResponse(LocalDateTime createdAt) {
-        var createdAtString = new LocalDateTimeMapper().apply(createdAt);
-        return new UserCreatedResponse("john.snow", createdAtString);
     }
 }
