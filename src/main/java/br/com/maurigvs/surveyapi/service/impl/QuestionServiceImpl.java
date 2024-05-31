@@ -5,6 +5,7 @@ import br.com.maurigvs.surveyapi.exception.SurveyNotFoundException;
 import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.repository.QuestionRepository;
 import br.com.maurigvs.surveyapi.service.QuestionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -12,13 +13,10 @@ import reactor.core.scheduler.Schedulers;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository repository;
-
-    public QuestionServiceImpl(QuestionRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public Mono<Question> create(Mono<Question> questionMono) {

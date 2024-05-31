@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,15 +22,11 @@ import reactor.core.publisher.Mono;
 @Tag(name = "choice")
 @RestController
 @RequestMapping("/survey/{surveyId}/question/{questionId}/choice")
+@RequiredArgsConstructor
 public class ChoiceController {
 
     private final ChoiceService choiceService;
     private final QuestionService questionService;
-
-    public ChoiceController(ChoiceService choiceService, QuestionService questionService) {
-        this.choiceService = choiceService;
-        this.questionService = questionService;
-    }
 
     @Operation(summary = "create a new choice to a question")
     @ApiResponses(value = {

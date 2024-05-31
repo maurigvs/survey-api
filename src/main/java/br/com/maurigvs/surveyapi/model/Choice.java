@@ -9,13 +9,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Choice implements Serializable {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Getter
+public class Choice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,28 +36,4 @@ public class Choice implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "choice", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<AnswerItem> answerItems = new ArrayList<>();
 
-    public Choice(Long id, String title, Question question) {
-        this.id = id;
-        this.title = title;
-        this.question = question;
-    }
-
-    protected Choice() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Question getQuestion() {
-        return question;
-    }
-
-    public List<AnswerItem> getAnswerItems() {
-        return answerItems;
-    }
 }

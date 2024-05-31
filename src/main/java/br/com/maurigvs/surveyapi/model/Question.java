@@ -9,13 +9,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Question implements Serializable {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Getter
+public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,32 +39,4 @@ public class Question implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<AnswerItem> answerItems = new ArrayList<>();
 
-    public Question(Long id, String title, Survey survey) {
-        this.id = id;
-        this.title = title;
-        this.survey = survey;
-    }
-
-    protected Question() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public List<Choice> getChoices() {
-        return choices;
-    }
-
-    public Survey getSurvey() {
-        return survey;
-    }
-
-    public List<AnswerItem> getAnswerItems() {
-        return answerItems;
-    }
 }
