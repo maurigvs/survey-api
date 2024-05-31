@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,12 +37,9 @@ public class QuestionController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Void> postQuestion(@PathVariable Long surveyId,
-                                   @RequestBody Mono<QuestionRequest> requestMono){
-        return surveyService
-                .findById(surveyId)
-                .zipWith(requestMono)
-                .map(tuple -> QuestionMapper.toEntity(tuple.getT2(), tuple.getT1()))
-                .map(Mono::just)
+                                   @RequestBody @Valid QuestionRequest request){
+        return surveyService.findById(surveyId)
+                .map(survey -> QuestionMapper.toEntity(request, survey))
                 .flatMap(questionService::create)
                 .then();
     }
@@ -55,6 +53,6 @@ public class QuestionController {
     @ResponseStatus(HttpStatus.OK)
     public Mono<Void> deleteQuestionById(@PathVariable Long surveyId,
                                          @PathVariable Long questionId){
-        return questionService.deleteById(questionId, surveyId);
+        return questionService.deleteById(questionId);
     }
 }

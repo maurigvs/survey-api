@@ -30,8 +30,9 @@ class SurveyControllerIT {
 
     @Test
     void should_return_Created_when_post_survey() {
-        var surveyRequestMono = Mono.just(MockData.ofSurveyRequest());
-        given(surveyController.postSurvey(surveyRequestMono)).willReturn(Mono.empty());
+        SurveyRequest surveyRequest = MockData.ofSurveyRequest();
+        var surveyRequestMono = Mono.just(surveyRequest);
+        given(surveyController.postSurvey(surveyRequest)).willReturn(Mono.empty());
 
         webTestClient.post()
                 .uri("/survey")

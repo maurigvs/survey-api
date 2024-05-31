@@ -31,8 +31,9 @@ class AnswerControllerIT {
 
     @Test
     void should_return_Created_when_post_answer() {
-        var answerRequestMono = Mono.just(MockData.ofAnswerRequest());
-        given(answerController.postAnswer(1L, answerRequestMono)).willReturn(Mono.empty());
+        AnswerRequest answerRequest = MockData.ofAnswerRequest();
+        var answerRequestMono = Mono.just(answerRequest);
+        given(answerController.postAnswer(1L, answerRequest)).willReturn(Mono.empty());
 
         webTestClient.post()
                 .uri("/survey/1/answer")

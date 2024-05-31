@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,12 +39,10 @@ public class AnswerController {
     @PostMapping("/survey/{surveyId}/answer")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Void> postAnswer(@PathVariable Long surveyId,
-                                 @RequestBody Mono<AnswerRequest> requestMono){
+                                 @RequestBody @Valid AnswerRequest request){
 
         return surveyService.findById(surveyId)
-                .zipWith(requestMono)
-                .map(tuple -> AnswerMapper.toEntity(tuple.getT2(), tuple.getT1()))
-                .map(Mono::just)
+                .map(survey -> AnswerMapper.toEntity(request, survey))
                 .flatMap(answerService::create)
                 .then();
     }

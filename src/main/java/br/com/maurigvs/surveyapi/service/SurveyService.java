@@ -1,16 +1,13 @@
 package br.com.maurigvs.surveyapi.service;
 
 import br.com.maurigvs.surveyapi.model.Survey;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import br.com.maurigvs.surveyapi.repository.SurveyRepository;
+import org.springframework.stereotype.Service;
 
-public interface SurveyService {
+@Service
+public class SurveyService extends AbstractCrudService<Survey, SurveyRepository> {
 
-    Mono<Survey> create(Mono<Survey> surveyMono);
-
-    Mono<Survey> findById(Long surveyId);
-
-    Flux<Survey> findAll();
-
-    Mono<Void> deleteById(Long surveyId);
+    public SurveyService(SurveyRepository repository) {
+        super(repository, Survey.class);
+    }
 }

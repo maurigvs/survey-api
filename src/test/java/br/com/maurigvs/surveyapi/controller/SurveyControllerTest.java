@@ -1,5 +1,6 @@
 package br.com.maurigvs.surveyapi.controller;
 
+import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
 import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -30,11 +31,11 @@ class SurveyControllerTest {
 
     @Test
     void should_return_Created_when_post_survey(){
-        var surveyRequestMono = Mono.just(MockData.ofSurveyRequest());
+        SurveyRequest surveyRequest = MockData.ofSurveyRequest();
         var surveyMono = Mono.just(MockData.ofSurvey());
         given(surveyService.create(any())).willReturn(surveyMono);
 
-        StepVerifier.create(surveyController.postSurvey(surveyRequestMono))
+        StepVerifier.create(surveyController.postSurvey(surveyRequest))
                 .verifyComplete();
 
         verify(surveyService, times(1)).create(any());

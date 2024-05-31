@@ -1,11 +1,13 @@
 package br.com.maurigvs.surveyapi.service;
 
 import br.com.maurigvs.surveyapi.model.Choice;
-import reactor.core.publisher.Mono;
+import br.com.maurigvs.surveyapi.repository.ChoiceRepository;
+import org.springframework.stereotype.Service;
 
-public interface ChoiceService {
+@Service
+public class ChoiceService extends AbstractCrudService<Choice, ChoiceRepository> {
 
-    Mono<Choice> create(Mono<Choice> choiceMono);
-
-    Mono<Void> deleteById(Long choiceId, Long questionId, Long surveyId);
+    public ChoiceService(ChoiceRepository repository) {
+        super(repository, Choice.class);
+    }
 }

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,11 +38,9 @@ public class ChoiceController {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Void> postChoice(@PathVariable Long surveyId,
                                  @PathVariable Long questionId,
-                                 @RequestBody Mono<ChoiceRequest> requestMono){
+                                 @RequestBody @Valid ChoiceRequest request){
         return questionService.findById(questionId)
-                .zipWith(requestMono)
-                .map(tuple -> ChoiceMapper.toEntity(tuple.getT2(), tuple.getT1()))
-                .map(Mono::just)
+                .map(question -> ChoiceMapper.toEntity(request, question))
                 .flatMap(choiceService::create)
                 .then();
     }
@@ -56,6 +55,6 @@ public class ChoiceController {
     public Mono<Void> deleteChoiceById(@PathVariable Long surveyId,
                                        @PathVariable Long questionId,
                                        @PathVariable Long choiceId){
-        return choiceService.deleteById(choiceId, questionId, surveyId);
+        return choiceService.deleteById(choiceId);
     }
 }

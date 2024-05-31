@@ -37,10 +37,8 @@ public class SurveyController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Void> postSurvey(@RequestBody @Valid Mono<SurveyRequest> requestMono){
-        return requestMono
-                .map(SurveyMapper::toEntity)
-                .map(Mono::just)
+    public Mono<Void> postSurvey(@RequestBody @Valid SurveyRequest request){
+        return Mono.just(request).map(SurveyMapper::toEntity)
                 .flatMap(surveyService::create)
                 .then();
     }

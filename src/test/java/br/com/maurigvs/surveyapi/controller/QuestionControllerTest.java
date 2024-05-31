@@ -1,6 +1,7 @@
 package br.com.maurigvs.surveyapi.controller;
 
 import br.com.maurigvs.surveyapi.mocks.MockData;
+import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.service.QuestionService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -37,26 +38,26 @@ class QuestionControllerTest {
     void should_return_Created_when_add_question_to_existing_survey() throws Exception {
         var surveyMono = Mono.just(MockData.ofSurvey());
         var questionMono = Mono.just(MockData.ofQuestion());
-        var questionRequestMono = Mono.just(MockData.ofQuestionRequest());
+        var questionRequest = MockData.ofQuestionRequest();
         given(surveyService.findById(1L)).willReturn(surveyMono);
         given(questionService.create(any())).willReturn(questionMono);
         
-        StepVerifier.create(questionController.postQuestion(1L, questionRequestMono))
+        StepVerifier.create(questionController.postQuestion(1L, questionRequest))
                 .verifyComplete();
 
         verify(surveyService, times(1)).findById(1L);
-        verify(questionService, times(1)).create(any(Mono.class));
+        verify(questionService, times(1)).create(any(Question.class));
         verifyNoMoreInteractions(surveyService, questionService);
     }
 
     @Test
     void should_return_OK_when_delete_question_from_existing_survey() throws Exception {
-        given(questionService.deleteById(anyLong(), anyLong())).willReturn(Mono.empty());
+        given(questionService.deleteById(anyLong())).willReturn(Mono.empty());
 
         StepVerifier.create(questionController.deleteQuestionById(1L, 2L))
                 .verifyComplete();
 
-        verify(questionService, times(1)).deleteById(2L,1L);
+        verify(questionService, times(1)).deleteById(2L);
         verifyNoMoreInteractions(questionService);
         verifyNoInteractions(surveyService);
     }

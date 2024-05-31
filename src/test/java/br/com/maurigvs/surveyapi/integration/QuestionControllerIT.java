@@ -29,8 +29,9 @@ class QuestionControllerIT {
 
     @Test
     void should_return_Created_when_add_question_to_existing_survey(){
-        var questionRequestMono = Mono.just(MockData.ofQuestionRequest());
-        given(questionController.postQuestion(1L, questionRequestMono)).willReturn(Mono.empty());
+        QuestionRequest questionRequest = MockData.ofQuestionRequest();
+        var questionRequestMono = Mono.just(questionRequest);
+        given(questionController.postQuestion(1L, questionRequest)).willReturn(Mono.empty());
 
         webTestClient.post()
                 .uri("/survey/1/question")

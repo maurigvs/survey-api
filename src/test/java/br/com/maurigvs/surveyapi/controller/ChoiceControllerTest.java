@@ -36,22 +36,22 @@ class ChoiceControllerTest {
     void should_return_Created_when_add_choice_to_existing_question() throws Exception {
         var choiceMono = Mono.just(MockData.ofChoice());
         var questionMono = Mono.just(MockData.ofQuestion());
-        var choiceRequestMono = Mono.just(MockData.ofChoiceRequest());
+        var choiceRequest = MockData.ofChoiceRequest();
         given(questionService.findById(1L)).willReturn(questionMono);
         given(choiceService.create(any())).willReturn(choiceMono);
 
-        StepVerifier.create(choiceController.postChoice(1L ,1L, choiceRequestMono))
+        StepVerifier.create(choiceController.postChoice(1L ,1L, choiceRequest))
                 .verifyComplete();
     }
 
     @Test
     void should_return_OK_when_delete_choice_from_existing_question() throws Exception {
-        given(choiceService.deleteById(2L,1L,1L)).willReturn(Mono.empty());
+        given(choiceService.deleteById(2L)).willReturn(Mono.empty());
 
         StepVerifier.create(choiceController.deleteChoiceById(1L,1L,2L))
                 .verifyComplete();
 
-        verify(choiceService, times(1)).deleteById(2L,1L, 1L);
+        verify(choiceService, times(1)).deleteById(2L);
         verifyNoMoreInteractions(choiceService);
         verifyNoInteractions(questionService);
     }

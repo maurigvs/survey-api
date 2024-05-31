@@ -29,8 +29,9 @@ class ChoiceControllerIT {
 
     @Test
     void should_return_Created_when_add_choice_to_existing_question() throws Exception {
-        var choiceRequestMono = Mono.just(MockData.ofChoiceRequest());
-        given(choiceController.postChoice(1L,1L,choiceRequestMono)).willReturn(Mono.empty());
+        var choiceRequest = MockData.ofChoiceRequest();
+        var choiceRequestMono = Mono.just(choiceRequest);
+        given(choiceController.postChoice(1L,1L, choiceRequest)).willReturn(Mono.empty());
 
         webTestClient.post()
                 .uri("/survey/1/question/1/choice")
