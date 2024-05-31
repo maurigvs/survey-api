@@ -1,25 +1,27 @@
 package br.com.maurigvs.surveyapi.mapper;
 
-import br.com.maurigvs.surveyapi.dto.requests.QuestionRequest;
 import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
+import br.com.maurigvs.surveyapi.dto.responses.SurveyResponse;
+import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.model.Survey;
 
-import java.util.List;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
-public class SurveyMapper implements Function<SurveyRequest, Survey> {
+public final class SurveyMapper {
 
-    @Override
-    public Survey apply(SurveyRequest request) {
+    public static Survey toEntity(SurveyRequest request) {
         var survey = new Survey(null, request.survey());
-        applyQuestions(survey, request.questions());
+        var questionList = request.questions().stream()
+                .map(qr -> QuestionMapper.toEntity(qr, survey)).toList();
+        survey.getQuestions().addAll(questionList);
 
         return survey;
     }
 
-    private void applyQuestions(Survey survey, List<QuestionRequest> questions) {
-        survey.getQuestions().addAll(
-            questions.stream().map(new QuestionMapper(survey)).toList()
-        );
+    public static SurveyResponse toResponse(Survey survey){
+        var questionMap = survey.getQuestions().stream()
+                .collect(Collectors.toMap(Question::getId, QuestionMapper::toResponse));
+
+        return new SurveyResponse(survey.getId(), survey.getTitle(), questionMap);
     }
 }

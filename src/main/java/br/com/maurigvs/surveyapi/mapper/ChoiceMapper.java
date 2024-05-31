@@ -1,20 +1,16 @@
 package br.com.maurigvs.surveyapi.mapper;
 
+import br.com.maurigvs.surveyapi.dto.requests.ChoiceRequest;
 import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.model.Question;
 
-import java.util.function.Function;
+public final class ChoiceMapper {
 
-public class ChoiceMapper implements Function<String, Choice> {
-
-    private final Question question;
-
-    public ChoiceMapper(Question question) {
-        this.question = question;
+    public static Choice toEntity(ChoiceRequest request, Question question) {
+        return toEntity(request.choice(), question);
     }
 
-    @Override
-    public Choice apply(String choice) {
-        return new Choice(null, choice, question);
+    public static Choice toEntity(String title, Question question) {
+        return new Choice(null, title, question);
     }
 }

@@ -40,7 +40,7 @@ public class QuestionController {
         return surveyService
                 .findById(surveyId)
                 .zipWith(requestMono)
-                .map(tuple -> new QuestionMapper(tuple.getT1()).apply(tuple.getT2()))
+                .map(tuple -> QuestionMapper.toEntity(tuple.getT2(), tuple.getT1()))
                 .map(Mono::just)
                 .flatMap(questionService::create)
                 .then();

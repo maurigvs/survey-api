@@ -3,7 +3,6 @@ package br.com.maurigvs.surveyapi.controller;
 import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
 import br.com.maurigvs.surveyapi.dto.responses.SurveyResponse;
 import br.com.maurigvs.surveyapi.mapper.SurveyMapper;
-import br.com.maurigvs.surveyapi.mapper.SurveyResponseMapper;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -40,7 +39,7 @@ public class SurveyController {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Void> postSurvey(@RequestBody @Valid Mono<SurveyRequest> requestMono){
         return requestMono
-                .map(new SurveyMapper())
+                .map(SurveyMapper::toEntity)
                 .map(Mono::just)
                 .flatMap(surveyService::create)
                 .then();
@@ -55,6 +54,6 @@ public class SurveyController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Flux<SurveyResponse> findAllSurveys(){
-        return surveyService.findAll().map(new SurveyResponseMapper());
+        return surveyService.findAll().map(SurveyMapper::toResponse);
     }
 }

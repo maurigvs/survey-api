@@ -3,7 +3,6 @@ package br.com.maurigvs.surveyapi.controller;
 import br.com.maurigvs.surveyapi.dto.requests.AnswerRequest;
 import br.com.maurigvs.surveyapi.dto.responses.AnswerResponse;
 import br.com.maurigvs.surveyapi.mapper.AnswerMapper;
-import br.com.maurigvs.surveyapi.mapper.AnswerResponseMapper;
 import br.com.maurigvs.surveyapi.service.AnswerService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,7 +42,7 @@ public class AnswerController {
 
         return surveyService.findById(surveyId)
                 .zipWith(requestMono)
-                .map(tuple -> new AnswerMapper(tuple.getT1()).apply(tuple.getT2()))
+                .map(tuple -> AnswerMapper.toEntity(tuple.getT2(), tuple.getT1()))
                 .map(Mono::just)
                 .flatMap(answerService::create)
                 .then();
@@ -58,6 +57,6 @@ public class AnswerController {
     @GetMapping("/survey/answer")
     @ResponseStatus(HttpStatus.OK)
     public Flux<AnswerResponse> findAllAnswers(){
-        return answerService.findAll().map(new AnswerResponseMapper());
+        return answerService.findAll().map(AnswerMapper::toResponse);
     }
 }

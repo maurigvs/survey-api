@@ -40,7 +40,7 @@ public class ChoiceController {
                                  @RequestBody Mono<ChoiceRequest> requestMono){
         return questionService.findById(questionId)
                 .zipWith(requestMono)
-                .map(tuple -> new ChoiceMapper(tuple.getT1()).apply(tuple.getT2().choice()))
+                .map(tuple -> ChoiceMapper.toEntity(tuple.getT2(), tuple.getT1()))
                 .map(Mono::just)
                 .flatMap(choiceService::create)
                 .then();
