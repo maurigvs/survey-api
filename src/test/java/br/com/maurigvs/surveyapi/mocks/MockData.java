@@ -7,6 +7,7 @@ import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
 import br.com.maurigvs.surveyapi.dto.responses.AnswerResponse;
 import br.com.maurigvs.surveyapi.dto.responses.QuestionResponse;
 import br.com.maurigvs.surveyapi.dto.responses.SurveyResponse;
+import br.com.maurigvs.surveyapi.mapper.QuestionMapper;
 import br.com.maurigvs.surveyapi.model.Answer;
 import br.com.maurigvs.surveyapi.model.AnswerItem;
 import br.com.maurigvs.surveyapi.model.Choice;
@@ -151,5 +152,9 @@ public class MockData {
                         2L, new QuestionResponse("Were you satisfied with your Christmas presents?",
                                 Map.of(7L, "Neither satisfied or dissatisfied"))
                 ));
+    }
+
+    public static QuestionResponse ofQuestionResponse() {
+        return QuestionMapper.toResponse(ofQuestion());
     }
 }

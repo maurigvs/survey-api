@@ -46,7 +46,7 @@ class SurveyControllerIT {
     @Test
     void should_return_OK_when_get_survey_list() {
         var surveyResponseFlux = Flux.just(MockData.ofSurveyResponse());
-        given(surveyController.findAllSurveys()).willReturn(surveyResponseFlux);
+        given(surveyController.getSurveyList()).willReturn(surveyResponseFlux);
 
         webTestClient.get()
                 .uri("/survey")

@@ -44,7 +44,7 @@ class QuestionControllerIT {
 
     @Test
     void should_return_OK_when_delete_question_from_existing_survey() {
-        given(questionController.deleteQuestionById(1L, 2L)).willReturn(Mono.empty());
+        given(questionController.deleteQuestion(1L, 2L)).willReturn(Mono.empty());
 
         webTestClient.delete()
                 .uri("/survey/1/question/2")

@@ -2,8 +2,7 @@ package br.com.maurigvs.surveyapi.controller;
 
 import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
 import br.com.maurigvs.surveyapi.dto.responses.SurveyResponse;
-import br.com.maurigvs.surveyapi.mapper.SurveyMapper;
-import br.com.maurigvs.surveyapi.service.SurveyService;
+import br.com.maurigvs.surveyapi.service.AggregatorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,7 +27,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class SurveyController {
 
-    private final SurveyService surveyService;
+    private final AggregatorService service;
 
     @Operation(summary = "create a new survey")
     @ApiResponses(value = {
@@ -37,10 +36,8 @@ public class SurveyController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Void> postSurvey(@RequestBody @Valid SurveyRequest request){
-        return Mono.just(request).map(SurveyMapper::toEntity)
-                .flatMap(surveyService::create)
-                .then();
+    public Mono<SurveyResponse> postSurvey(@RequestBody @Valid SurveyRequest request){
+        return service.createSurvey(request);
     }
 
     @Operation(summary = "list of all surveys")
@@ -51,7 +48,7 @@ public class SurveyController {
     })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Flux<SurveyResponse> findAllSurveys(){
-        return surveyService.findAll().map(SurveyMapper::toResponse);
+    public Flux<SurveyResponse> getSurveyList(){
+        return service.findAllSurveys();
     }
 }

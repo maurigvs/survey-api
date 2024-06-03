@@ -44,7 +44,7 @@ class ChoiceControllerIT {
 
     @Test
     void should_return_OK_when_delete_choice_from_existing_question() throws Exception {
-        given(choiceController.deleteChoiceById(1L,1L,2L)).willReturn(Mono.empty());
+        given(choiceController.deleteChoice(1L,1L,2L)).willReturn(Mono.empty());
 
         webTestClient.delete()
                 .uri("/survey/1/question/1/choice/2")

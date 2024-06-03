@@ -24,18 +24,18 @@ import static org.mockito.BDDMockito.given;
 class AnswerControllerIT {
 
     @Autowired
-    private WebTestClient webTestClient;
+    private WebTestClient webClient;
 
     @MockBean
-    private AnswerController answerController;
+    private AnswerController controller;
 
     @Test
     void should_return_Created_when_post_answer() {
         AnswerRequest answerRequest = MockData.ofAnswerRequest();
         var answerRequestMono = Mono.just(answerRequest);
-        given(answerController.postAnswer(1L, answerRequest)).willReturn(Mono.empty());
+        given(controller.postAnswer(1L, answerRequest)).willReturn(Mono.empty());
 
-        webTestClient.post()
+        webClient.post()
                 .uri("/survey/1/answer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(answerRequestMono, AnswerRequest.class)
@@ -48,9 +48,9 @@ class AnswerControllerIT {
     void should_return_Ok_when_get_answers() {
         var answerResponse = MockData.ofAnswerResponse();
         var answerResponseFlux = Flux.just(MockData.ofAnswerResponse());
-        given(answerController.findAllAnswers()).willReturn(answerResponseFlux);
+        given(controller.getAnswerList()).willReturn(answerResponseFlux);
 
-        webTestClient.get()
+        webClient.get()
                 .uri("/survey/answer")
                 .exchange()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)

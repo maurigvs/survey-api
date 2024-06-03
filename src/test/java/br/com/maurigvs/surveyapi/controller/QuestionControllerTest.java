@@ -1,9 +1,7 @@
 package br.com.maurigvs.surveyapi.controller;
 
 import br.com.maurigvs.surveyapi.mocks.MockData;
-import br.com.maurigvs.surveyapi.model.Question;
-import br.com.maurigvs.surveyapi.service.QuestionService;
-import br.com.maurigvs.surveyapi.service.SurveyService;
+import br.com.maurigvs.surveyapi.service.AggregatorService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -16,49 +14,33 @@ import reactor.test.StepVerifier;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @SpringBootTest(classes = {QuestionController.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class QuestionControllerTest {
 
     @Autowired
-    private QuestionController questionController;
+    private QuestionController controller;
 
     @MockBean
-    private SurveyService surveyService;
-
-    @MockBean
-    private QuestionService questionService;
+    private AggregatorService service;
 
     @Test
-    void should_return_Created_when_add_question_to_existing_survey() throws Exception {
-        var surveyMono = Mono.just(MockData.ofSurvey());
-        var questionMono = Mono.just(MockData.ofQuestion());
+    void should_return_Created_when_add_question_to_existing_survey() {
         var questionRequest = MockData.ofQuestionRequest();
-        given(surveyService.findById(1L)).willReturn(surveyMono);
-        given(questionService.create(any())).willReturn(questionMono);
+        var questionResponse = MockData.ofQuestionResponse();
+        given(service.createQuestion(anyLong(), any())).willReturn(Mono.just(questionResponse));
         
-        StepVerifier.create(questionController.postQuestion(1L, questionRequest))
+        StepVerifier.create(controller.postQuestion(1L, questionRequest))
+                .expectNext(questionResponse)
                 .verifyComplete();
-
-        verify(surveyService, times(1)).findById(1L);
-        verify(questionService, times(1)).create(any(Question.class));
-        verifyNoMoreInteractions(surveyService, questionService);
     }
 
     @Test
-    void should_return_OK_when_delete_question_from_existing_survey() throws Exception {
-        given(questionService.deleteById(anyLong())).willReturn(Mono.empty());
+    void should_return_OK_when_delete_question_from_existing_survey() {
+        given(service.deleteQuestion(anyLong(), any())).willReturn(Mono.empty());
 
-        StepVerifier.create(questionController.deleteQuestionById(1L, 2L))
+        StepVerifier.create(controller.deleteQuestion(1L, 2L))
                 .verifyComplete();
-
-        verify(questionService, times(1)).deleteById(2L);
-        verifyNoMoreInteractions(questionService);
-        verifyNoInteractions(surveyService);
     }
 }

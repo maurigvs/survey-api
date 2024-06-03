@@ -2,9 +2,7 @@ package br.com.maurigvs.surveyapi.controller;
 
 import br.com.maurigvs.surveyapi.dto.requests.AnswerRequest;
 import br.com.maurigvs.surveyapi.dto.responses.AnswerResponse;
-import br.com.maurigvs.surveyapi.mapper.AnswerMapper;
-import br.com.maurigvs.surveyapi.service.AnswerService;
-import br.com.maurigvs.surveyapi.service.SurveyService;
+import br.com.maurigvs.surveyapi.service.AggregatorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,8 +26,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class AnswerController {
 
-    private final AnswerService answerService;
-    private final SurveyService surveyService;
+    private final AggregatorService service;
 
     @Operation(summary = "create a new answer to a survey")
     @ApiResponses(value = {
@@ -38,13 +35,8 @@ public class AnswerController {
     })
     @PostMapping("/survey/{surveyId}/answer")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Void> postAnswer(@PathVariable Long surveyId,
-                                 @RequestBody @Valid AnswerRequest request){
-
-        return surveyService.findById(surveyId)
-                .map(survey -> AnswerMapper.toEntity(request, survey))
-                .flatMap(answerService::create)
-                .then();
+    public Mono<AnswerResponse> postAnswer(@PathVariable Long surveyId, @RequestBody @Valid AnswerRequest request){
+        return service.createAnswer(surveyId, request);
     }
 
     @Operation(summary = "list of all answers to all surveys")
@@ -55,7 +47,7 @@ public class AnswerController {
     })
     @GetMapping("/survey/answer")
     @ResponseStatus(HttpStatus.OK)
-    public Flux<AnswerResponse> findAllAnswers(){
-        return answerService.findAll().map(AnswerMapper::toResponse);
+    public Flux<AnswerResponse> getAnswerList(){
+        return service.findAllAnswers();
     }
 }

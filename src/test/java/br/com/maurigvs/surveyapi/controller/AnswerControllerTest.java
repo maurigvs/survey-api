@@ -1,11 +1,9 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.dto.requests.AnswerRequest;
 import br.com.maurigvs.surveyapi.exception.NotFoundException;
 import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.model.Survey;
-import br.com.maurigvs.surveyapi.service.AnswerService;
-import br.com.maurigvs.surveyapi.service.SurveyService;
+import br.com.maurigvs.surveyapi.service.AggregatorService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -17,10 +15,10 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @SpringBootTest(classes = {AnswerController.class})
@@ -28,51 +26,44 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 class AnswerControllerTest {
 
     @Autowired
-    private AnswerController answerController;
+    private AnswerController controller;
 
     @MockBean
-    private AnswerService answerService;
-
-    @MockBean
-    private SurveyService surveyService;
+    private AggregatorService service;
 
     @Test
-    void should_return_Created_when_post_answer() throws Exception {
-        var answerMono = Mono.just(MockData.ofAnswer());
-        var surveyMono = Mono.just(MockData.ofSurvey());
+    void should_return_Created_when_post_answer() {
         var answerRequest = MockData.ofAnswerRequest();
-        given(surveyService.findById(1L)).willReturn(surveyMono);
-        given(answerService.create(any())).willReturn(answerMono);
+        var answerResponse = MockData.ofAnswerResponse();
+        given(service.createAnswer(anyLong(), any())).willReturn(Mono.just(answerResponse));
 
-        StepVerifier.create(answerController.postAnswer(1L, answerRequest))
+        StepVerifier.create(controller.postAnswer(1L, answerRequest))
+                .expectNext(answerResponse)
                 .verifyComplete();
     }
 
     @Test
     void should_return_error_when_post_answer() {
-        AnswerRequest answerRequest = MockData.ofAnswerRequest();
-        given(surveyService.findById(1L)).willReturn(Mono.error(new NotFoundException(Survey.class, 1L)));
+        var answerRequest = MockData.ofAnswerRequest();
+        given(service.createAnswer(anyLong(), any())).willReturn(Mono.error(new NotFoundException(Survey.class, 1L)));
 
-        StepVerifier.create(answerController.postAnswer(1L, answerRequest))
+        StepVerifier.create(controller.postAnswer(1L, answerRequest))
                 .expectErrorMatches(throwable ->
                         throwable instanceof NotFoundException &&
                         throwable.getMessage().equals("Survey not found by Id 1"))
                 .verify();
-
-        verifyNoInteractions(answerService);
     }
 
     @Test
     void should_return_Ok_when_get_answers() {
-        var answerFlux = Flux.just(MockData.ofAnswer());
         var answerResponse = MockData.ofAnswerResponse();
-        given(answerService.findAll()).willReturn(answerFlux);
+        given(service.findAllAnswers()).willReturn(Flux.just(answerResponse));
 
-        StepVerifier.create(answerController.findAllAnswers())
+        StepVerifier.create(controller.getAnswerList())
                 .expectNext(answerResponse)
                 .verifyComplete();
 
-        verify(answerService, times(1)).findAll();
-        verifyNoMoreInteractions(answerService);
+        verify(service, times(1)).findAllAnswers();
+        verifyNoMoreInteractions(service);
     }
 }

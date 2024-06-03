@@ -1,9 +1,8 @@
 package br.com.maurigvs.surveyapi.controller;
 
 import br.com.maurigvs.surveyapi.dto.requests.ChoiceRequest;
-import br.com.maurigvs.surveyapi.mapper.ChoiceMapper;
-import br.com.maurigvs.surveyapi.service.ChoiceService;
-import br.com.maurigvs.surveyapi.service.QuestionService;
+import br.com.maurigvs.surveyapi.dto.responses.QuestionResponse;
+import br.com.maurigvs.surveyapi.service.AggregatorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,8 +25,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class ChoiceController {
 
-    private final ChoiceService choiceService;
-    private final QuestionService questionService;
+    private final AggregatorService service;
 
     @Operation(summary = "create a new choice to a question")
     @ApiResponses(value = {
@@ -36,13 +34,8 @@ public class ChoiceController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Void> postChoice(@PathVariable Long surveyId,
-                                 @PathVariable Long questionId,
-                                 @RequestBody @Valid ChoiceRequest request){
-        return questionService.findById(questionId)
-                .map(question -> ChoiceMapper.toEntity(request, question))
-                .flatMap(choiceService::create)
-                .then();
+    public Mono<QuestionResponse> postChoice(@PathVariable Long surveyId, @PathVariable Long questionId, @RequestBody @Valid ChoiceRequest request){
+        return service.createChoice(surveyId, questionId, request);
     }
 
     @Operation(summary = "delete a choice from a question")
@@ -52,9 +45,7 @@ public class ChoiceController {
     })
     @DeleteMapping("/{choiceId}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<Void> deleteChoiceById(@PathVariable Long surveyId,
-                                       @PathVariable Long questionId,
-                                       @PathVariable Long choiceId){
-        return choiceService.deleteById(choiceId);
+    public Mono<Void> deleteChoice(@PathVariable Long surveyId, @PathVariable Long questionId, @PathVariable Long choiceId){
+        return service.deleteChoice(surveyId, questionId, choiceId);
     }
 }

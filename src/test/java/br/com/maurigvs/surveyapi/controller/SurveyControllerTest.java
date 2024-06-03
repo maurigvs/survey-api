@@ -1,8 +1,7 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
 import br.com.maurigvs.surveyapi.mocks.MockData;
-import br.com.maurigvs.surveyapi.service.SurveyService;
+import br.com.maurigvs.surveyapi.service.AggregatorService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -15,44 +14,35 @@ import reactor.test.StepVerifier;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @SpringBootTest(classes = {SurveyController.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class SurveyControllerTest {
 
     @Autowired
-    private SurveyController surveyController;
+    private SurveyController controller;
 
     @MockBean
-    private SurveyService surveyService;
+    private AggregatorService service;
 
     @Test
     void should_return_Created_when_post_survey(){
-        SurveyRequest surveyRequest = MockData.ofSurveyRequest();
-        var surveyMono = Mono.just(MockData.ofSurvey());
-        given(surveyService.create(any())).willReturn(surveyMono);
+        var surveyRequest = MockData.ofSurveyRequest();
+        var surveyResponse = MockData.ofSurveyResponse();
+        given(service.createSurvey(any())).willReturn(Mono.just(surveyResponse));
 
-        StepVerifier.create(surveyController.postSurvey(surveyRequest))
+        StepVerifier.create(controller.postSurvey(surveyRequest))
+                .expectNext(surveyResponse)
                 .verifyComplete();
-
-        verify(surveyService, times(1)).create(any());
-        verifyNoMoreInteractions(surveyService);
     }
 
     @Test
-    void should_return_OK_when_get_survey_list() throws Exception {
-        var surveyFlux = Flux.just(MockData.ofSurvey());
+    void should_return_OK_when_get_survey_list() {
         var surveyResponse = MockData.ofSurveyResponse();
-        given(surveyService.findAll()).willReturn(surveyFlux);
+        given(service.findAllSurveys()).willReturn(Flux.just(surveyResponse));
 
-        StepVerifier.create(surveyController.findAllSurveys())
+        StepVerifier.create(controller.getSurveyList())
                 .expectNext(surveyResponse)
                 .verifyComplete();
-
-        verify(surveyService, times(1)).findAll();
-        verifyNoMoreInteractions(surveyService);
     }
 }
