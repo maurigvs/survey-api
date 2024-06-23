@@ -28,7 +28,7 @@ class ChoiceControllerIT {
     private ChoiceController choiceController;
 
     @Test
-    void should_return_Created_when_add_choice_to_existing_question() throws Exception {
+    void should_return_Created_when_add_choice_to_existing_question() {
         var choiceRequest = MockData.ofChoiceRequest();
         var choiceRequestMono = Mono.just(choiceRequest);
         given(choiceController.postChoice(1L,1L, choiceRequest)).willReturn(Mono.empty());
@@ -43,7 +43,7 @@ class ChoiceControllerIT {
     }
 
     @Test
-    void should_return_OK_when_delete_choice_from_existing_question() throws Exception {
+    void should_return_OK_when_delete_choice_from_existing_question() {
         given(choiceController.deleteChoice(1L,1L,2L)).willReturn(Mono.empty());
 
         webTestClient.delete()
