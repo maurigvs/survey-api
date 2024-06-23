@@ -19,7 +19,7 @@ spring:
     web-application-type: reactive
   sql:
     init:
-      data-locations: db/data.sql
+      data-locations: starter-data.sql
 #      mode: always
 
 springdoc:
