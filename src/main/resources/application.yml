@@ -1,0 +1,26 @@
+server:
+  servlet:
+    context-path: /${spring.application.name}
+  port: 8081
+
+spring:
+  application:
+    name: api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/survey_db
+    username: pgdbuser
+    password: pgdbpass
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  sql:
+    init:
+      data-locations: db/data.sql
+#      mode: always
+
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
