@@ -3,7 +3,6 @@ package br.com.maurigvs.surveyapi.integration;
 import br.com.maurigvs.surveyapi.controller.SurveyController;
 import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
 import br.com.maurigvs.surveyapi.mocks.MockData;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -18,8 +17,7 @@ import reactor.core.publisher.Mono;
 
 import static org.mockito.BDDMockito.given;
 
-@Disabled
-@SpringBootTest(properties = "spring.main.web-application-type=reactive")
+@SpringBootTest
 @AutoConfigureWebTestClient
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class SurveyControllerIT {

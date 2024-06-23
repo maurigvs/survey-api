@@ -4,7 +4,6 @@ import br.com.maurigvs.surveyapi.controller.AnswerController;
 import br.com.maurigvs.surveyapi.dto.requests.AnswerRequest;
 import br.com.maurigvs.surveyapi.dto.responses.AnswerResponse;
 import br.com.maurigvs.surveyapi.mocks.MockData;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -19,8 +18,7 @@ import reactor.core.publisher.Mono;
 
 import static org.mockito.BDDMockito.given;
 
-@Disabled
-@SpringBootTest(properties = "spring.main.web-application-type=reactive")
+@SpringBootTest
 @AutoConfigureWebTestClient
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class AnswerControllerIT {
