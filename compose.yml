@@ -1,0 +1,17 @@
+version: '3.9'
+services:
+  postgresdb:
+    image: postgres
+    restart: unless-stopped
+    shm_size: 128mb # set shared memory limit when using docker-compose
+    environment:
+      POSTGRES_DB: survey_db
+      POSTGRES_USER: pgdbuser
+      POSTGRES_PASSWORD: pgdbpass
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdb:/var/lib/postgres
+
+volumes:
+  pgdb:
