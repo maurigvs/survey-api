@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.stream.Stream;
 
+//TODO Implementar testes!
 @ControllerAdvice
 public class RestExceptionHandler {
 

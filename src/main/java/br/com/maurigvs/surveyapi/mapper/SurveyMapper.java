@@ -7,6 +7,7 @@ import br.com.maurigvs.surveyapi.model.Survey;
 
 import java.util.stream.Collectors;
 
+//TODO Implementar testes!
 public final class SurveyMapper {
 
     public static Survey toEntity(SurveyRequest request) {
