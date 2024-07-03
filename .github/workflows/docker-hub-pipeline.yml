@@ -1,6 +1,10 @@
 name: Docker Hub Pipeline
 on: push
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   docker-hub-pipeline:
     name: Pipeline
