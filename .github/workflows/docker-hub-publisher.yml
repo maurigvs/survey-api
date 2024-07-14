@@ -48,4 +48,4 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Docker Hub repository
-        run: echo "${{ env.REPO_URL }}" >> $GITHUB_STEP_SUMMARY
+        run: echo "[Docker Hub repository](${{ env.REPO_URL }})" >> $GITHUB_STEP_SUMMARY
