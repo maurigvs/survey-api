@@ -27,7 +27,8 @@ jobs:
           cache: 'gradle'
 
       - name: Build and Test
-        run: ./gradlew build --no-daemon --console plain
+#        run: ./gradlew build --no-daemon --console plain
+        run: ./gradlew -b ci.gradle package
 
       - name: Setting up Docker
         uses: docker/setup-buildx-action@v3
