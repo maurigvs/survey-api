@@ -1,4 +1,4 @@
-# survey-api with hotfix
+# SurveyAPI
 
 ### About
 
