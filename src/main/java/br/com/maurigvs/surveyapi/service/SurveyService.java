@@ -1,7 +1,6 @@
 package br.com.maurigvs.surveyapi.service;
 
-import br.com.maurigvs.surveyapi.exception.ChoiceNotFoundException;
-import br.com.maurigvs.surveyapi.exception.QuestionNotFoundException;
+import br.com.maurigvs.surveyapi.exception.NotFoundException;
 import br.com.maurigvs.surveyapi.model.entity.Choice;
 import br.com.maurigvs.surveyapi.model.entity.Question;
 import br.com.maurigvs.surveyapi.model.entity.Survey;
@@ -21,7 +20,7 @@ public class SurveyService extends DatabaseService<Survey, SurveyRepository> {
                 .map(survey -> survey.getQuestions().stream()
                         .filter(question -> question.getId().equals(questionId))
                         .findFirst()
-                        .orElseThrow(() -> new QuestionNotFoundException(questionId)));
+                        .orElseThrow(() -> new NotFoundException(Question.class, questionId)));
     }
 
     public Mono<Choice> findChoiceInQuestion(Long surveyId, Long questionId, Long choiceId){
@@ -29,6 +28,6 @@ public class SurveyService extends DatabaseService<Survey, SurveyRepository> {
                 .map(question -> question.getChoices().stream()
                         .filter(choice -> choice.getId().equals(choiceId))
                         .findFirst()
-                        .orElseThrow(() -> new ChoiceNotFoundException(choiceId)));
+                        .orElseThrow(() -> new NotFoundException(Choice.class, choiceId)));
     }
 }

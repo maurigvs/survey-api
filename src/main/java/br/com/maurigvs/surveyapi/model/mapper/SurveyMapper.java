@@ -4,10 +4,12 @@ import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
 import br.com.maurigvs.surveyapi.model.dto.SurveyResponse;
 import br.com.maurigvs.surveyapi.model.entity.Question;
 import br.com.maurigvs.surveyapi.model.entity.Survey;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.stream.Collectors;
 
-//TODO Implementar testes!
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SurveyMapper {
 
     public static Survey toEntity(SurveyRequest request) {

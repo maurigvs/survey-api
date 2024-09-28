@@ -3,8 +3,10 @@ package br.com.maurigvs.surveyapi.model.mapper;
 import br.com.maurigvs.surveyapi.model.dto.ChoiceRequest;
 import br.com.maurigvs.surveyapi.model.entity.Choice;
 import br.com.maurigvs.surveyapi.model.entity.Question;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-//TODO Implementar testes!
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ChoiceMapper {
 
     public static Choice toEntity(ChoiceRequest request, Question question) {
