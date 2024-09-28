@@ -2,8 +2,8 @@ package br.com.maurigvs.surveyapi.controller;
 
 import br.com.maurigvs.surveyapi.model.dto.ChoiceRequest;
 import br.com.maurigvs.surveyapi.model.dto.QuestionResponse;
-import br.com.maurigvs.surveyapi.model.mapper.QuestionMapper;
 import br.com.maurigvs.surveyapi.model.entity.Choice;
+import br.com.maurigvs.surveyapi.model.mapper.DtoMapper;
 import br.com.maurigvs.surveyapi.service.ChoiceService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-import static br.com.maurigvs.surveyapi.model.mapper.ChoiceMapper.toEntity;
+import static br.com.maurigvs.surveyapi.model.mapper.EntityMapper.mapChoice;
 
 @Tag(name = "choice")
 @RestController
@@ -45,10 +45,10 @@ public class ChoiceController {
                                              @RequestBody @Valid ChoiceRequest request){
 
         return surveyService.findQuestionInSurvey(surveyId, questionId)
-                .map(question -> toEntity(request, question))
+                .map(question -> mapChoice(request, question))
                 .flatMap(choiceService::save)
                 .map(Choice::getQuestion)
-                .map(QuestionMapper::toResponse);
+                .map(DtoMapper::mapQuestion);
     }
 
     @Operation(summary = "delete a choice from a question")

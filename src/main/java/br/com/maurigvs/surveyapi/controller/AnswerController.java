@@ -2,7 +2,7 @@ package br.com.maurigvs.surveyapi.controller;
 
 import br.com.maurigvs.surveyapi.model.dto.AnswerRequest;
 import br.com.maurigvs.surveyapi.model.dto.AnswerResponse;
-import br.com.maurigvs.surveyapi.model.mapper.AnswerMapper;
+import br.com.maurigvs.surveyapi.model.mapper.DtoMapper;
 import br.com.maurigvs.surveyapi.service.AnswerService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import static br.com.maurigvs.surveyapi.model.mapper.AnswerMapper.toEntity;
+import static br.com.maurigvs.surveyapi.model.mapper.EntityMapper.mapAnswer;
 
 @Tag(name = "answer")
 @RestController
@@ -44,9 +44,9 @@ public class AnswerController {
                                            @RequestBody @Valid AnswerRequest request){
 
         return surveyService.findById(surveyId)
-                .map(survey -> toEntity(request, survey))
+                .map(survey -> mapAnswer(request, survey))
                 .flatMap(answerService::save)
-                .map(AnswerMapper::toResponse);
+                .map(DtoMapper::mapAnswer);
     }
 
     @Operation(summary = "list of all answers to all surveys")
@@ -60,6 +60,6 @@ public class AnswerController {
     public Flux<AnswerResponse> getAnswerList(){
 
         return answerService.findAll()
-                .map(AnswerMapper::toResponse);
+                .map(DtoMapper::mapAnswer);
     }
 }

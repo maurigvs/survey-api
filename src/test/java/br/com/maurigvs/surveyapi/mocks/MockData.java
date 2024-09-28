@@ -1,18 +1,18 @@
 package br.com.maurigvs.surveyapi.mocks;
 
 import br.com.maurigvs.surveyapi.model.dto.AnswerRequest;
+import br.com.maurigvs.surveyapi.model.dto.AnswerResponse;
 import br.com.maurigvs.surveyapi.model.dto.ChoiceRequest;
 import br.com.maurigvs.surveyapi.model.dto.QuestionRequest;
-import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
-import br.com.maurigvs.surveyapi.model.dto.AnswerResponse;
 import br.com.maurigvs.surveyapi.model.dto.QuestionResponse;
+import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
 import br.com.maurigvs.surveyapi.model.dto.SurveyResponse;
-import br.com.maurigvs.surveyapi.model.mapper.QuestionMapper;
 import br.com.maurigvs.surveyapi.model.entity.Answer;
 import br.com.maurigvs.surveyapi.model.entity.AnswerItem;
 import br.com.maurigvs.surveyapi.model.entity.Choice;
 import br.com.maurigvs.surveyapi.model.entity.Question;
 import br.com.maurigvs.surveyapi.model.entity.Survey;
+import br.com.maurigvs.surveyapi.model.mapper.DtoMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -154,6 +154,6 @@ public class MockData {
     }
 
     public static QuestionResponse ofQuestionResponse() {
-        return QuestionMapper.toResponse(ofQuestion());
+        return DtoMapper.mapQuestion(ofQuestion());
     }
 }

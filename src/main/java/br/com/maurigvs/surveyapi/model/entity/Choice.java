@@ -35,5 +35,4 @@ public class Choice {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "choice", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<AnswerItem> answerItems = new ArrayList<>();
-
 }

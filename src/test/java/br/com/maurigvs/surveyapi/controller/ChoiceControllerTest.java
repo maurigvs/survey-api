@@ -1,8 +1,8 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.model.mapper.QuestionMapper;
 import br.com.maurigvs.surveyapi.mocks.MockData;
 import br.com.maurigvs.surveyapi.model.entity.Choice;
+import br.com.maurigvs.surveyapi.model.mapper.DtoMapper;
 import br.com.maurigvs.surveyapi.service.ChoiceService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -36,7 +36,7 @@ class ChoiceControllerTest {
         var question = MockData.ofQuestion();
         var choice = MockData.ofChoice();
         var request = MockData.ofChoiceRequest();
-        var response = QuestionMapper.toResponse(question);
+        var response = DtoMapper.mapQuestion(question);
 
         given(surveyService.findQuestionInSurvey(1L, 2L)).willReturn(Mono.just(question));
         given(choiceService.save(any(Choice.class))).willReturn(Mono.just(choice));

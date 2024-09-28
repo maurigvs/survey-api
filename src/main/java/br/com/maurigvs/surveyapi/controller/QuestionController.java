@@ -2,7 +2,7 @@ package br.com.maurigvs.surveyapi.controller;
 
 import br.com.maurigvs.surveyapi.model.dto.QuestionRequest;
 import br.com.maurigvs.surveyapi.model.dto.QuestionResponse;
-import br.com.maurigvs.surveyapi.model.mapper.QuestionMapper;
+import br.com.maurigvs.surveyapi.model.mapper.DtoMapper;
 import br.com.maurigvs.surveyapi.service.QuestionService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-import static br.com.maurigvs.surveyapi.model.mapper.QuestionMapper.toEntity;
+import static br.com.maurigvs.surveyapi.model.mapper.EntityMapper.mapQuestion;
 
 @Tag(name = "question")
 @RestController
@@ -43,9 +43,9 @@ public class QuestionController {
                                                @RequestBody @Valid QuestionRequest request){
 
         return surveyService.findById(surveyId)
-                .map(survey -> toEntity(request, survey))
+                .map(survey -> mapQuestion(request, survey))
                 .flatMap(questionService::save)
-                .map(QuestionMapper::toResponse);
+                .map(DtoMapper::mapQuestion);
     }
 
     @Operation(summary = "delete a question from a survey")
