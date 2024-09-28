@@ -11,18 +11,18 @@ import reactor.core.scheduler.Schedulers;
 import java.util.Optional;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-abstract class AbstractCrudService<T, R extends JpaRepository<T, Long>> {
+abstract class DatabaseService<T, R extends JpaRepository<T, Long>> {
 
     private final R repository;
     private final Class<?> entity;
 
-    public Mono<T> create(T entity) {
-        return Mono.just(entity).map(repository::save)
+    public Mono<T> save(T entity) {
+        return Mono.fromSupplier(() -> repository.save(entity))
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
     public Mono<T> findById(Long id) {
-        return Mono.just(id).map(repository::findById)
+        return Mono.fromSupplier(() -> repository.findById(id))
                 .filter(Optional::isPresent)
                 .switchIfEmpty(Mono.error(new NotFoundException(entity, id)))
                 .map(Optional::get)
@@ -34,8 +34,8 @@ abstract class AbstractCrudService<T, R extends JpaRepository<T, Long>> {
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
-    public Mono<Void> deleteById(Long id){
-        return findById(id)
+    public Mono<Void> delete(T entity){
+        return Mono.just(entity)
                 .doOnNext(repository::delete)
                 .then()
                 .subscribeOn(Schedulers.boundedElastic());

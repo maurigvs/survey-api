@@ -1,18 +1,18 @@
 package br.com.maurigvs.surveyapi.mocks;
 
-import br.com.maurigvs.surveyapi.dto.requests.AnswerRequest;
-import br.com.maurigvs.surveyapi.dto.requests.ChoiceRequest;
-import br.com.maurigvs.surveyapi.dto.requests.QuestionRequest;
-import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
-import br.com.maurigvs.surveyapi.dto.responses.AnswerResponse;
-import br.com.maurigvs.surveyapi.dto.responses.QuestionResponse;
-import br.com.maurigvs.surveyapi.dto.responses.SurveyResponse;
-import br.com.maurigvs.surveyapi.mapper.QuestionMapper;
-import br.com.maurigvs.surveyapi.model.Answer;
-import br.com.maurigvs.surveyapi.model.AnswerItem;
-import br.com.maurigvs.surveyapi.model.Choice;
-import br.com.maurigvs.surveyapi.model.Question;
-import br.com.maurigvs.surveyapi.model.Survey;
+import br.com.maurigvs.surveyapi.model.dto.AnswerRequest;
+import br.com.maurigvs.surveyapi.model.dto.ChoiceRequest;
+import br.com.maurigvs.surveyapi.model.dto.QuestionRequest;
+import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.model.dto.AnswerResponse;
+import br.com.maurigvs.surveyapi.model.dto.QuestionResponse;
+import br.com.maurigvs.surveyapi.model.dto.SurveyResponse;
+import br.com.maurigvs.surveyapi.model.mapper.QuestionMapper;
+import br.com.maurigvs.surveyapi.model.entity.Answer;
+import br.com.maurigvs.surveyapi.model.entity.AnswerItem;
+import br.com.maurigvs.surveyapi.model.entity.Choice;
+import br.com.maurigvs.surveyapi.model.entity.Question;
+import br.com.maurigvs.surveyapi.model.entity.Survey;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -36,23 +36,22 @@ public class MockData {
     public static Survey ofSurvey() {
         var survey = new Survey(1L, "Sample Survey");
 
-        var question1 = new Question(1L, "Where does Santa Claus live?", survey);
-        question1.getChoices().addAll(List.of(
-                new Choice(1L, "Hawaii", question1),
-                new Choice(2L, "Finland", question1),
-                new Choice(3L, "Sweden", question1),
-                new Choice(4L, "China", question1)));
-        survey.getQuestions().add(question1);
+        var q1 = new Question(1L, "Where does Santa Claus live?", survey);
+        q1.getChoices().addAll(List.of(
+                new Choice(1L, "Hawaii", q1),
+                new Choice(2L, "Finland", q1),
+                new Choice(3L, "Sweden", q1),
+                new Choice(4L, "China", q1)));
+        survey.getQuestions().add(q1);
 
-        var question2 = new Question(2L, "Were you satisfied with your Christmas presents?", survey);
-        question2.getChoices().addAll(List.of(
-                new Choice(5L, "Very satisfied", question2),
-                new Choice(6L, "Somewhat satisfied", question2),
-                new Choice(7L, "Neither satisfied or dissatisfied", question2),
-                new Choice(8L, "Dissatisfied", question2),
-                new Choice(9L, "Very dissatisfied", question2)));
-        survey.getQuestions().add(question2);
-
+        var q2 = new Question(2L, "Were you satisfied with your Christmas presents?", survey);
+        q2.getChoices().addAll(List.of(
+                new Choice(5L, "Very satisfied", q2),
+                new Choice(6L, "Somewhat satisfied", q2),
+                new Choice(7L, "Neither satisfied or dissatisfied", q2),
+                new Choice(8L, "Dissatisfied", q2),
+                new Choice(9L, "Very dissatisfied", q2)));
+        survey.getQuestions().add(q2);
         return survey;
     }
 

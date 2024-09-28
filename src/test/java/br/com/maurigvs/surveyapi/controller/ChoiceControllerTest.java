@@ -1,46 +1,59 @@
 package br.com.maurigvs.surveyapi.controller;
 
+import br.com.maurigvs.surveyapi.model.mapper.QuestionMapper;
 import br.com.maurigvs.surveyapi.mocks.MockData;
-import br.com.maurigvs.surveyapi.service.AggregatorService;
+import br.com.maurigvs.surveyapi.model.entity.Choice;
+import br.com.maurigvs.surveyapi.service.ChoiceService;
+import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
-@SpringBootTest(classes = {ChoiceController.class})
+@ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class ChoiceControllerTest {
 
-    @Autowired
-    private ChoiceController controller;
+    @InjectMocks
+    private ChoiceController choiceController;
 
-    @MockBean
-    private AggregatorService service;
+    @Mock
+    private SurveyService surveyService;
+
+    @Mock
+    private ChoiceService choiceService;
 
     @Test
     void should_return_Created_when_add_choice_to_existing_question() {
-        var questionResponse = MockData.ofQuestionResponse();
-        given(service.createChoice(anyLong(), anyLong(), any())).willReturn(Mono.just(questionResponse));
+        var question = MockData.ofQuestion();
+        var choice = MockData.ofChoice();
+        var request = MockData.ofChoiceRequest();
+        var response = QuestionMapper.toResponse(question);
 
-        StepVerifier.create(controller.postChoice(1L ,1L, MockData.ofChoiceRequest()))
-                .expectNext(questionResponse)
+        given(surveyService.findQuestionInSurvey(1L, 2L)).willReturn(Mono.just(question));
+        given(choiceService.save(any(Choice.class))).willReturn(Mono.just(choice));
+
+        StepVerifier.create(choiceController.postChoice(1L ,2L, request))
+                .expectNext(response)
                 .verifyComplete();
     }
 
     @Test
     void should_return_OK_when_delete_choice_from_existing_question() {
-        given(service.deleteChoice(anyLong(), anyLong(), anyLong())).willReturn(Mono.empty());
+        var choice = MockData.ofChoice();
 
-        StepVerifier.create(controller.deleteChoice(1L,1L,2L))
+        given(surveyService.findChoiceInQuestion(1L ,2L, 3L)).willReturn(Mono.just(choice));
+        given(choiceService.delete(any(Choice.class))).willReturn(Mono.empty());
+
+        StepVerifier.create(choiceController.deleteChoice(1L,2L,3L))
                 .verifyComplete();
     }
-
 }

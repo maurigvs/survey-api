@@ -1,4 +1,4 @@
-package br.com.maurigvs.surveyapi.model;
+package br.com.maurigvs.surveyapi.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,5 +32,4 @@ public class AnswerItem {
     @ManyToOne
     @JoinColumn(name = "answer_id")
     private Answer answer;
-
 }

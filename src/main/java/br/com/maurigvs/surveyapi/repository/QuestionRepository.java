@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.repository;
 
-import br.com.maurigvs.surveyapi.model.Question;
+import br.com.maurigvs.surveyapi.model.entity.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

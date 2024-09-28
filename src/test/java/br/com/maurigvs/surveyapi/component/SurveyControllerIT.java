@@ -1,8 +1,8 @@
-package br.com.maurigvs.surveyapi.integration;
+package br.com.maurigvs.surveyapi.component;
 
-import br.com.maurigvs.surveyapi.controller.AnswerController;
-import br.com.maurigvs.surveyapi.dto.requests.AnswerRequest;
-import br.com.maurigvs.surveyapi.dto.responses.AnswerResponse;
+import br.com.maurigvs.surveyapi.controller.SurveyController;
+import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.model.dto.SurveyResponse;
 import br.com.maurigvs.surveyapi.mocks.MockData;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -21,40 +21,40 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest
 @AutoConfigureWebTestClient
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class AnswerControllerIT {
+class SurveyControllerIT {
 
     @Autowired
-    private WebTestClient webClient;
+    private WebTestClient webTestClient;
 
     @MockBean
-    private AnswerController controller;
+    private SurveyController surveyController;
 
     @Test
-    void should_return_Created_when_post_answer() {
-        AnswerRequest answerRequest = MockData.ofAnswerRequest();
-        var answerRequestMono = Mono.just(answerRequest);
-        given(controller.postAnswer(1L, answerRequest)).willReturn(Mono.empty());
+    void should_return_Created_when_post_survey() {
+        var request = MockData.ofSurveyRequest();
 
-        webClient.post()
-                .uri("/survey/1/answer")
+        given(surveyController.postSurvey(request)).willReturn(Mono.empty());
+
+        webTestClient.post()
+                .uri("/survey")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(answerRequestMono, AnswerRequest.class)
+                .body(Mono.just(request), SurveyRequest.class)
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody().isEmpty();
     }
 
     @Test
-    void should_return_Ok_when_get_answers() {
-        var answerResponse = MockData.ofAnswerResponse();
-        var answerResponseFlux = Flux.just(MockData.ofAnswerResponse());
-        given(controller.getAnswerList()).willReturn(answerResponseFlux);
+    void should_return_OK_when_get_survey_list() {
+        var response = MockData.ofSurveyResponse();
 
-        webClient.get()
-                .uri("/survey/answer")
+        given(surveyController.getSurveyList()).willReturn(Flux.just(response));
+
+        webTestClient.get()
+                .uri("/survey")
                 .exchange()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectStatus().isOk()
-                .expectBodyList(AnswerResponse.class).contains(answerResponse);
+                .expectBodyList(SurveyResponse.class).contains(response);
     }
 }

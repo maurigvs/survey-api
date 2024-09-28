@@ -1,8 +1,10 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.dto.requests.QuestionRequest;
-import br.com.maurigvs.surveyapi.dto.responses.QuestionResponse;
-import br.com.maurigvs.surveyapi.service.AggregatorService;
+import br.com.maurigvs.surveyapi.model.dto.QuestionRequest;
+import br.com.maurigvs.surveyapi.model.dto.QuestionResponse;
+import br.com.maurigvs.surveyapi.model.mapper.QuestionMapper;
+import br.com.maurigvs.surveyapi.service.QuestionService;
+import br.com.maurigvs.surveyapi.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -19,13 +21,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+import static br.com.maurigvs.surveyapi.model.mapper.QuestionMapper.toEntity;
+
 @Tag(name = "question")
 @RestController
 @RequestMapping("/survey/{surveyId}/question")
 @RequiredArgsConstructor
 public class QuestionController {
 
-    private final AggregatorService service;
+    private final SurveyService surveyService;
+    private final QuestionService questionService;
 
     @Operation(summary = "create a new question to a survey")
     @ApiResponses(value = {
@@ -34,8 +39,13 @@ public class QuestionController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<QuestionResponse> postQuestion(@PathVariable Long surveyId, @RequestBody @Valid QuestionRequest request){
-        return service.createQuestion(surveyId, request);
+    public Mono<QuestionResponse> postQuestion(@PathVariable Long surveyId,
+                                               @RequestBody @Valid QuestionRequest request){
+
+        return surveyService.findById(surveyId)
+                .map(survey -> toEntity(request, survey))
+                .flatMap(questionService::save)
+                .map(QuestionMapper::toResponse);
     }
 
     @Operation(summary = "delete a question from a survey")
@@ -45,7 +55,10 @@ public class QuestionController {
     })
     @DeleteMapping("/{questionId}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<Void> deleteQuestion(@PathVariable Long surveyId, @PathVariable Long questionId){
-        return service.deleteQuestion(surveyId, questionId);
+    public Mono<Void> deleteQuestion(@PathVariable Long surveyId,
+                                     @PathVariable Long questionId){
+
+        return surveyService.findQuestionInSurvey(surveyId, questionId)
+                .flatMap(questionService::delete);
     }
 }

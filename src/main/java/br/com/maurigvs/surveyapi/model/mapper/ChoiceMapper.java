@@ -1,8 +1,8 @@
-package br.com.maurigvs.surveyapi.mapper;
+package br.com.maurigvs.surveyapi.model.mapper;
 
-import br.com.maurigvs.surveyapi.dto.requests.ChoiceRequest;
-import br.com.maurigvs.surveyapi.model.Choice;
-import br.com.maurigvs.surveyapi.model.Question;
+import br.com.maurigvs.surveyapi.model.dto.ChoiceRequest;
+import br.com.maurigvs.surveyapi.model.entity.Choice;
+import br.com.maurigvs.surveyapi.model.entity.Question;
 
 //TODO Implementar testes!
 public final class ChoiceMapper {

@@ -1,8 +1,10 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.dto.requests.AnswerRequest;
-import br.com.maurigvs.surveyapi.dto.responses.AnswerResponse;
-import br.com.maurigvs.surveyapi.service.AggregatorService;
+import br.com.maurigvs.surveyapi.model.dto.AnswerRequest;
+import br.com.maurigvs.surveyapi.model.dto.AnswerResponse;
+import br.com.maurigvs.surveyapi.model.mapper.AnswerMapper;
+import br.com.maurigvs.surveyapi.service.AnswerService;
+import br.com.maurigvs.surveyapi.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,12 +23,15 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static br.com.maurigvs.surveyapi.model.mapper.AnswerMapper.toEntity;
+
 @Tag(name = "answer")
 @RestController
 @RequiredArgsConstructor
 public class AnswerController {
 
-    private final AggregatorService service;
+    private final SurveyService surveyService;
+    private final AnswerService answerService;
 
     @Operation(summary = "create a new answer to a survey")
     @ApiResponses(value = {
@@ -35,8 +40,13 @@ public class AnswerController {
     })
     @PostMapping("/survey/{surveyId}/answer")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<AnswerResponse> postAnswer(@PathVariable Long surveyId, @RequestBody @Valid AnswerRequest request){
-        return service.createAnswer(surveyId, request);
+    public Mono<AnswerResponse> postAnswer(@PathVariable Long surveyId,
+                                           @RequestBody @Valid AnswerRequest request){
+
+        return surveyService.findById(surveyId)
+                .map(survey -> toEntity(request, survey))
+                .flatMap(answerService::save)
+                .map(AnswerMapper::toResponse);
     }
 
     @Operation(summary = "list of all answers to all surveys")
@@ -48,6 +58,8 @@ public class AnswerController {
     @GetMapping("/survey/answer")
     @ResponseStatus(HttpStatus.OK)
     public Flux<AnswerResponse> getAnswerList(){
-        return service.findAllAnswers();
+
+        return answerService.findAll()
+                .map(AnswerMapper::toResponse);
     }
 }

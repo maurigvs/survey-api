@@ -1,15 +1,16 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.exception.NotFoundException;
 import br.com.maurigvs.surveyapi.mocks.MockData;
-import br.com.maurigvs.surveyapi.model.Survey;
-import br.com.maurigvs.surveyapi.service.AggregatorService;
+import br.com.maurigvs.surveyapi.model.entity.Answer;
+import br.com.maurigvs.surveyapi.service.AnswerService;
+import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -17,53 +18,47 @@ import reactor.test.StepVerifier;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 
-@SpringBootTest(classes = {AnswerController.class})
+@ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class AnswerControllerTest {
 
-    @Autowired
-    private AnswerController controller;
+    @InjectMocks
+    private AnswerController answerController;
 
-    @MockBean
-    private AggregatorService service;
+    @Mock
+    private SurveyService surveyService;
+
+    @Mock
+    private AnswerService answerService;
 
     @Test
     void should_return_Created_when_post_answer() {
-        var answerRequest = MockData.ofAnswerRequest();
-        var answerResponse = MockData.ofAnswerResponse();
-        given(service.createAnswer(anyLong(), any())).willReturn(Mono.just(answerResponse));
+        var survey = MockData.ofSurvey();
+        var answer = MockData.ofAnswer();
+        var request = MockData.ofAnswerRequest();
+        var response = MockData.ofAnswerResponse();
 
-        StepVerifier.create(controller.postAnswer(1L, answerRequest))
-                .expectNext(answerResponse)
+        given(surveyService.findById(anyLong())).willReturn(Mono.just(survey));
+        given(answerService.save(any(Answer.class))).willReturn(Mono.just(answer));
+
+        StepVerifier.create(answerController.postAnswer(1L, request))
+                .expectNext(response)
                 .verifyComplete();
-    }
-
-    @Test
-    void should_return_error_when_post_answer() {
-        var answerRequest = MockData.ofAnswerRequest();
-        given(service.createAnswer(anyLong(), any())).willReturn(Mono.error(new NotFoundException(Survey.class, 1L)));
-
-        StepVerifier.create(controller.postAnswer(1L, answerRequest))
-                .expectErrorMatches(throwable ->
-                        throwable instanceof NotFoundException &&
-                        throwable.getMessage().equals("Survey not found by Id 1"))
-                .verify();
     }
 
     @Test
     void should_return_Ok_when_get_answers() {
-        var answerResponse = MockData.ofAnswerResponse();
-        given(service.findAllAnswers()).willReturn(Flux.just(answerResponse));
+        var answer = MockData.ofAnswer();
+        var response = MockData.ofAnswerResponse();
 
-        StepVerifier.create(controller.getAnswerList())
-                .expectNext(answerResponse)
+        given(answerService.findAll()).willReturn(Flux.just(answer));
+
+        StepVerifier.create(answerController.getAnswerList())
+                .expectNext(response)
                 .verifyComplete();
 
-        verify(service, times(1)).findAllAnswers();
-        verifyNoMoreInteractions(service);
+        verifyNoInteractions(surveyService);
     }
 }

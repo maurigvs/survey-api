@@ -1,7 +1,7 @@
-package br.com.maurigvs.surveyapi.integration;
+package br.com.maurigvs.surveyapi.component;
 
-import br.com.maurigvs.surveyapi.controller.ChoiceController;
-import br.com.maurigvs.surveyapi.dto.requests.ChoiceRequest;
+import br.com.maurigvs.surveyapi.controller.QuestionController;
+import br.com.maurigvs.surveyapi.model.dto.QuestionRequest;
 import br.com.maurigvs.surveyapi.mocks.MockData;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -19,35 +19,35 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest
 @AutoConfigureWebTestClient
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class ChoiceControllerIT {
+class QuestionControllerIT {
 
     @Autowired
     private WebTestClient webTestClient;
 
     @MockBean
-    private ChoiceController choiceController;
+    private QuestionController questionController;
 
     @Test
-    void should_return_Created_when_add_choice_to_existing_question() {
-        var choiceRequest = MockData.ofChoiceRequest();
-        var choiceRequestMono = Mono.just(choiceRequest);
-        given(choiceController.postChoice(1L,1L, choiceRequest)).willReturn(Mono.empty());
+    void should_return_Created_when_add_question_to_existing_survey(){
+        var request = MockData.ofQuestionRequest();
+
+        given(questionController.postQuestion(1L, request)).willReturn(Mono.empty());
 
         webTestClient.post()
-                .uri("/survey/1/question/1/choice")
+                .uri("/survey/1/question")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(choiceRequestMono, ChoiceRequest.class)
+                .body(Mono.just(request), QuestionRequest.class)
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody().isEmpty();
     }
 
     @Test
-    void should_return_OK_when_delete_choice_from_existing_question() {
-        given(choiceController.deleteChoice(1L,1L,2L)).willReturn(Mono.empty());
+    void should_return_OK_when_delete_question_from_existing_survey() {
+        given(questionController.deleteQuestion(1L, 2L)).willReturn(Mono.empty());
 
         webTestClient.delete()
-                .uri("/survey/1/question/1/choice/2")
+                .uri("/survey/1/question/2")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody().isEmpty();

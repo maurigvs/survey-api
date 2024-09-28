@@ -1,8 +1,11 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.dto.requests.ChoiceRequest;
-import br.com.maurigvs.surveyapi.dto.responses.QuestionResponse;
-import br.com.maurigvs.surveyapi.service.AggregatorService;
+import br.com.maurigvs.surveyapi.model.dto.ChoiceRequest;
+import br.com.maurigvs.surveyapi.model.dto.QuestionResponse;
+import br.com.maurigvs.surveyapi.model.mapper.QuestionMapper;
+import br.com.maurigvs.surveyapi.model.entity.Choice;
+import br.com.maurigvs.surveyapi.service.ChoiceService;
+import br.com.maurigvs.surveyapi.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -19,13 +22,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+import static br.com.maurigvs.surveyapi.model.mapper.ChoiceMapper.toEntity;
+
 @Tag(name = "choice")
 @RestController
 @RequestMapping("/survey/{surveyId}/question/{questionId}/choice")
 @RequiredArgsConstructor
 public class ChoiceController {
 
-    private final AggregatorService service;
+    private final SurveyService surveyService;
+    private final ChoiceService choiceService;
 
     @Operation(summary = "create a new choice to a question")
     @ApiResponses(value = {
@@ -34,8 +40,15 @@ public class ChoiceController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<QuestionResponse> postChoice(@PathVariable Long surveyId, @PathVariable Long questionId, @RequestBody @Valid ChoiceRequest request){
-        return service.createChoice(surveyId, questionId, request);
+    public Mono<QuestionResponse> postChoice(@PathVariable Long surveyId,
+                                             @PathVariable Long questionId,
+                                             @RequestBody @Valid ChoiceRequest request){
+
+        return surveyService.findQuestionInSurvey(surveyId, questionId)
+                .map(question -> toEntity(request, question))
+                .flatMap(choiceService::save)
+                .map(Choice::getQuestion)
+                .map(QuestionMapper::toResponse);
     }
 
     @Operation(summary = "delete a choice from a question")
@@ -45,7 +58,11 @@ public class ChoiceController {
     })
     @DeleteMapping("/{choiceId}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<Void> deleteChoice(@PathVariable Long surveyId, @PathVariable Long questionId, @PathVariable Long choiceId){
-        return service.deleteChoice(surveyId, questionId, choiceId);
+    public Mono<Void> deleteChoice(@PathVariable Long surveyId,
+                                   @PathVariable Long questionId,
+                                   @PathVariable Long choiceId){
+
+        return surveyService.findChoiceInQuestion(surveyId, questionId, choiceId)
+                .flatMap(choiceService::delete);
     }
 }

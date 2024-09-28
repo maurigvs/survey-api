@@ -1,26 +1,27 @@
 package br.com.maurigvs.surveyapi.service;
 
 import br.com.maurigvs.surveyapi.mocks.MockData;
-import br.com.maurigvs.surveyapi.model.Answer;
+import br.com.maurigvs.surveyapi.model.entity.Answer;
 import br.com.maurigvs.surveyapi.repository.AnswerRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@SpringBootTest(classes = AnswerService.class)
-class AnswerServiceTest extends AbstractCrudServiceTest<Answer, AnswerRepository, AnswerService> {
+@ExtendWith(MockitoExtension.class)
+class AnswerServiceTest extends DatabaseServiceTest<Answer, AnswerRepository, AnswerService> {
 
-    @Autowired
-    private AnswerService service;
+    @InjectMocks
+    private AnswerService answerService;
 
-    @MockBean
-    private AnswerRepository repository;
+    @Mock
+    private AnswerRepository answerRepository;
 
     @BeforeEach
     void setUp() {
-        super.service = this.service;
-        super.repository = this.repository;
+        super.service = this.answerService;
+        super.repository = this.answerRepository;
         super.entity = MockData.ofAnswer();
     }
 }

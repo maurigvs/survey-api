@@ -1,4 +1,4 @@
-package br.com.maurigvs.surveyapi.model;
+package br.com.maurigvs.surveyapi.model.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -21,17 +21,22 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-public class Answer {
+public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String title;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Choice> choices = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "survey_id")
     private Survey survey;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "answer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<AnswerItem> answerItems = new ArrayList<>();
 
 }

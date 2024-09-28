@@ -1,13 +1,14 @@
 package br.com.maurigvs.surveyapi.controller;
 
 import br.com.maurigvs.surveyapi.mocks.MockData;
-import br.com.maurigvs.surveyapi.service.AggregatorService;
+import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -15,34 +16,38 @@ import reactor.test.StepVerifier;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-@SpringBootTest(classes = {SurveyController.class})
+@ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class SurveyControllerTest {
 
-    @Autowired
-    private SurveyController controller;
+    @InjectMocks
+    private SurveyController surveyController;
 
-    @MockBean
-    private AggregatorService service;
+    @Mock
+    private SurveyService surveyService;
 
     @Test
     void should_return_Created_when_post_survey(){
-        var surveyRequest = MockData.ofSurveyRequest();
-        var surveyResponse = MockData.ofSurveyResponse();
-        given(service.createSurvey(any())).willReturn(Mono.just(surveyResponse));
+        var survey = MockData.ofSurvey();
+        var request = MockData.ofSurveyRequest();
+        var response = MockData.ofSurveyResponse();
 
-        StepVerifier.create(controller.postSurvey(surveyRequest))
-                .expectNext(surveyResponse)
+        given(surveyService.save(any())).willReturn(Mono.just(survey));
+
+        StepVerifier.create(surveyController.postSurvey(request))
+                .expectNext(response)
                 .verifyComplete();
     }
 
     @Test
     void should_return_OK_when_get_survey_list() {
-        var surveyResponse = MockData.ofSurveyResponse();
-        given(service.findAllSurveys()).willReturn(Flux.just(surveyResponse));
+        var survey = MockData.ofSurvey();
+        var response = MockData.ofSurveyResponse();
 
-        StepVerifier.create(controller.getSurveyList())
-                .expectNext(surveyResponse)
+        given(surveyService.findAll()).willReturn(Flux.just(survey));
+
+        StepVerifier.create(surveyController.getSurveyList())
+                .expectNext(response)
                 .verifyComplete();
     }
 }

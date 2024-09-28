@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.exception;
 
-import br.com.maurigvs.surveyapi.dto.responses.ErrorResponse;
+import br.com.maurigvs.surveyapi.model.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,14 +12,13 @@ import reactor.core.publisher.Mono;
 
 import java.util.stream.Stream;
 
-//TODO Implementar testes!
 @ControllerAdvice
 public class RestExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
     @ResponseBody
-    public Mono<ErrorResponse> handleBadRequestException(BusinessException exception){
+    public Mono<ErrorResponse> handleBusinessException(BusinessException exception){
         return Mono.just(new ErrorResponse(
                 HttpStatus.PRECONDITION_FAILED.getReasonPhrase(),
                 exception.getMessage()));
@@ -28,7 +27,7 @@ public class RestExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public Mono<ErrorResponse> handleBadRequestException(RuntimeException exception){
+    public Mono<ErrorResponse> handleRuntimeException(RuntimeException exception){
         return Mono.just(new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                 exception.getMessage()));

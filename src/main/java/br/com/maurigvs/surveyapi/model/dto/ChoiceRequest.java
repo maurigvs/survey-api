@@ -1,4 +1,4 @@
-package br.com.maurigvs.surveyapi.dto.requests;
+package br.com.maurigvs.surveyapi.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

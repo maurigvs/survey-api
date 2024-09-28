@@ -1,9 +1,9 @@
-package br.com.maurigvs.surveyapi.mapper;
+package br.com.maurigvs.surveyapi.model.mapper;
 
-import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
-import br.com.maurigvs.surveyapi.dto.responses.SurveyResponse;
-import br.com.maurigvs.surveyapi.model.Question;
-import br.com.maurigvs.surveyapi.model.Survey;
+import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.model.dto.SurveyResponse;
+import br.com.maurigvs.surveyapi.model.entity.Question;
+import br.com.maurigvs.surveyapi.model.entity.Survey;
 
 import java.util.stream.Collectors;
 
@@ -12,10 +12,10 @@ public final class SurveyMapper {
 
     public static Survey toEntity(SurveyRequest request) {
         var survey = new Survey(null, request.survey());
-        var questionList = request.questions().stream()
-                .map(qr -> QuestionMapper.toEntity(qr, survey)).toList();
-        survey.getQuestions().addAll(questionList);
-
+        survey.getQuestions()
+                .addAll(request.questions().stream()
+                .map(question -> QuestionMapper.toEntity(question, survey))
+                .toList());
         return survey;
     }
 

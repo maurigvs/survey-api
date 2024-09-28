@@ -1,8 +1,9 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.dto.requests.SurveyRequest;
-import br.com.maurigvs.surveyapi.dto.responses.SurveyResponse;
-import br.com.maurigvs.surveyapi.service.AggregatorService;
+import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.model.dto.SurveyResponse;
+import br.com.maurigvs.surveyapi.model.mapper.SurveyMapper;
+import br.com.maurigvs.surveyapi.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,13 +22,15 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static br.com.maurigvs.surveyapi.model.mapper.SurveyMapper.toEntity;
+
 @Tag(name = "survey")
 @RestController
 @RequestMapping("/survey")
 @RequiredArgsConstructor
 public class SurveyController {
 
-    private final AggregatorService service;
+    private final SurveyService surveyService;
 
     @Operation(summary = "create a new survey")
     @ApiResponses(value = {
@@ -37,7 +40,9 @@ public class SurveyController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<SurveyResponse> postSurvey(@RequestBody @Valid SurveyRequest request){
-        return service.createSurvey(request);
+
+        return surveyService.save(toEntity(request))
+                .map(SurveyMapper::toResponse);
     }
 
     @Operation(summary = "list of all surveys")
@@ -49,6 +54,7 @@ public class SurveyController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Flux<SurveyResponse> getSurveyList(){
-        return service.findAllSurveys();
+        return surveyService.findAll()
+                .map(SurveyMapper::toResponse);
     }
 }
