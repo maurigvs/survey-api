@@ -46,9 +46,9 @@ tasks.withType(Test).configureEach {
 	finalizedBy jacocoTestReport
 	jacoco {
 		enabled = true
-//		excludes = ['**/dto/*', '**/exception/*', '**/config/*', '**/repository/*', '**/service/*']
-		destinationFile = file("${buildDir}/jacoco/test.exec")
-		classDumpDir = file("${buildDir}/jacoco/classpathdumps")
+		// excludes = ['**/dto/*', '**/exception/*', '**/config/*', '**/repository/*', '**/service/*']
+		destinationFile = layout.buildDirectory.file('jacoco/jacocoTest.exec').get().asFile
+		classDumpDir = layout.buildDirectory.dir('jacoco/classpathdumps').get().asFile
 	}
 }
 
