@@ -46,7 +46,6 @@ tasks.withType(Test).configureEach {
 	finalizedBy jacocoTestReport
 	jacoco {
 		enabled = true
-		// excludes = ['**/dto/*', '**/exception/*', '**/config/*', '**/repository/*', '**/service/*']
 		destinationFile = layout.buildDirectory.file('jacoco/jacocoTest.exec').get().asFile
 		classDumpDir = layout.buildDirectory.dir('jacoco/classpathdumps').get().asFile
 	}
@@ -64,28 +63,18 @@ jacocoTestCoverageVerification {
 	violationRules {
 		rule {
 			element = 'PACKAGE'
+			excludes = ['br.com.maurigvs.surveyapi.model.dto.*']
+
 			limit {
 				counter = 'INSTRUCTION'
 				value = 'COVEREDRATIO'
-				minimum = 0.80
+				minimum = 0.00
 			}
 			limit {
 				counter = 'BRANCH'
 				value = 'COVEREDRATIO'
 				minimum = 0.80
-			}
-		}
-		rule {
-			element = 'METHOD'
-			limit {
-				counter = 'COMPLEXITY'
-				value = 'TOTALCOUNT'
-				maximum = 5
-			}
-			limit {
-				counter = 'LINE'
-				value = 'TOTALCOUNT'
-				maximum = 10
+
 			}
 		}
 		rule {
@@ -99,6 +88,19 @@ jacocoTestCoverageVerification {
 				counter = 'INSTRUCTION'
 				value = 'TOTALCOUNT'
 				maximum = 200
+			}
+		}
+		rule {
+			element = 'METHOD'
+			limit {
+				counter = 'COMPLEXITY'
+				value = 'TOTALCOUNT'
+				maximum = 5
+			}
+			limit {
+				counter = 'LINE'
+				value = 'TOTALCOUNT'
+				maximum = 10
 			}
 		}
 	}

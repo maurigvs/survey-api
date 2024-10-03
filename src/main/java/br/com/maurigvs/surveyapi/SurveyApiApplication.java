@@ -18,15 +18,11 @@ public class SurveyApiApplication {
 	@Bean
 	public OpenAPI openApiInfo() {
 		return new OpenAPI()
-				.info(new Info()
-						.title("Survey API")
-						.description("A simple Survey application")
-						.version("v2.0")
-						.license(new License()
-								.name("Apache 2.0")
-								.url("http://springdoc.org")))
-				.externalDocs(new ExternalDocumentation()
-						.description("More projects from the Developer")
-						.url("https://github.com/maurigvs"));
+			.info(new Info().title("Survey API")
+					.description("A simple Survey application").version("v2.0")
+					.license(new License().name("Apache 2.0").url("http://springdoc.org")))
+			.externalDocs(new ExternalDocumentation()
+					.description("More projects from the Developer")
+					.url("https://github.com/maurigvs"));
 	}
 }

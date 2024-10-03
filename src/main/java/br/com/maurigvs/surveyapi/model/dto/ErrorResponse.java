@@ -1,13 +1,14 @@
 package br.com.maurigvs.surveyapi.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 @Schema
 public record ErrorResponse(
-        String error,
+        HttpStatus error,
         String... message
 ){
 

@@ -1,8 +1,7 @@
 package br.com.maurigvs.surveyapi.component;
 
-import br.com.maurigvs.surveyapi.controller.AnswerController;
-import br.com.maurigvs.surveyapi.model.dto.AnswerRequest;
-import br.com.maurigvs.surveyapi.model.dto.AnswerResponse;
+import br.com.maurigvs.surveyapi.controller.QuestionController;
+import br.com.maurigvs.surveyapi.model.dto.QuestionRequest;
 import br.com.maurigvs.surveyapi.mocks.MockData;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -13,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.BDDMockito.given;
@@ -21,40 +19,37 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest
 @AutoConfigureWebTestClient
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class AnswerControllerIT {
+class QuestionComponentTest {
 
     @Autowired
     private WebTestClient webTestClient;
 
     @MockBean
-    private AnswerController answerController;
+    private QuestionController questionController;
 
     @Test
-    void should_return_Created_when_post_answer() {
-        var request = MockData.ofAnswerRequest();
+    void should_return_Created_when_add_question_to_existing_survey(){
+        var request = MockData.ofQuestionRequest();
 
-        given(answerController.postAnswer(1L, request)).willReturn(Mono.empty());
+        given(questionController.postQuestion(1L, request)).willReturn(Mono.empty());
 
         webTestClient.post()
-                .uri("/survey/1/answer")
+                .uri("/survey/1/question")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.just(request), AnswerRequest.class)
+                .body(Mono.just(request), QuestionRequest.class)
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody().isEmpty();
     }
 
     @Test
-    void should_return_Ok_when_get_answers() {
-        var response = MockData.ofAnswerResponse();
+    void should_return_OK_when_delete_question_from_existing_survey() {
+        given(questionController.deleteQuestion(1L, 2L)).willReturn(Mono.empty());
 
-        given(answerController.getAnswerList()).willReturn(Flux.just(response));
-
-        webTestClient.get()
-                .uri("/survey/answer")
+        webTestClient.delete()
+                .uri("/survey/1/question/2")
                 .exchange()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectStatus().isOk()
-                .expectBodyList(AnswerResponse.class).contains(response);
+                .expectBody().isEmpty();
     }
 }

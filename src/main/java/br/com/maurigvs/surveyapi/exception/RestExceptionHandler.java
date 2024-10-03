@@ -19,27 +19,21 @@ public class RestExceptionHandler {
     @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
     @ResponseBody
     public Mono<ErrorResponse> handleBusinessException(BusinessException exception){
-        return Mono.just(new ErrorResponse(
-                HttpStatus.PRECONDITION_FAILED.getReasonPhrase(),
-                exception.getMessage()));
+        return Mono.just(new ErrorResponse(HttpStatus.PRECONDITION_FAILED, exception.getMessage()));
     }
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public Mono<ErrorResponse> handleRuntimeException(RuntimeException exception){
-        return Mono.just(new ErrorResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                exception.getMessage()));
+        return Mono.just(new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
     }
 
     @ExceptionHandler(WebExchangeBindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public Mono<ErrorResponse> handleWebExchangeBindException(WebExchangeBindException exception){
-        return Mono.just(new ErrorResponse(
-                HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                mapMessages(exception.getFieldErrors().stream())));
+        return Mono.just(new ErrorResponse(HttpStatus.BAD_REQUEST, mapMessages(exception.getFieldErrors().stream())));
     }
 
     private static String[] mapMessages(Stream<FieldError> fieldErrorStream) {

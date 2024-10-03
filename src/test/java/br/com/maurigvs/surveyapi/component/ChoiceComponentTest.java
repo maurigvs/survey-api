@@ -19,7 +19,7 @@ import static org.mockito.BDDMockito.given;
 @SpringBootTest
 @AutoConfigureWebTestClient
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class ChoiceControllerIT {
+class ChoiceComponentTest {
 
     @Autowired
     private WebTestClient webTestClient;

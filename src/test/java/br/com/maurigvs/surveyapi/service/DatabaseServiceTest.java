@@ -1,11 +1,10 @@
 package br.com.maurigvs.surveyapi.service;
 
-import br.com.maurigvs.surveyapi.exception.NotFoundException;
+import br.com.maurigvs.surveyapi.exception.BusinessException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.jpa.repository.JpaRepository;
-import reactor.test.StepVerifier;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +17,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
+import static reactor.test.StepVerifier.create;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 abstract class DatabaseServiceTest<M, R extends JpaRepository<M, Long>, S extends DatabaseService<M, R>> {
@@ -30,7 +30,7 @@ abstract class DatabaseServiceTest<M, R extends JpaRepository<M, Long>, S extend
     void should_return_entity_when_save() {
         given(repository.save(any())).willReturn(entity);
 
-        StepVerifier.create(service.save(entity))
+        create(service.save(entity))
                 .expectNext(entity)
                 .verifyComplete();
 
@@ -43,7 +43,7 @@ abstract class DatabaseServiceTest<M, R extends JpaRepository<M, Long>, S extend
         var id = 1L;
         given(repository.findById(anyLong())).willReturn(Optional.of(entity));
 
-        StepVerifier.create(service.findById(id))
+        create(service.findById(id))
                 .expectNext(entity)
                 .verifyComplete();
 
@@ -57,9 +57,9 @@ abstract class DatabaseServiceTest<M, R extends JpaRepository<M, Long>, S extend
         var message = entity.getClass().getSimpleName() + " not found by Id " + id;
         given(repository.findById(id)).willReturn(Optional.empty());
 
-        StepVerifier.create(service.findById(id))
+        create(service.findById(id))
                 .expectErrorSatisfies(throwable -> {
-                    var exception = assertInstanceOf(NotFoundException.class, throwable);
+                    var exception = assertInstanceOf(BusinessException.class, throwable);
                     assertEquals(message, exception.getMessage());
                 })
                 .verify();
@@ -72,7 +72,7 @@ abstract class DatabaseServiceTest<M, R extends JpaRepository<M, Long>, S extend
     void should_return_entity_stream_when_find_all() {
         given(repository.findAll()).willReturn(List.of(entity));
 
-        StepVerifier.create(service.findAll())
+        create(service.findAll())
                 .expectNext(entity)
                 .verifyComplete();
 
@@ -84,7 +84,7 @@ abstract class DatabaseServiceTest<M, R extends JpaRepository<M, Long>, S extend
     void should_return_void_when_delete_by_id() {
         doNothing().when(repository).delete(entity);
 
-        StepVerifier.create(service.delete(entity))
+        create(service.delete(entity))
                 .verifyComplete();
 
         then(repository).should(times(1)).delete(entity);

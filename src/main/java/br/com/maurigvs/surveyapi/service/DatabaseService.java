@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.service;
 
-import br.com.maurigvs.surveyapi.exception.NotFoundException;
+import br.com.maurigvs.surveyapi.exception.BusinessException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +13,8 @@ import java.util.Optional;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 abstract class DatabaseService<T, R extends JpaRepository<T, Long>> {
 
+    static final String ENTITY_NOT_FOUND = "%s not found by Id %s";
+
     private final R repository;
     private final Class<?> entity;
 
@@ -24,7 +26,7 @@ abstract class DatabaseService<T, R extends JpaRepository<T, Long>> {
     public Mono<T> findById(Long id) {
         return Mono.fromSupplier(() -> repository.findById(id))
                 .filter(Optional::isPresent)
-                .switchIfEmpty(Mono.error(new NotFoundException(entity, id)))
+                .switchIfEmpty(Mono.error(new BusinessException(ENTITY_NOT_FOUND.formatted(entity.getSimpleName(), id))))
                 .map(Optional::get)
                 .subscribeOn(Schedulers.boundedElastic());
     }
