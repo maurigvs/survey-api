@@ -99,7 +99,7 @@ public class MockData {
                 "Last Christmas"));
     }
 
-    public static Choice mockOfNewChoice(Question question){
+    public static Choice mockOfNewChoice(Question question) {
         return new Choice(15L, "Alaska", question);
     }
 

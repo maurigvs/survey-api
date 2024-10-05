@@ -1,6 +1,10 @@
 name: Builder
 run-name: ${{ github.ref_name }}
-on: push
+
+on:
+  push:
+    branches-ignore:
+      - master
 
 jobs:
   builder:
@@ -8,15 +12,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checking out ${{ github.repository }}
+      - name: Checkout ${{ github.repository }}
         uses: actions/checkout@v4
 
-      - name: Setting up Java
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Build and Test
+      - name: Run Tests
+        run: ./gradlew test --console plain
+
+      - name: Run Build
         run: ./gradlew build --console plain

@@ -20,7 +20,7 @@ public record QuestionResponse(
                         .toMap(Choice::getId, Choice::getTitle)));
     }
 
-    public QuestionResponse(Item item){
+    public QuestionResponse(Item item) {
         this(item.getQuestion().getTitle(),
                 Map.of(item.getChoice().getId(), item.getChoice().getTitle()));
     }

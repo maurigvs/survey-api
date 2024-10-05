@@ -13,9 +13,10 @@ import br.com.maurigvs.surveyapi.model.Survey;
 
 public class EntityMapper {
 
-    private EntityMapper(){}
+    private EntityMapper() {
+    }
 
-    public static Survey toSurvey(SurveyRequest request){
+    public static Survey toSurvey(SurveyRequest request) {
         Survey survey = new Survey(null, request.survey());
         survey.getQuestions().addAll(request.questions().stream()
                 .map(question -> toQuestion(question, survey))
@@ -23,7 +24,7 @@ public class EntityMapper {
         return survey;
     }
 
-    public static Question toQuestion(QuestionRequest request, Survey survey){
+    public static Question toQuestion(QuestionRequest request, Survey survey) {
         Question question = new Question(null, request.question(), survey);
         question.getChoices().addAll(request.choices().stream()
                 .map(choice -> toChoice(choice, question))
@@ -31,11 +32,11 @@ public class EntityMapper {
         return question;
     }
 
-    public static Choice toChoice(String request, Question question){
+    public static Choice toChoice(String request, Question question) {
         return new Choice(null, request, question);
     }
 
-    public static Choice toChoice(ChoiceRequest request, Question question){
+    public static Choice toChoice(ChoiceRequest request, Question question) {
         return toChoice(request.choice(), question);
     }
 

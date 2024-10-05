@@ -22,7 +22,7 @@ public record SurveyResponse(
                         .toMap(Question::getId, QuestionResponse::new)));
     }
 
-    public SurveyResponse(Answer answer){
+    public SurveyResponse(Answer answer) {
         this(answer.getSurvey().getId(),
                 answer.getSurvey().getTitle(),
                 answer.getItems().stream().collect(Collectors
