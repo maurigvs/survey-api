@@ -5,7 +5,6 @@ import br.com.maurigvs.surveyapi.dto.AnswerRequest;
 import br.com.maurigvs.surveyapi.dto.AnswerResponse;
 import br.com.maurigvs.surveyapi.dto.ErrorResponse;
 import br.com.maurigvs.surveyapi.dto.ItemRequest;
-import br.com.maurigvs.surveyapi.mocks.MockData;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,6 @@ import java.util.stream.Stream;
 import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfAnswerRequest;
 import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfAnswerResponse;
 import static br.com.maurigvs.surveyapi.mocks.MockData.ofJson;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -46,7 +44,7 @@ class AnswerComponentTest {
     @Test
     void should_return_Created_when_post_answer() {
         AnswerRequest request = mockOfAnswerRequest();
-        given(answerController.postAnswer(1L, request)).willReturn(Mono.empty());
+        when(answerController.postAnswer(1L, request)).thenReturn(Mono.empty());
 
         webTestClient.post()
                 .uri("/survey/1/answer")
@@ -123,7 +121,7 @@ class AnswerComponentTest {
     @Test
     void should_return_Ok_when_get_answers() {
         AnswerResponse response = mockOfAnswerResponse();
-        given(answerController.findAllAnswers()).willReturn(Flux.just(response));
+        when(answerController.findAllAnswers()).thenReturn(Flux.just(response));
 
         webTestClient.get()
                 .uri("/survey/answer")

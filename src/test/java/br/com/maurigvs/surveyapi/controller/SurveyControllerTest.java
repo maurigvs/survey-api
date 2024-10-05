@@ -19,7 +19,7 @@ import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurvey;
 import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurveyRequest;
 import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurveyResponse;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -34,7 +34,7 @@ class SurveyControllerTest {
     @Test
     void should_return_Created_when_post_survey() {
         SurveyRequest request = mockOfSurveyRequest();
-        given(surveyService.create(any(Survey.class))).willReturn(Mono.empty());
+        when(surveyService.create(any(Survey.class))).thenReturn(Mono.empty());
 
         StepVerifier.create(surveyController.postSurvey(request))
                 .expectNext()
@@ -45,7 +45,7 @@ class SurveyControllerTest {
     void should_return_OK_when_get_survey_list() {
         Survey survey = mockOfSurvey();
         SurveyResponse response = mockOfSurveyResponse();
-        given(surveyService.findAll()).willReturn(Flux.just(survey));
+        when(surveyService.findAll()).thenReturn(Flux.just(survey));
 
         StepVerifier.create(surveyController.findAllSurveys())
                 .expectNext(response)

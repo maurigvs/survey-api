@@ -22,8 +22,8 @@ import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfQuestion;
 import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurvey;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -45,8 +45,8 @@ class QuestionControllerTest {
     void should_return_Created_when_add_question_to_existing_survey() {
         QuestionRequest request = mockOfNewQuestionRequest();
         Survey survey = mockOfSurvey();
-        given(surveyService.findById(1L)).willReturn(Mono.just(survey));
-        given(questionService.create(any(Question.class))).willReturn(Mono.empty());
+        when(surveyService.findById(1L)).thenReturn(Mono.just(survey));
+        when(questionService.create(any(Question.class))).thenReturn(Mono.empty());
 
         StepVerifier.create(questionController.postQuestion(1L, request))
                 .verifyComplete();
@@ -55,8 +55,8 @@ class QuestionControllerTest {
     @Test
     void should_return_OK_when_delete_question_from_existing_survey() {
         Question question = mockOfQuestion();
-        given(surveyService.findQuestionInSurvey(1L, 2L)).willReturn(Mono.just(question));
-        given(questionService.delete(any(Question.class))).willReturn(Mono.empty());
+        when(surveyService.findQuestionInSurvey(1L, 2L)).thenReturn(Mono.just(question));
+        when(questionService.delete(any(Question.class))).thenReturn(Mono.empty());
 
         StepVerifier.create(questionController.deleteQuestionById(1L, 2L))
                 .verifyComplete();

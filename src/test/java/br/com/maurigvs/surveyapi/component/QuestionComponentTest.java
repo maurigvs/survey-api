@@ -14,7 +14,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfNewQuestionRequest;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureWebTestClient
@@ -30,7 +30,7 @@ class QuestionComponentTest {
     @Test
     void should_return_Created_when_add_question_to_existing_survey() {
         QuestionRequest request = mockOfNewQuestionRequest();
-        given(questionController.postQuestion(1L, request)).willReturn(Mono.empty());
+        when(questionController.postQuestion(1L, request)).thenReturn(Mono.empty());
 
         webTestClient.post()
                 .uri("/survey/1/question")
@@ -43,7 +43,7 @@ class QuestionComponentTest {
 
     @Test
     void should_return_OK_when_delete_question_from_existing_survey() {
-        given(questionController.deleteQuestionById(1L, 2L)).willReturn(Mono.empty());
+        when(questionController.deleteQuestionById(1L, 2L)).thenReturn(Mono.empty());
 
         webTestClient.delete()
                 .uri("/survey/1/question/2")

@@ -22,7 +22,7 @@ import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfAnswerRequest;
 import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfAnswerResponse;
 import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurvey;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -41,8 +41,8 @@ class AnswerControllerTest {
     void should_return_Created_when_post_answer() {
         AnswerRequest request = mockOfAnswerRequest();
         Survey survey = mockOfSurvey();
-        given(surveyService.findById(1L)).willReturn(Mono.just(survey));
-        given(answerService.create(any())).willReturn(Mono.empty());
+        when(surveyService.findById(1L)).thenReturn(Mono.just(survey));
+        when(answerService.create(any())).thenReturn(Mono.empty());
 
         StepVerifier.create(answerController.postAnswer(1L, request))
                 .verifyComplete();
@@ -53,7 +53,7 @@ class AnswerControllerTest {
         Answer answer = mockOfAnswer();
         AnswerResponse response = mockOfAnswerResponse();
 
-        given(answerService.findAll()).willReturn(Flux.just(answer));
+        when(answerService.findAll()).thenReturn(Flux.just(answer));
 
         StepVerifier.create(answerController.findAllAnswers())
                 .expectNext(response)

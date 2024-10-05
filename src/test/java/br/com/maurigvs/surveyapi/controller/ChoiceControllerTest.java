@@ -19,7 +19,7 @@ import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfChoice;
 import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfNewChoiceRequest;
 import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfQuestion;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -38,8 +38,8 @@ class ChoiceControllerTest {
     void should_return_Created_when_add_choice_to_existing_question() {
         ChoiceRequest request = mockOfNewChoiceRequest();
         Question question = mockOfQuestion();
-        given(surveyService.findQuestionInSurvey(1L, 1L)).willReturn(Mono.just(question));
-        given(choiceService.create(any(Choice.class))).willReturn(Mono.empty());
+        when(surveyService.findQuestionInSurvey(1L, 1L)).thenReturn(Mono.just(question));
+        when(choiceService.create(any(Choice.class))).thenReturn(Mono.empty());
 
         StepVerifier.create(choiceController.postChoice(1L, 1L, request))
                 .verifyComplete();
@@ -48,8 +48,8 @@ class ChoiceControllerTest {
     @Test
     void should_return_OK_when_delete_choice_from_existing_question() {
         Choice choice = mockOfChoice();
-        given(surveyService.findChoiceInQuestion(1L, 1L, 2L)).willReturn(Mono.just(choice));
-        given(choiceService.delete(choice)).willReturn(Mono.empty());
+        when(surveyService.findChoiceInQuestion(1L, 1L, 2L)).thenReturn(Mono.just(choice));
+        when(choiceService.delete(choice)).thenReturn(Mono.empty());
 
         StepVerifier.create(choiceController.deleteChoiceById(1L, 1L, 2L))
                 .verifyComplete();

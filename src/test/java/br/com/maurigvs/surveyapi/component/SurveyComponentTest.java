@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 
 import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurveyRequest;
 import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurveyResponse;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureWebTestClient
@@ -33,7 +33,7 @@ class SurveyComponentTest {
     @Test
     void should_return_Created_when_add_survey() {
         SurveyRequest request = mockOfSurveyRequest();
-        given(surveyController.postSurvey(request)).willReturn(Mono.empty());
+        when(surveyController.postSurvey(request)).thenReturn(Mono.empty());
 
         webTestClient.post()
                 .uri("/survey")
@@ -47,7 +47,7 @@ class SurveyComponentTest {
     @Test
     void should_return_OK_when_find_all_surveys() {
         SurveyResponse response = mockOfSurveyResponse();
-        given(surveyController.findAllSurveys()).willReturn(Flux.just(response));
+        when(surveyController.findAllSurveys()).thenReturn(Flux.just(response));
 
         webTestClient.get()
                 .uri("/survey")
