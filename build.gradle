@@ -61,9 +61,9 @@ jacocoTestReport {
 
 jacocoTestCoverageVerification {
 	violationRules {
+		enabled = true
 		rule {
 			element = 'PACKAGE'
-			excludes = ['br.com.maurigvs.surveyapi.model.dto.*']
 
 			limit {
 				counter = 'INSTRUCTION'

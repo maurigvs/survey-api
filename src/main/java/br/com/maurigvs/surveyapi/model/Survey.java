@@ -1,4 +1,4 @@
-package br.com.maurigvs.surveyapi.model.entity;
+package br.com.maurigvs.surveyapi.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -32,4 +32,5 @@ public class Survey {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Answer> answers = new ArrayList<>();
+
 }

@@ -1,4 +1,4 @@
-package br.com.maurigvs.surveyapi.model.dto;
+package br.com.maurigvs.surveyapi.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
@@ -13,19 +13,8 @@ public record AnswerRequest(
         @NotNull
         Long surveyId,
 
-        @NotEmpty
         @Valid
-        List<Item> answers
+        @NotEmpty
+        List<ItemRequest> answers
 ) {
-
-        @Schema
-        public record Item(
-
-                @NotNull
-                Long questionId,
-
-                @NotNull
-                Long choiceId
-        ) {
-        }
 }

@@ -1,18 +1,18 @@
 package br.com.maurigvs.surveyapi.mocks;
 
-import br.com.maurigvs.surveyapi.model.dto.AnswerRequest;
-import br.com.maurigvs.surveyapi.model.dto.AnswerResponse;
-import br.com.maurigvs.surveyapi.model.dto.ChoiceRequest;
-import br.com.maurigvs.surveyapi.model.dto.QuestionRequest;
-import br.com.maurigvs.surveyapi.model.dto.QuestionResponse;
-import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
-import br.com.maurigvs.surveyapi.model.dto.SurveyResponse;
-import br.com.maurigvs.surveyapi.model.entity.Answer;
-import br.com.maurigvs.surveyapi.model.entity.AnswerItem;
-import br.com.maurigvs.surveyapi.model.entity.Choice;
-import br.com.maurigvs.surveyapi.model.entity.Question;
-import br.com.maurigvs.surveyapi.model.entity.Survey;
-import br.com.maurigvs.surveyapi.model.mapper.DtoMapper;
+import br.com.maurigvs.surveyapi.dto.AnswerRequest;
+import br.com.maurigvs.surveyapi.dto.AnswerResponse;
+import br.com.maurigvs.surveyapi.dto.ChoiceRequest;
+import br.com.maurigvs.surveyapi.dto.ItemRequest;
+import br.com.maurigvs.surveyapi.dto.QuestionRequest;
+import br.com.maurigvs.surveyapi.dto.QuestionResponse;
+import br.com.maurigvs.surveyapi.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.dto.SurveyResponse;
+import br.com.maurigvs.surveyapi.model.Answer;
+import br.com.maurigvs.surveyapi.model.Choice;
+import br.com.maurigvs.surveyapi.model.Item;
+import br.com.maurigvs.surveyapi.model.Question;
+import br.com.maurigvs.surveyapi.model.Survey;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -21,6 +21,135 @@ import java.util.List;
 import java.util.Map;
 
 public class MockData {
+
+    public static Survey mockOfSurvey() {
+        Survey survey = new Survey(1L, "Christmas Survey");
+        Question question1 = new Question(1L, "Where does Santa Claus live?", survey);
+        List<Choice> choices1 = List.of(
+                new Choice(1L, "Hawaii", question1),
+                new Choice(2L, "Finland", question1),
+                new Choice(3L, "Sweden", question1),
+                new Choice(4L, "China", question1));
+        Question question2 = new Question(2L, "Were you satisfied with your Christmas presents?", survey);
+        List<Choice> choices2 = List.of(
+                new Choice(5L, "Very satisfied", question2),
+                new Choice(6L, "Somewhat satisfied", question2),
+                new Choice(7L, "Neither satisfied or dissatisfied", question2),
+                new Choice(8L, "Dissatisfied", question2),
+                new Choice(9L, "Very dissatisfied", question2));
+
+        survey.getQuestions().addAll(List.of(question1, question2));
+        question1.getChoices().addAll(choices1);
+        question2.getChoices().addAll(choices2);
+        return survey;
+    }
+
+    public static SurveyRequest mockOfSurveyRequest() {
+        return new SurveyRequest("Christmas Survey", List.of(
+                new QuestionRequest("Where does Santa Claus live?", List.of(
+                        "Hawaii",
+                        "Finland",
+                        "Sweden",
+                        "China")),
+                new QuestionRequest("Were you satisfied with your Christmas presents?", List.of(
+                        "Very satisfied",
+                        "Somewhat satisfied",
+                        "Neither satisfied or dissatisfied",
+                        "Dissatisfied", "Very dissatisfied"))
+        ));
+    }
+
+    public static SurveyResponse mockOfSurveyResponse() {
+        return new SurveyResponse(1L, "Christmas Survey", Map.of(
+                1L, new QuestionResponse("Where does Santa Claus live?", Map.of(
+                        1L, "Hawaii",
+                        2L, "Finland",
+                        3L, "Sweden",
+                        4L, "China")),
+                2L, new QuestionResponse("Were you satisfied with your Christmas presents?", Map.of(
+                        5L, "Very satisfied",
+                        6L, "Somewhat satisfied",
+                        7L, "Neither satisfied or dissatisfied",
+                        8L, "Dissatisfied",
+                        9L, "Very dissatisfied"))
+        ));
+    }
+
+    public static Question mockOfNewQuestion() {
+        Survey survey = new Survey(1L, "Christmas Survey");
+        Question question = new Question(3L, "What is your favorite Christmas song?", survey);
+        List<Choice> choices = List.of(
+                new Choice(10L, "Jingle Bells", question),
+                new Choice(11L, "Silent Night", question),
+                new Choice(12L, "White Christmas", question),
+                new Choice(13L, "All I Want for Christmas Is You", question),
+                new Choice(14L, "Last Christmas", question));
+
+        survey.getQuestions().add(question);
+        question.getChoices().addAll(choices);
+        return question;
+    }
+
+    public static QuestionRequest mockOfNewQuestionRequest() {
+        return new QuestionRequest("What is your favorite Christmas song?", List.of(
+                "Jingle Bells",
+                "Silent Night",
+                "White Christmas",
+                "All I Want for Christmas Is You",
+                "Last Christmas"));
+    }
+
+    public static Choice mockOfNewChoice(Question question){
+        return new Choice(15L, "Alaska", question);
+    }
+
+    public static ChoiceRequest mockOfNewChoiceRequest() {
+        return new ChoiceRequest("Alaska");
+    }
+
+    public static Answer mockOfAnswer() {
+        Survey survey = new Survey(1L, "Christmas Survey");
+        Answer answer = new Answer(1L, survey);
+        Question question1 = new Question(1L, "Where does Santa Claus live?", survey);
+        Choice choice1Selected = new Choice(2L, "Finland", question1);
+        List<Choice> choices1 = List.of(
+                new Choice(1L, "Hawaii", question1),
+                choice1Selected,
+                new Choice(3L, "Sweden", question1),
+                new Choice(4L, "China", question1));
+        Question question2 = new Question(2L, "Were you satisfied with your Christmas presents?", survey);
+        Choice choice2selected = new Choice(7L, "Neither satisfied or dissatisfied", question2);
+        List<Choice> choices2 = List.of(
+                new Choice(5L, "Very satisfied", question2),
+                new Choice(6L, "Somewhat satisfied", question2),
+                choice2selected,
+                new Choice(8L, "Dissatisfied", question2),
+                new Choice(9L, "Very dissatisfied", question2));
+        Item item1 = new Item(1L, question1, choice1Selected, answer);
+        Item item2 = new Item(2L, question2, choice2selected, answer);
+
+        survey.getQuestions().addAll(List.of(question1, question2));
+        question1.getChoices().addAll(choices1);
+        question2.getChoices().addAll(choices2);
+        answer.getItems().addAll(List.of(item1, item2));
+        return answer;
+    }
+
+    public static AnswerRequest mockOfAnswerRequest() {
+        return new AnswerRequest(1L, List.of(
+                new ItemRequest(1L, 2L),
+                new ItemRequest(2L, 7L)));
+    }
+
+    public static AnswerResponse mockOfAnswerResponse() {
+        return new AnswerResponse(1L,
+                new SurveyResponse(1L, "Christmas Survey", Map.of(
+                        1L, new QuestionResponse("Where does Santa Claus live?", Map.of(
+                                2L, "Finland")),
+                        2L, new QuestionResponse("Were you satisfied with your Christmas presents?", Map.of(
+                                7L, "Neither satisfied or dissatisfied"))
+                )));
+    }
 
     public static String ofJson(Object object) {
         try {
@@ -33,127 +162,11 @@ public class MockData {
         }
     }
 
-    public static Survey ofSurvey() {
-        var survey = new Survey(1L, "Sample Survey");
-
-        var q1 = new Question(1L, "Where does Santa Claus live?", survey);
-        q1.getChoices().addAll(List.of(
-                new Choice(1L, "Hawaii", q1),
-                new Choice(2L, "Finland", q1),
-                new Choice(3L, "Sweden", q1),
-                new Choice(4L, "China", q1)));
-        survey.getQuestions().add(q1);
-
-        var q2 = new Question(2L, "Were you satisfied with your Christmas presents?", survey);
-        q2.getChoices().addAll(List.of(
-                new Choice(5L, "Very satisfied", q2),
-                new Choice(6L, "Somewhat satisfied", q2),
-                new Choice(7L, "Neither satisfied or dissatisfied", q2),
-                new Choice(8L, "Dissatisfied", q2),
-                new Choice(9L, "Very dissatisfied", q2)));
-        survey.getQuestions().add(q2);
-        return survey;
+    public static Question mockOfQuestion() {
+        return mockOfSurvey().getQuestions().get(0);
     }
 
-    public static Question ofQuestion() {
-        return ofSurvey().getQuestions().get(0);
-    }
-
-    public static Choice ofChoice() {
-        return ofQuestion().getChoices().get(0);
-    }
-
-    public static List<Survey> ofSurveyList() {
-        return List.of(ofSurvey());
-    }
-
-    public static SurveyRequest ofSurveyRequest() {
-        return new SurveyRequest("Sample Survey", List.of(
-                new QuestionRequest("Where does Santa Claus live?", List.of(
-                        "Hawaii",
-                        "Finland",
-                        "Sweden",
-                        "China")),
-                new QuestionRequest("Were you satisfied with your Christmas presents?", List.of(
-                        "Very satisfied",
-                        "Somewhat satisfied",
-                        "Neither satisfied or dissatisfied",
-                        "Dissatisfied",
-                        "Very dissatisfied"))
-        ));
-    }
-
-    public static QuestionRequest ofQuestionRequest() {
-        return ofSurveyRequest().questions().get(0);
-    }
-
-    public static ChoiceRequest ofChoiceRequest() {
-        return new ChoiceRequest("Argentina");
-    }
-
-    public static SurveyResponse ofSurveyResponse() {
-        return new SurveyResponse(1L, "Sample Survey", Map.of(
-                1L, new QuestionResponse("Where does Santa Claus live?", Map.of(
-                        1L, "Hawaii",
-                        2L, "Finland",
-                        3L, "Sweden",
-                        4L, "China")),
-                2L, new QuestionResponse("Were you satisfied with your Christmas presents?", Map.of(
-                        5L, "Very satisfied",
-                        6L, "Somewhat satisfied",
-                        7L, "Neither satisfied or dissatisfied",
-                        8L, "Dissatisfied",
-                        9L, "Very dissatisfied"))));
-    }
-
-    public static List<SurveyResponse> ofSurveyResponseList() {
-        return List.of(ofSurveyResponse());
-    }
-
-    public static Answer ofAnswer() {
-        var survey = ofSurvey();
-        var answer = new Answer(1L, survey);
-        answer.getAnswerItems().addAll(List.of(
-                new AnswerItem(1L,
-                        survey.getQuestions().get(0),
-                        survey.getQuestions().get(0).getChoices().get(1),
-                        answer
-                ),
-                new AnswerItem(2L,
-                        survey.getQuestions().get(1),
-                        survey.getQuestions().get(1).getChoices().get(2),
-                        answer
-                )
-        ));
-        return answer;
-    }
-
-    public static AnswerRequest ofAnswerRequest() {
-        return new AnswerRequest(1L, List.of(
-                new AnswerRequest.Item(1L,2L),
-                new AnswerRequest.Item(2L,7L)
-        ));
-    }
-
-    public static AnswerRequest.Item ofAnswerRequestItem() {
-        return ofAnswerRequest().answers().get(0);
-    }
-
-    public static AnswerResponse ofAnswerResponse() {
-        return new AnswerResponse(1L, ofSurveyResponseOfAnswer());
-    }
-
-    public static SurveyResponse ofSurveyResponseOfAnswer() {
-        return new SurveyResponse(1L, "Sample Survey",
-                Map.of(
-                        1L, new QuestionResponse("Where does Santa Claus live?",
-                                Map.of(2L, "Finland")),
-                        2L, new QuestionResponse("Were you satisfied with your Christmas presents?",
-                                Map.of(7L, "Neither satisfied or dissatisfied"))
-                ));
-    }
-
-    public static QuestionResponse ofQuestionResponse() {
-        return DtoMapper.mapQuestion(ofQuestion());
+    public static Choice mockOfChoice() {
+        return mockOfQuestion().getChoices().get(0);
     }
 }

@@ -1,7 +1,9 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.mocks.MockData;
-import br.com.maurigvs.surveyapi.model.entity.Answer;
+import br.com.maurigvs.surveyapi.dto.AnswerRequest;
+import br.com.maurigvs.surveyapi.dto.AnswerResponse;
+import br.com.maurigvs.surveyapi.model.Answer;
+import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.service.AnswerService;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -15,10 +17,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfAnswer;
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfAnswerRequest;
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfAnswerResponse;
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurvey;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -28,37 +32,31 @@ class AnswerControllerTest {
     private AnswerController answerController;
 
     @Mock
-    private SurveyService surveyService;
+    private AnswerService answerService;
 
     @Mock
-    private AnswerService answerService;
+    private SurveyService surveyService;
 
     @Test
     void should_return_Created_when_post_answer() {
-        var survey = MockData.ofSurvey();
-        var answer = MockData.ofAnswer();
-        var request = MockData.ofAnswerRequest();
-        var response = MockData.ofAnswerResponse();
-
-        given(surveyService.findById(anyLong())).willReturn(Mono.just(survey));
-        given(answerService.save(any(Answer.class))).willReturn(Mono.just(answer));
+        AnswerRequest request = mockOfAnswerRequest();
+        Survey survey = mockOfSurvey();
+        given(surveyService.findById(1L)).willReturn(Mono.just(survey));
+        given(answerService.create(any())).willReturn(Mono.empty());
 
         StepVerifier.create(answerController.postAnswer(1L, request))
-                .expectNext(response)
                 .verifyComplete();
     }
 
     @Test
     void should_return_Ok_when_get_answers() {
-        var answer = MockData.ofAnswer();
-        var response = MockData.ofAnswerResponse();
+        Answer answer = mockOfAnswer();
+        AnswerResponse response = mockOfAnswerResponse();
 
         given(answerService.findAll()).willReturn(Flux.just(answer));
 
-        StepVerifier.create(answerController.getAnswerList())
+        StepVerifier.create(answerController.findAllAnswers())
                 .expectNext(response)
                 .verifyComplete();
-
-        verifyNoInteractions(surveyService);
     }
 }

@@ -1,26 +1,28 @@
 package br.com.maurigvs.surveyapi.service;
 
-import br.com.maurigvs.surveyapi.exception.BusinessException;
-import br.com.maurigvs.surveyapi.mocks.MockData;
-import br.com.maurigvs.surveyapi.model.entity.Question;
-import br.com.maurigvs.surveyapi.model.entity.Survey;
+import br.com.maurigvs.surveyapi.model.Choice;
+import br.com.maurigvs.surveyapi.model.Question;
+import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.repository.SurveyRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.test.StepVerifier;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurvey;
 import static org.mockito.Mockito.when;
-import static reactor.test.StepVerifier.create;
 
 @ExtendWith(MockitoExtension.class)
-class SurveyServiceTest extends DatabaseServiceTest<Survey, SurveyRepository, SurveyService> {
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+class SurveyServiceTest extends DataAdapterTest<Survey, SurveyRepository, SurveyService> {
 
     @InjectMocks
     private SurveyService surveyService;
@@ -30,46 +32,46 @@ class SurveyServiceTest extends DatabaseServiceTest<Survey, SurveyRepository, Su
 
     @BeforeEach
     void setUp() {
-        super.service = this.surveyService;
-        super.repository = this.surveyRepository;
-        super.entity = MockData.ofSurvey();
+        super.service = surveyService;
+        super.repository = surveyRepository;
+        super.entity = mockOfSurvey();
     }
 
     @Test
-    void findQuestionInSurvey() {
-        Question question = entity.getQuestions().get(0);
+    void should_return_question_when_find_question_in_survey() {
+        Question expected = entity.getQuestions().get(0);
         when(repository.findById(1L)).thenReturn(Optional.of(entity));
 
-        create(surveyService.findQuestionInSurvey(1L, 1L))
-                .expectNext(question)
+        StepVerifier.create(service.findQuestionInSurvey(1L, 1L))
+                .expectNext(expected)
                 .verifyComplete();
     }
 
     @Test
-    void findQuestionInSurvey_expetion() {
-        entity.getQuestions().clear();
-        var message = "Question not found by Id 1";
-        when(repository.findById(1L)).thenReturn(Optional.of(entity));
+    void should_throw_exception_given_question_not_found() {
+        when(repository.findById(1L)).thenReturn(Optional.empty());
 
-        create(surveyService.findQuestionInSurvey(1L, 1L))
-                .expectErrorSatisfies(throwable -> {
-                    var exception = assertInstanceOf(BusinessException.class, throwable);
-                    assertEquals(message, exception.getMessage());
-                })
+        StepVerifier.create(service.findQuestionInSurvey(1L, 1L))
+                .expectError(NoSuchElementException.class)
                 .verify();
     }
 
     @Test
-    void findChoiceInQuestion() {
-        entity.getQuestions().get(0).getChoices().clear();
-        var message = "Choice not found by Id 1";
+    void should_return_choice_when_find_choice_in_question() {
+        Choice expected = entity.getQuestions().get(1).getChoices().get(0);
         when(repository.findById(1L)).thenReturn(Optional.of(entity));
 
-        create(surveyService.findChoiceInQuestion(1L, 1L, 1L))
-                .expectErrorSatisfies(throwable -> {
-                    var exception = assertInstanceOf(BusinessException.class, throwable);
-                    assertEquals(message, exception.getMessage());
-                })
+        StepVerifier.create(service.findChoiceInQuestion(1L, 2L, 5L))
+                .expectNext(expected)
+                .verifyComplete();
+    }
+
+    @Test
+    void should_throw_exception_given_choice_not_found() {
+        when(repository.findById(1L)).thenReturn(Optional.of(entity));
+
+        StepVerifier.create(service.findChoiceInQuestion(1L, 3L, 9L))
+                .expectError(NoSuchElementException.class)
                 .verify();
     }
 }

@@ -1,8 +1,7 @@
 package br.com.maurigvs.surveyapi.component;
 
 import br.com.maurigvs.surveyapi.controller.QuestionController;
-import br.com.maurigvs.surveyapi.model.dto.QuestionRequest;
-import br.com.maurigvs.surveyapi.mocks.MockData;
+import br.com.maurigvs.surveyapi.dto.QuestionRequest;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -14,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfNewQuestionRequest;
 import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
@@ -28,9 +28,8 @@ class QuestionComponentTest {
     private QuestionController questionController;
 
     @Test
-    void should_return_Created_when_add_question_to_existing_survey(){
-        var request = MockData.ofQuestionRequest();
-
+    void should_return_Created_when_add_question_to_existing_survey() {
+        QuestionRequest request = mockOfNewQuestionRequest();
         given(questionController.postQuestion(1L, request)).willReturn(Mono.empty());
 
         webTestClient.post()
@@ -44,7 +43,7 @@ class QuestionComponentTest {
 
     @Test
     void should_return_OK_when_delete_question_from_existing_survey() {
-        given(questionController.deleteQuestion(1L, 2L)).willReturn(Mono.empty());
+        given(questionController.deleteQuestionById(1L, 2L)).willReturn(Mono.empty());
 
         webTestClient.delete()
                 .uri("/survey/1/question/2")

@@ -1,6 +1,8 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.mocks.MockData;
+import br.com.maurigvs.surveyapi.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.dto.SurveyResponse;
+import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -13,6 +15,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurvey;
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurveyRequest;
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurveyResponse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -27,26 +32,22 @@ class SurveyControllerTest {
     private SurveyService surveyService;
 
     @Test
-    void should_return_Created_when_post_survey(){
-        var survey = MockData.ofSurvey();
-        var request = MockData.ofSurveyRequest();
-        var response = MockData.ofSurveyResponse();
-
-        given(surveyService.save(any())).willReturn(Mono.just(survey));
+    void should_return_Created_when_post_survey() {
+        SurveyRequest request = mockOfSurveyRequest();
+        given(surveyService.create(any(Survey.class))).willReturn(Mono.empty());
 
         StepVerifier.create(surveyController.postSurvey(request))
-                .expectNext(response)
+                .expectNext()
                 .verifyComplete();
     }
 
     @Test
     void should_return_OK_when_get_survey_list() {
-        var survey = MockData.ofSurvey();
-        var response = MockData.ofSurveyResponse();
-
+        Survey survey = mockOfSurvey();
+        SurveyResponse response = mockOfSurveyResponse();
         given(surveyService.findAll()).willReturn(Flux.just(survey));
 
-        StepVerifier.create(surveyController.getSurveyList())
+        StepVerifier.create(surveyController.findAllSurveys())
                 .expectNext(response)
                 .verifyComplete();
     }

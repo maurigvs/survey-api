@@ -1,18 +1,20 @@
-package br.com.maurigvs.surveyapi.model.dto;
+package br.com.maurigvs.surveyapi.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 
 @Schema
-public record QuestionRequest(
+public record SurveyRequest(
 
         @NotBlank
-        String question,
+        String survey,
 
+        @Valid
         @NotEmpty
-        List<String> choices
-){
+        List<QuestionRequest> questions
+) {
 }

@@ -1,9 +1,8 @@
 package br.com.maurigvs.surveyapi.component;
 
 import br.com.maurigvs.surveyapi.controller.SurveyController;
-import br.com.maurigvs.surveyapi.model.dto.SurveyRequest;
-import br.com.maurigvs.surveyapi.model.dto.SurveyResponse;
-import br.com.maurigvs.surveyapi.mocks.MockData;
+import br.com.maurigvs.surveyapi.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.dto.SurveyResponse;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -16,6 +15,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurveyRequest;
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurveyResponse;
 import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
@@ -30,9 +31,8 @@ class SurveyComponentTest {
     private SurveyController surveyController;
 
     @Test
-    void should_return_Created_when_post_survey() {
-        var request = MockData.ofSurveyRequest();
-
+    void should_return_Created_when_add_survey() {
+        SurveyRequest request = mockOfSurveyRequest();
         given(surveyController.postSurvey(request)).willReturn(Mono.empty());
 
         webTestClient.post()
@@ -45,10 +45,9 @@ class SurveyComponentTest {
     }
 
     @Test
-    void should_return_OK_when_get_survey_list() {
-        var response = MockData.ofSurveyResponse();
-
-        given(surveyController.getSurveyList()).willReturn(Flux.just(response));
+    void should_return_OK_when_find_all_surveys() {
+        SurveyResponse response = mockOfSurveyResponse();
+        given(surveyController.findAllSurveys()).willReturn(Flux.just(response));
 
         webTestClient.get()
                 .uri("/survey")

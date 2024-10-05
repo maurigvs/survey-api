@@ -11,18 +11,18 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class SurveyApiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SurveyApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SurveyApiApplication.class, args);
+    }
 
-	@Bean
-	public OpenAPI openApiInfo() {
-		return new OpenAPI()
-			.info(new Info().title("Survey API")
-					.description("A simple Survey application").version("v2.0")
-					.license(new License().name("Apache 2.0").url("http://springdoc.org")))
-			.externalDocs(new ExternalDocumentation()
-					.description("More projects from the Developer")
-					.url("https://github.com/maurigvs"));
-	}
+    @Bean
+    public OpenAPI openApiInfo() {
+        return new OpenAPI()
+                .info(new Info().title("Survey API")
+                        .description("A simple Survey application").version("v2.0")
+                        .license(new License().name("Apache 2.0").url("http://springdoc.org")))
+                .externalDocs(new ExternalDocumentation()
+                        .description("More projects from the Developer")
+                        .url("https://github.com/maurigvs"));
+    }
 }

@@ -1,16 +1,20 @@
 package br.com.maurigvs.surveyapi.service;
 
-import br.com.maurigvs.surveyapi.mocks.MockData;
-import br.com.maurigvs.surveyapi.model.entity.Question;
+import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.repository.QuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfNewQuestion;
+
 @ExtendWith(MockitoExtension.class)
-class QuestionServiceTest extends DatabaseServiceTest<Question, QuestionRepository, QuestionService> {
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+class QuestionServiceTest extends DataAdapterTest<Question, QuestionRepository, QuestionService> {
 
     @InjectMocks
     private QuestionService questionService;
@@ -20,8 +24,8 @@ class QuestionServiceTest extends DatabaseServiceTest<Question, QuestionReposito
 
     @BeforeEach
     void setUp() {
-        super.service = this.questionService;
-        super.repository = this.questionRepository;
-        super.entity = MockData.ofQuestion();
+        super.service = questionService;
+        super.repository = questionRepository;
+        super.entity = mockOfNewQuestion();
     }
 }
