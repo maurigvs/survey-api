@@ -1,59 +1,57 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.mocks.MockData;
+import br.com.maurigvs.surveyapi.controller.dto.ChoiceRequest;
+import br.com.maurigvs.surveyapi.model.Choice;
+import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.service.ChoiceService;
-import br.com.maurigvs.surveyapi.service.QuestionService;
+import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfChoice;
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfNewChoiceRequest;
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfQuestion;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = {ChoiceController.class})
+@ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class ChoiceControllerTest {
 
-    @Autowired
+    @InjectMocks
     private ChoiceController choiceController;
 
-    @MockBean
+    @Mock
     private ChoiceService choiceService;
 
-    @MockBean
-    private QuestionService questionService;
+    @Mock
+    private SurveyService surveyService;
 
     @Test
-    void should_return_Created_when_add_choice_to_existing_question() throws Exception {
-        var choiceMono = Mono.just(MockData.ofChoice());
-        var questionMono = Mono.just(MockData.ofQuestion());
-        var choiceRequestMono = Mono.just(MockData.ofChoiceRequest());
-        given(questionService.findById(1L)).willReturn(questionMono);
-        given(choiceService.create(any())).willReturn(choiceMono);
+    void should_return_Created_when_add_choice_to_existing_question() {
+        ChoiceRequest request = mockOfNewChoiceRequest();
+        Question question = mockOfQuestion();
+        when(surveyService.findQuestionInSurvey(1L, 1L)).thenReturn(Mono.just(question));
+        when(choiceService.create(any(Choice.class))).thenReturn(Mono.empty());
 
-        StepVerifier.create(choiceController.postChoice(1L ,1L, choiceRequestMono))
+        StepVerifier.create(choiceController.postChoice(1L, 1L, request))
                 .verifyComplete();
     }
 
     @Test
-    void should_return_OK_when_delete_choice_from_existing_question() throws Exception {
-        given(choiceService.deleteById(2L,1L,1L)).willReturn(Mono.empty());
+    void should_return_OK_when_delete_choice_from_existing_question() {
+        Choice choice = mockOfChoice();
+        when(surveyService.findChoiceInQuestion(1L, 1L, 2L)).thenReturn(Mono.just(choice));
+        when(choiceService.delete(choice)).thenReturn(Mono.empty());
 
-        StepVerifier.create(choiceController.deleteChoiceById(1L,1L,2L))
+        StepVerifier.create(choiceController.deleteChoiceById(1L, 1L, 2L))
                 .verifyComplete();
-
-        verify(choiceService, times(1)).deleteById(2L,1L, 1L);
-        verifyNoMoreInteractions(choiceService);
-        verifyNoInteractions(questionService);
     }
-
 }

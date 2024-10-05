@@ -1,0 +1,15 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:h2:mem:survey_db
+    username: h2dbuser
+    password: h2dbpass
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  main:
+    web-application-type: reactive

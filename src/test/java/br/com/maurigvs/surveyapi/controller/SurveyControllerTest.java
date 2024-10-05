@@ -1,57 +1,54 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.mocks.MockData;
+import br.com.maurigvs.surveyapi.controller.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.controller.dto.SurveyResponse;
+import br.com.maurigvs.surveyapi.model.Survey;
 import br.com.maurigvs.surveyapi.service.SurveyService;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurvey;
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurveyRequest;
+import static br.com.maurigvs.surveyapi.mocks.MockData.mockOfSurveyResponse;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest(classes = {SurveyController.class})
+@ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class SurveyControllerTest {
 
-    @Autowired
+    @InjectMocks
     private SurveyController surveyController;
 
-    @MockBean
+    @Mock
     private SurveyService surveyService;
 
     @Test
-    void should_return_Created_when_post_survey(){
-        var surveyRequestMono = Mono.just(MockData.ofSurveyRequest());
-        var surveyMono = Mono.just(MockData.ofSurvey());
-        given(surveyService.create(any())).willReturn(surveyMono);
+    void should_return_Created_when_post_survey() {
+        SurveyRequest request = mockOfSurveyRequest();
+        when(surveyService.create(any(Survey.class))).thenReturn(Mono.empty());
 
-        StepVerifier.create(surveyController.postSurvey(surveyRequestMono))
+        StepVerifier.create(surveyController.postSurvey(request))
+                .expectNext()
                 .verifyComplete();
-
-        verify(surveyService, times(1)).create(any());
-        verifyNoMoreInteractions(surveyService);
     }
 
     @Test
-    void should_return_OK_when_get_survey_list() throws Exception {
-        var surveyFlux = Flux.just(MockData.ofSurvey());
-        var surveyResponse = MockData.ofSurveyResponse();
-        given(surveyService.findAll()).willReturn(surveyFlux);
+    void should_return_OK_when_get_survey_list() {
+        Survey survey = mockOfSurvey();
+        SurveyResponse response = mockOfSurveyResponse();
+        when(surveyService.findAll()).thenReturn(Flux.just(survey));
 
         StepVerifier.create(surveyController.findAllSurveys())
-                .expectNext(surveyResponse)
+                .expectNext(response)
                 .verifyComplete();
-
-        verify(surveyService, times(1)).findAll();
-        verifyNoMoreInteractions(surveyService);
     }
 }
