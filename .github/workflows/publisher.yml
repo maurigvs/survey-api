@@ -1,8 +1,9 @@
 name: Publisher
+run-name: ${{ github.ref_name }}
 
 on:
   push:
-    branches-ignore:
+    branches:
       - master
 
 jobs:
