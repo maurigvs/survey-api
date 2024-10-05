@@ -26,4 +26,4 @@ jobs:
         run: ./gradlew test --console plain
 
       - name: Run Build
-        run: ./gradlew build --console plain
+        run: ./gradlew build -x test --console plain

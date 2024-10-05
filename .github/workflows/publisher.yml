@@ -25,7 +25,7 @@ jobs:
           cache: 'gradle'
 
       - name: Run Build
-        run: ./gradlew build --console plain
+        run: ./gradlew build -x test --console plain
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
