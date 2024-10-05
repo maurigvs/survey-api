@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.exception;
 
-import br.com.maurigvs.surveyapi.dto.ErrorResponse;
+import br.com.maurigvs.surveyapi.controller.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

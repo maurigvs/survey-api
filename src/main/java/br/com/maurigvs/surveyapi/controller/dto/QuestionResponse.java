@@ -1,4 +1,4 @@
-package br.com.maurigvs.surveyapi.dto;
+package br.com.maurigvs.surveyapi.controller.dto;
 
 import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.model.Item;

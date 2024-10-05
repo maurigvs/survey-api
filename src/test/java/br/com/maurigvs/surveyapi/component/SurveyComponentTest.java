@@ -1,8 +1,8 @@
 package br.com.maurigvs.surveyapi.component;
 
 import br.com.maurigvs.surveyapi.controller.SurveyController;
-import br.com.maurigvs.surveyapi.dto.SurveyRequest;
-import br.com.maurigvs.surveyapi.dto.SurveyResponse;
+import br.com.maurigvs.surveyapi.controller.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.controller.dto.SurveyResponse;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;

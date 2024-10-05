@@ -1,10 +1,10 @@
 package br.com.maurigvs.surveyapi.mapper;
 
-import br.com.maurigvs.surveyapi.dto.AnswerRequest;
-import br.com.maurigvs.surveyapi.dto.ChoiceRequest;
-import br.com.maurigvs.surveyapi.dto.ItemRequest;
-import br.com.maurigvs.surveyapi.dto.QuestionRequest;
-import br.com.maurigvs.surveyapi.dto.SurveyRequest;
+import br.com.maurigvs.surveyapi.controller.dto.AnswerRequest;
+import br.com.maurigvs.surveyapi.controller.dto.ChoiceRequest;
+import br.com.maurigvs.surveyapi.controller.dto.ItemRequest;
+import br.com.maurigvs.surveyapi.controller.dto.QuestionRequest;
+import br.com.maurigvs.surveyapi.controller.dto.SurveyRequest;
 import br.com.maurigvs.surveyapi.model.Answer;
 import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.model.Item;
@@ -36,7 +36,7 @@ class EntityBuilderTest {
         SurveyRequest request = mockOfSurveyRequest();
         Survey expected = mockOfSurvey();
 
-        Survey actual = EntityBuilder.toSurvey(request);
+        Survey actual = EntityMapper.toSurvey(request);
 
         assertNull(actual.getId());
         assertEquals(expected.getTitle(), actual.getTitle());
@@ -50,7 +50,7 @@ class EntityBuilderTest {
         Survey survey = mockOfSurvey();
         Question expected = mockOfNewQuestion();
 
-        Question actual = EntityBuilder.toQuestion(request, survey);
+        Question actual = EntityMapper.toQuestion(request, survey);
 
         assertNull(actual.getId());
         assertEquals(expected.getTitle(), actual.getTitle());
@@ -64,7 +64,7 @@ class EntityBuilderTest {
         Question question = mockOfQuestion();
         Choice expected = mockOfNewChoice(question);
 
-        Choice actual = EntityBuilder.toChoice(request, question);
+        Choice actual = EntityMapper.toChoice(request, question);
 
         assertNull(actual.getId());
         assertEquals(expected.getTitle(), actual.getTitle());
@@ -78,7 +78,7 @@ class EntityBuilderTest {
         Question question = mockOfQuestion();
         Choice expected = new Choice(null, request, question);
 
-        Choice actual = EntityBuilder.toChoice(request, question);
+        Choice actual = EntityMapper.toChoice(request, question);
 
         assertNull(actual.getId());
         assertEquals(expected.getTitle(), actual.getTitle());
@@ -92,7 +92,7 @@ class EntityBuilderTest {
         Survey survey = mockOfSurvey();
         Answer expected = mockOfAnswer();
 
-        Answer actual = EntityBuilder.toAnswer(request, survey);
+        Answer actual = EntityMapper.toAnswer(request, survey);
 
         assertNull(actual.getId());
         assertSame(survey, actual.getSurvey());
@@ -105,7 +105,7 @@ class EntityBuilderTest {
         Answer answer = mockOfAnswer();
         Item expected = answer.getItems().get(0);
 
-        Item actual = EntityBuilder.toItem(itemRequest, answer);
+        Item actual = EntityMapper.toItem(itemRequest, answer);
 
         assertNull(actual.getId());
         assertSame(expected.getQuestion(), actual.getQuestion());

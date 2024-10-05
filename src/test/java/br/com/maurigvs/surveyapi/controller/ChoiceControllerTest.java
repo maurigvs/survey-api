@@ -1,6 +1,6 @@
 package br.com.maurigvs.surveyapi.controller;
 
-import br.com.maurigvs.surveyapi.dto.ChoiceRequest;
+import br.com.maurigvs.surveyapi.controller.dto.ChoiceRequest;
 import br.com.maurigvs.surveyapi.model.Choice;
 import br.com.maurigvs.surveyapi.model.Question;
 import br.com.maurigvs.surveyapi.service.ChoiceService;
