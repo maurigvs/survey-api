@@ -1,5 +1,5 @@
 name: Builder
-run-name: Build ${{ github.event_name }}
+run-name: Build ${{ github.ref_name }} ${{ github.event.head_commit.message }}
 
 on:
   push:
