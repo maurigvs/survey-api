@@ -1,4 +1,4 @@
-# SurveyAPI
+# survey-api
 
 ### About
 
