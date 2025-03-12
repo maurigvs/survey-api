@@ -15,11 +15,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Set Git config
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "Github Actions"
+
       - name: Merge master back to dev
+        uses: {{ secrets.SURVEY_TOKEN }}
         run: |
           git fetch --unshallow
           git checkout develop
