@@ -13,8 +13,7 @@ jobs:
 #    if: github.event.pull_request.merged == true
 #    timeout-minutes: 2
     runs-on: ubuntu-latest
-    permissions:
-      contents: read|write
+    permissions: write-all
     env:
       GITHUB_TOKEN: ${{ secrets.SURVEY_TOKEN }}
 
