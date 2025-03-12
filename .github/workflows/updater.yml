@@ -1,6 +1,10 @@
 name: PRs to Develop
+
 on:
-  push: master
+  push:
+    branches:
+      - master
+
 #  pull_request:
 #    branches: [master]
 #    types: [closed]
