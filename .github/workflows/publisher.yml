@@ -11,7 +11,7 @@ jobs:
     name: Build and Push
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read|write
 
     steps:
       - name: Checkout ${{ github.repository }}
