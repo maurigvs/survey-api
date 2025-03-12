@@ -1,0 +1,23 @@
+name: Auto Merge Master to Develop
+
+on:
+  push:
+    branches:
+      - master  # Trigger when there's a push to the `feature` branch
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Merge the `feature` branch into `main`
+      - name: Merge feature into main
+        uses: peter-evans/merge-branch@v1
+        with:
+          from_branch: master  # The branch to merge from
+          to_branch: develop   # The branch to merge into
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for authentication
