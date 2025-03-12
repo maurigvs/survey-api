@@ -22,7 +22,8 @@ jobs:
           git config --local user.name "Github Actions"
 
       - name: Merge master back to dev
-        with: {{ secrets.SURVEY_TOKEN }}
+        with:
+          GITHUB_TOKEN: ${{ secrets.SURVEY_TOKEN }}
         run: |
           git fetch --unshallow
           git checkout develop
