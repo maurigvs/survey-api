@@ -1,10 +1,9 @@
 name: Publisher
-run-name: ${{ github.ref_name }}
 
 on:
-  push:
-    branches:
-      - master
+  pull_request:
+    branches: [master]
+    types: [closed]
 
 jobs:
   publisher:
