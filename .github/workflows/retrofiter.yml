@@ -5,11 +5,14 @@ on:
     branches: [master]
     types: [closed]
     
+permissions:
+  contents: write # Grants write access to the repository
+
 jobs:
   retrofit:
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ secrets.PAT }}
       
     steps:
       - name: Checkout repository
