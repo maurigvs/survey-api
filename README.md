@@ -26,7 +26,7 @@ The following guides illustrate how to use some features concretely, as is shoul
 * [Building REST services with Spring](https://spring.io/guides/tutorials/rest/)
 * [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
 
-### Additional Links
+### Additional Useful Links
 
 These additional references should also help you:
 
