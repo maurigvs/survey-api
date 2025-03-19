@@ -22,9 +22,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      - name: Close previous PR open
+      - name: Check for existing PRs
+        id: check-pr
         run: |
-          gh pr close develop --comment "outdated"
+          PRS=$(gh pr list --state open --base develop --json number -q '.[].number')
+          if [ -n "$PRS" ]; then
+          OLDEST_PR=$(echo "$PRS" | head -n 1)
+          echo "oldest_pr=$OLDEST_PR" >> $GITHUB_OUTPUT
+          fi
+          
+          - name: Close oldest PR if exists
+            if: steps.check-pr.outputs.oldest_pr != ''
+            run: |
+              gh pr close ${{ steps.check-pr.outputs.oldest_pr }}
       
       - name: Merge master into develop
         run: |
