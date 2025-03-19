@@ -1,0 +1,21 @@
+name: Retrofit
+
+on:
+  pull_request:
+    branches: [master]
+    types: [closed]
+    
+jobs:
+  retrofit:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Merge master into develop
+        run: |
+          git pull
+          gh pr create --title "develop retrofit" --fill --draft --base develop --assignee @me
