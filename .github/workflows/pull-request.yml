@@ -1,0 +1,20 @@
+name: Retrofiter
+
+on:
+  pull_request:
+    branches: [master]
+    types: [closed]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  pull-request:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: pull-request
+        run: |
+          gh pr create --title "develop retrofit" --fill -d --base develop
