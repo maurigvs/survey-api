@@ -6,14 +6,14 @@ on:
     types: [closed]
     
 permissions:
-  contents: write # Grants write access to the repository
+  contents: write
 
 jobs:
   retrofit:
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ secrets.PAT }}
-      
+      GH_TOKEN: ${{ github.token }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
