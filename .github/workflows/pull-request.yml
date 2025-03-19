@@ -1,20 +1,23 @@
-name: Retrofiter
+name: Develop Retrofit
 
 on:
-  pull_request:
-    branches: [master]
-    types: [closed]
-
-permissions:
-  pull-requests: write
+  workflow_dispatch: # Allows manual triggering of the workflow
+  push:
+    branches:
+      - master
 
 jobs:
-  pull-request:
+  allow-merge:
     runs-on: ubuntu-latest
-    env:
-      GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v4
-      - name: pull-request
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Merge master into develop
         run: |
-          gh pr create --title "develop retrofit" --fill -d --base develop
+          git config --global user.name mauri
+          git config --global user.email maurigvs@icloud.com
+          git fetch origin develop
+          git checkout develop
+          git merge origin/master --no-ff -m "Merge master into develop"
+          git push origin develop
