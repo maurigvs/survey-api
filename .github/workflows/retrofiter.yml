@@ -4,21 +4,29 @@ on:
   pull_request:
     branches: [master]
     types: [closed]
-    
+
 permissions:
   contents: write
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
 
 jobs:
   retrofit:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.PAT }}
-
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      
+      - name: Close previous PR open
+        run: |
+          gh pr close develop --comment "outdated"
+      
       - name: Merge master into develop
         run: |
           git pull
-          gh pr create --title "automatic merge master into develop" --fill --base develop --assignee @me
+          gh pr create --title "Merge master into develop" --fill --base develop --assignee @me
