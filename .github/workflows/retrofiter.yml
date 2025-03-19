@@ -12,7 +12,7 @@ jobs:
   retrofit:
     runs-on: ubuntu-latest
     env:
-      GH_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ secrets.PAT }}
 
     steps:
       - name: Checkout repository
@@ -21,4 +21,4 @@ jobs:
       - name: Merge master into develop
         run: |
           git pull
-          gh pr create --title "develop retrofit" --fill --draft --base develop --assignee @me
+          gh pr create --title "Merge master into develop" --fill --base develop --assignee @me
