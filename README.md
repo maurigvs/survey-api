@@ -3,7 +3,7 @@
 ### About
 
 This is a simple Spring Boot API creating Surveys and submitting responses.
-This documentation needs improvement.
+This documentation needs improvement and this is a Hotfix test.
 
 * [Official documentation](http://localhost:8080/api/swagger-ui/index.html)
 
