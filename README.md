@@ -19,7 +19,7 @@ For further reference, please consider the following sections:
 
 ### Guides
 
-The following guides illustrate how to use some features concretely:
+The following guides illustrate how to use some features concretely, as is should:
 
 * [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
 * [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
