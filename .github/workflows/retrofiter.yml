@@ -21,4 +21,4 @@ jobs:
       - name: Merge master into develop
         run: |
           git pull
-          gh pr create --title "Merge master into develop" --fill --base develop --assignee @me
+          gh pr create --title "automatic merge master into develop" --fill --base develop --assignee @me
