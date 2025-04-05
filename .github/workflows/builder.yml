@@ -43,6 +43,6 @@ jobs:
           # You can now use this version in subsequent steps
 
       - name: Create summary
-        if: always()
+        if: success()
         run: |
-          echo "## Version ${{ steps.gradle-version.outputs.version }} build successfully." >> $GITHUB_STEP_SUMMARY
+          echo "### Version ${{ steps.gradle-version.outputs.version }} build successfully." >> $GITHUB_STEP_SUMMARY
