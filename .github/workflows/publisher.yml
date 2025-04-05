@@ -1,5 +1,4 @@
 name: Publisher
-run-name: ${{ github.ref_name }}
 
 on:
   push:

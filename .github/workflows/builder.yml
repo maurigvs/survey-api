@@ -1,5 +1,4 @@
 name: Builder
-run-name: ${{ github.ref_name }}
 
 on:
   push:
@@ -33,7 +32,7 @@ jobs:
         run: |
           VERSION=$(./gradlew properties -q | grep "version:" | awk '{print $2}')
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          
+
       - name: Use the version
         run: |
           echo "The application version is ${{ steps.gradle-version.outputs.version }}"
