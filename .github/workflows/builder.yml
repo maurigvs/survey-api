@@ -27,3 +27,14 @@ jobs:
 
       - name: Run Build
         run: ./gradlew build -x test --console plain
+
+      - name: Get version from Gradle
+        id: gradle-version
+        run: |
+          VERSION=$(./gradlew properties -q | grep "version:" | awk '{print $2}')
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          
+      - name: Use the version
+        run: |
+          echo "The application version is ${{ steps.gradle-version.outputs.version }}"
+          # You can now use this version in subsequent steps
