@@ -45,8 +45,4 @@ jobs:
       - name: Create summary
         if: always()
         run: |
-          if [ "${{ job.status }}" == "success" ]; then
-            echo "::notice title=Success::🎉 Version **${{ steps.gradle-version.outputs.version }}** tested and built successfully."
-          else
-            echo "::error title=Failed::❌ Something went wrong. Please check the logs."
-          fi
+          echo "## Version ${{ steps.gradle-version.outputs.version }} build successfully." >> $GITHUB_STEP_SUMMARY
